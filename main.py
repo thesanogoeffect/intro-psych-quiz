@@ -98,3 +98,8 @@ st.write(
 st.write(
     "Want to help make it better? Found a problem in the questions? Visit here, but PLEASE KEEP THE FORMAT!: (https://docs.google.com/document/d/14OcbX4qMwhRGgL2HfmaO_qIqZKjJfzWfvDCaZ8Kxpaw/edit?usp=sharing"
 )
+
+# GitHub link
+st.write(
+    "Or check out the project on https://github.com/thesanogoeffect/IntroPsychQuiz"
+)
