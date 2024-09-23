@@ -94,7 +94,7 @@ st.markdown("<br><hr><br>", unsafe_allow_html=True)  # Separator between questio
 
 # Footer
 st.write(
-    "Made by Jakub W., cleaned data from D. Lakens' post https://canvas.tue.nl/courses/27884/discussion_topics/255128. Special thanks to Anton B."
+    "Made by Jakub W., cleaned data from prof. D. Lakens' post https://canvas.tue.nl/courses/27884/discussion_topics/255128. Special thanks to Anton B."
 )
 st.write(
     "Want to help make it better? Found a problem in the questions? Visit here, but PLEASE KEEP THE FORMAT!: (https://docs.google.com/document/d/14OcbX4qMwhRGgL2HfmaO_qIqZKjJfzWfvDCaZ8Kxpaw/edit?usp=sharing"
