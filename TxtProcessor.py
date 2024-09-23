@@ -51,4 +51,5 @@ class TxtProcessor:
 
 if __name__ == "__main__":
     txt = TxtProcessor("cleaned_questions.txt")
+    print(len(txt.df))
     txt.df.to_parquet("Halfway Answers 2021-2_cleaned.parquet")
