@@ -63,7 +63,7 @@ st.title("Intro to Psychology Mid-term Quiz")
 
 # Enable the user to check the chapters they want to see
 max_chapters = [1, 2, 3, 4, 5, 6]
-with st.expander("Select Chapters?"):
+with st.expander("Filter Chapters?"):
     # By default all enabled, multiselect
     selected_chapters = st.multiselect("Select the chapters you want to see", max_chapters, default=max_chapters, on_change=handle_chapter_change)
 
