@@ -9,7 +9,7 @@ qm = QuestionManager("Halfway Answers 2021-2_cleaned.parquet")
 def handle_user_input(question: pd.Series, correct_answer: str, radio_key: str):
     user_answer = st.session_state[radio_key]
     st.set_page_config(page_title="Intro to Psychology Mid-term Quiz", page_icon="🧠")
-    st.session_state["seen_questions"].add(question.name)
+    st.session_state["seen_questions"].add(int(question.name))
     st.session_state["total_answered"] += 1
 
     # Check if the answer is correct
