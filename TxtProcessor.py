@@ -11,7 +11,7 @@ class TxtProcessor:
         self.process()
 
     def process(self):
-        with open(self.path, "r") as file:
+        with open(self.path, "r", encoding='utf-8-sig') as file:
             text = file.read()
             split_text = text.split("\n\n")
             # now we have question on the even indexes and answers on the odd indexes
@@ -23,7 +23,7 @@ class TxtProcessor:
                 q_dict = {}
                 # ['17274271. What was Gestalt Psychology a response to?',
                 split = question.split(".")
-                q_id = question.split(".")[0]
+                q_id = question.split(".")[0].strip()
                 q_dict["question_title"] = " ".join(split[1:]).strip()
                 q_chapter = q_id[-1]
                 q_dict["ID"] = int(q_id)
@@ -36,10 +36,10 @@ class TxtProcessor:
                 parsed_answers = answers.split("\n")
                 for answer in parsed_answers:
                     if "*" in answer:
-                        correct_answer = answer.strip()[3:]
-                        answer_options.append(answer.strip()[3:])
+                        correct_answer = answer.strip()[3:].strip()
+                        answer_options.append(answer.strip()[3:].strip())
                     else:
-                        answer_options.append(answer.strip()[2:])
+                        answer_options.append(answer.strip()[2:].strip())
                 q_dict["correct_answer"] = correct_answer
                 q_dict["options"] = answer_options
                 question_data.append(q_dict)
@@ -50,5 +50,5 @@ class TxtProcessor:
 
 
 if __name__ == "__main__":
-    txt = TxtProcessor("Halfway Answers 2021-2.txt")
+    txt = TxtProcessor("cleaned_questions.txt")
     txt.df.to_parquet("Halfway Answers 2021-2_cleaned.parquet")
