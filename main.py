@@ -34,9 +34,9 @@ def handle_chapter_change():
 def handle_question(question: pd.Series):
     st.write(f"**QID:** {question.name}")
     st.write(f"**Chapter:** {question['chapter']}")
-    st.write(f"**Title:** {question['question_title']}")
-
-
+    
+    # Larger, centered title
+    st.markdown(f"<h2 style='text-align: center; font-size: 22px;'>{question['question_title']}</h2>", unsafe_allow_html=True)
 
     options = list(question["options"])
     correct_answer = str(question["correct_answer"])
@@ -59,10 +59,11 @@ def handle_question(question: pd.Series):
 
 # Streamlit app layout
 st.title("Intro to Psychology Mid-term Quiz")
-# enable the user to check the chapters they want to see
-max_chapters = [1,2,3,4,5,6]
+
+# Enable the user to check the chapters they want to see
+max_chapters = [1, 2, 3, 4, 5, 6]
 with st.expander("Select Chapters?"):
-    # by default all enabled, multiselect
+    # By default all enabled, multiselect
     selected_chapters = st.multiselect("Select the chapters you want to see", max_chapters, default=max_chapters, on_change=handle_chapter_change)
 
 # Initialize session state variables
@@ -88,8 +89,7 @@ if st.session_state["feedback_message"]:
 question = st.session_state["current_question"]
 handle_question(question)
 
-st.markdown("---")  # Separator between questions
-# empty spaces
+st.markdown("<br><hr><br>", unsafe_allow_html=True)  # Separator between questions with spacing
 
 # Footer
 st.write(

@@ -1378,35 +1378,35 @@ B) Behaviorism
 *C) Functionalism
 D) Humanism
 
-20210751. When there's born someone with a relatively rare and distinctive trait (e.g. without some important part of the body), scientists often want to study how the trait will affect this individual's life. Sometimes studying like this may last many years. What Is this type of study called? 
+20210752. When there's born someone with a relatively rare and distinctive trait (e.g. without some important part of the body), scientists often want to study how the trait will affect this individual's life. Sometimes studying like this may last many years. What Is this type of study called? 
 
 A) Longitudinal research. 
 *B) Clinical or case study.
 C) Naturalistic observation.
 D) Cross-sectional research.
 
-20210751. Which part of the neuron is coated by myelin sheath?
+20210753. Which part of the neuron is coated by myelin sheath?
 
 *A) Axon.
 B) Soma.
 C) Dendrite.
 D) Cell membrane.
 
-20210751. Sleep spindles and K-complexes are characteristic for which stage of sleep?
+20210754. Sleep spindles and K-complexes are characteristic for which stage of sleep?
 
 A) Stage 1 sleep.
 *B) Stage 2 sleep.
 C) Stage 3 sleep.
 D) REM sleep.
 
-20210751. Imagine that you're talking to your friend close to a busy street. Suddenly, you hear a very loud sound and notice that a car accident occured. It interrupted and ended your conversation. This situation is an example of: 
+20210755. Imagine that you're talking to your friend close to a busy street. Suddenly, you hear a very loud sound and notice that a car accident occured. It interrupted and ended your conversation. This situation is an example of: 
 
 A) Top-down processing.
 *B) Bottom-up processing.
 C) Transduction.
 D) Action potential.
 
-20210751. Imagine that you've got a dog. After a few weeks living together, right now every time when you are about to take him for a walk and you're opening a wardrobe to take a jacket, he is already excited and happy. This is a result of:
+20210756. Imagine that you've got a dog. After a few weeks living together, right now every time when you are about to take him for a walk and you're opening a wardrobe to take a jacket, he is already excited and happy. This is a result of:
 
 *A) Classical conditioning.
 B) Operant conditioning.
@@ -2828,49 +2828,49 @@ B) Algorithm
 C) Memory fusion
 D) Trial and error
 
-1732358. Who is considered the father of behaviorism?
+17323581. Who is considered the father of behaviorism?
 
 A) Sigmund Freud
 B) B. F. Skinner
-*C) John Watson
+*C) John B. Watson
 D) William James
 
-1732358. Does height and shoe size have a correlation?
+17323582. Does height and shoe size have a correlation?
 
 A) Yes
 B) Yes, a negative correlation
 *C) Yes, a positive correlation
 D) No
 
-1732358. What is not a lobe of the brain?
+17323583. What is not a lobe of the brain?
 
 A) Frontal lobe
 *B) Mid lobe
 C) Parietal lobe
 D) Temporal lobe
 
-1732358. In what stage of sleep do you dream?
+17323584. In what stage of sleep do you dream?
 
 *A) REM sleep
 B) Stage 1
 C) Stage 2
 D) Stage 3
 
-1732358. Perception involves...
+17323585. Perception involves...
 
 A) Bottom-up processing
 B) Top-down processing
 *C) Both
 D) Neither
 
-1732358. Pavlov's work with dogs is an example of:
+17323586. Pavlov's work with dogs is an example of:
 
 *A) Classical Conditioning
 B) Operant Conditioning
 C) Observational learning
 D) Animal abuse learning
 
-1732358. Which method of problem solving is about working backwards?
+17323587. Which method of problem solving is about working backwards?
 
 A) Trial and error
 *B) Heuristic
@@ -3066,10 +3066,46 @@ A) to what extent does the test test current performance
 C) the extent to which the test measures all dimensions of the construct 
 D) to what extent does the test predict future performance
 
-17480336. When Jacks mother comes home after work, her son is always standing right behind the front door. She asked Jack if he was standing there for a long time and he responds: "No, I heard your footsteps on the sidewalk". What is the UCS and the UCR respectevely in this case?
- 
-A) Sound of footsteps (UCS) running towards the door (UCR)
-B) Sound of footsteps (UCS) wanting to see her (UCR)
-C) Mother coming home (UCS) wanting to see her (UCR)
-*D) Mother coming home (UCS) running towards the door (UCR)
+22145201. Which need is not part of the original Maslow's hierarchy of needs (but one that he decided to add later, after consideration)?
+
+A) Social
+B) Esteem
+*C) Spiritual
+D) Security
+
+22145202. You are conducting a study of the effectiveness of a meditation-based psychological intervention. You decide to find subjects only through the use recruitment posters, that you hang up across psychology clinics and meditation clinics in the area. What problem will you likely encounter due to the recruitment method?
+
+A) Observer bias
+B) Placebo effect
+C) High attrition rates
+*D) Limited ecological validity
+
+22145203. Which pair of brain structures is primarily involved in processing emotions and forming memories (In brain scans of subjects with PTSD, these regions often show significant differences when compared to control subjects)?
+
+A) Cerebellum, Broca's area
+B) Thalamus, Hippothalamus
+C) Cerebellum, Occipital lobe
+*D) Amygdala, Hippocampus
+
+22145204. What do SSRI antidepressants and cocaine have in common?
+
+A) Both directly increase dopamine uptake
+*B) Both work by preventing serotonin reuptake
+C) Both are commonly prescribed to treat anxiety disorders
+D) Both are serotonin antagonists
+
+22145205. At what decibel level does the risk of permanent hearing damage typically occur?
+
+A) >150 dB
+B) 100-150 dB
+C) 80-100 dB
+*D) Any of the other answers, depends on the length of exposure
+
+22145206. You want your daughter to read more books. You decide to give her some pocket money for reading. She is behind on her reading assignment and you really need her to improve as soon as possible. For the best results, you should reward her:
+
+*A) After she finishes a chapter, but only do so only occasionally and unpredictably
+B) Each time she finishes a book
+C) For every 3 hours of reading
+D) Occasionally and unpredictably, when you see her reading
+
 
