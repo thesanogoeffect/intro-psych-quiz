@@ -5,7 +5,7 @@ import random as rd
 
 # Initialize the QuestionManager
 qm = QuestionManager("Halfway Answers 2021-2_cleaned.parquet")
-st.set_page_config(page_title="Intro to Psychology Mid-term Quiz", page_icon="🧠")
+st.set_page_config(page_title="ITP Mid-term Quiz", page_icon="🧠")
 
 def handle_user_input(question: pd.Series, correct_answer: str, radio_key: str):
     user_answer = st.session_state[radio_key]
