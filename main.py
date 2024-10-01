@@ -90,8 +90,16 @@ if st.session_state["feedback_message"]:
 question = st.session_state["current_question"]
 handle_question(question)
 
-st.write(f"**Total answered:** {st.session_state['total_answered']}")
-st.write(f"**Total correct:** {st.session_state['total_correct']}")
+# Display the score in an expander with prettier formatting
+with st.expander("Show Score"):
+    col1, col2, col3 = st.columns(3)
+    col1.metric("Total Answered", st.session_state['total_answered'])
+    col2.metric("Total Correct", st.session_state['total_correct'])
+    if st.session_state['total_answered'] > 0:
+        accuracy = st.session_state['total_correct'] / st.session_state['total_answered'] * 100
+    else:
+        accuracy = 0
+    col3.metric("Accuracy", f"{accuracy:.1f}%")
 
 st.markdown("<br><hr><br>", unsafe_allow_html=True)  # Separator between questions with spacing
 # Footer
