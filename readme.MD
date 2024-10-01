@@ -83,7 +83,7 @@ The app will employ a multi-step pipeline for validating and improving the quali
 - **Streamlit**: For the initial development of the web app.
 - **SQLite**: For the database.
 - **OpenAI API**: For quality checks, corrections, and ratings.
-- **LLMs**: For automated quality checks, corrections, and ratings.
+- **Ollama?**: For automated quality checks, corrections, and ratings.
 
 ---
 
