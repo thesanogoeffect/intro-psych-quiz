@@ -13,6 +13,7 @@ This project is being actively developed into an interactive web app using **Str
 
 The project will utilize multiple database layers to organize and refine the quality of questions. The database layers are outlined as follows:  
 L1 in GSheets, L2-5 in SQLite in the GitHub repo, updated by regular GitHub Actions.
+L5 will also be available in CSV format and in parquet format for faster access.
 
 - **L1 - Raw Question Submissions**: All obtained questions, including:
   - **Source**: Indicates where the question originated (e.g., Google Form, previous years' questions, Google Doc, OpenStax book).
@@ -21,19 +22,16 @@ L1 in GSheets, L2-5 in SQLite in the GitHub repo, updated by regular GitHub Acti
   - **Date**: When the question was submitted.
   - **Anonymous**: User requested to post the question anonymously (boolean).
 
-- **L2 - Initial Validation**: All questions, enriched with validation data:
+- **L2 - Validated and Rated Questions **: All questions, enriched with validation data:
   - `is_format_valid?`: Checks if the question meets basic format requirements (e.g., has four different answer choices).
   - `is_correct_chapter?`: Verifies if the question is relevant to the indicated chapter.
   - `is_question_correct?`: Checks if the question itself is factually correct.
   - `is_sufficient?`: Assesses if the question quality is sufficient to move forward in the pipeline.
-
-- **L3 - Verified Questions**: Contains only the questions that have passed the validation checks. This includes all necessary metadata (correct formatting, grammar, chapter relevance).
-
-- **L4 - Quality-Rated Questions**: Questions enriched with:
-  - **Quality Ratings**: Provided by LLMs (would probably require very frequent calls to the backend or analytics optimization/batching).
-  - **Difficulty Ratings**: Based on LLM analysis (would probably require very frequent calls to the backend or analytics optimization/batching).
-
-- **L5 - Clean Final Set**: The set of questions available for student practice, including:
+  - `llm_semantic_quality_rating`: Quality rating provided by LLMs (would probably require very frequent calls to the backend or analytics optimization/batching).
+  - `llm_semantic_difficulty_rating`: Based on LLM analysis (would probably require very frequent calls to the backend or analytics optimization/batching).
+  - `llm_semantic_distractor_quality`: Quality of distractors provided by LLMs. 
+  - 
+- **L3 - Filtered Final Set**: The set of questions available for student practice, including:
   - Only those questions that exceed a certain quality score.
   - Excludes duplicates (retains only the highest-quality version of any duplicate question).
 
@@ -64,7 +62,7 @@ The app will employ a multi-step pipeline for validating and improving the quali
   Implement a form allowing users to report problematic questions, ensuring continuous improvement and curation of the question bank.
 
 - **5-Star Review System:**  
-  After answering a question, users can rate it on a 5-star scale, providing valuable quality feedback that contributes to the question's rating in **L4** and influences its inclusion in the final set in **L5**.
+  After answering a question, users can rate it on a 5-star scale, providing valuable quality feedback that contributes to the question's rating in **L2** and influences its inclusion in the final set in **L5**.
 
 ### Ideas and Future Enhancements
 
@@ -78,13 +76,13 @@ The app will employ a multi-step pipeline for validating and improving the quali
 
 - The app will use a **simple database, probably SQLite**.
 - The initial frontend is being developed using **Streamlit**.
-- The backend will handle data processing, validation checks, and interactions with the database with the use of **FastAPI and SQLAlchemy**.
+- Hosted on GitHub and using GitHub Actions for pipeline automation.
 
 ### Technologies and Tools
 
 - **Streamlit**: For the initial development of the web app.
 - **SQLite**: For the database.
-- **Ollama**: For quality checks, corrections, and ratings.
+- **OpenAI API**: For quality checks, corrections, and ratings.
 - **LLMs**: For automated quality checks, corrections, and ratings.
 
 ---
