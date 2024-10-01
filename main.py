@@ -90,8 +90,10 @@ if st.session_state["feedback_message"]:
 question = st.session_state["current_question"]
 handle_question(question)
 
-st.markdown("<br><hr><br>", unsafe_allow_html=True)  # Separator between questions with spacing
+st.write(f"**Total answered:** {st.session_state['total_answered']}")
+st.write(f"**Total correct:** {st.session_state['total_correct']}")
 
+st.markdown("<br><hr><br>", unsafe_allow_html=True)  # Separator between questions with spacing
 # Footer
 st.write(
     "Made by Jakub W., cleaned data from prof. D. Lakens' post https://canvas.tue.nl/courses/27884/discussion_topics/255128. Special thanks to Anton B."
