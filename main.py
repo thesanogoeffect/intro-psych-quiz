@@ -66,17 +66,7 @@ max_chapters = [1, 2, 3, 4, 5, 6]
 with st.expander("Filter Chapters?"):
     # By default all enabled, multiselect
     selected_chapters = st.multiselect("Select the chapters you want to see", max_chapters, default=max_chapters, on_change=handle_chapter_change)
-# Display the score in an expander with prettier formatting
-with st.expander("Show Score"):
-    col1, col2, col3 = st.columns(3)
-    col1.metric("Total Answered", st.session_state['total_answered'])
-    col2.metric("Total Correct", st.session_state['total_correct'])
-    if st.session_state['total_answered'] > 0:
-        accuracy = st.session_state['total_correct'] / st.session_state['total_answered'] * 100
-    else:
-        accuracy = 0
-    col3.metric("Accuracy", f"{accuracy:.1f}%")
-    
+
 # Initialize session state variables
 if "total_answered" not in st.session_state:
     st.session_state["total_answered"] = 0
@@ -88,6 +78,19 @@ if "feedback_message" not in st.session_state:
     st.session_state["feedback_message"] = ""
 if "current_question" not in st.session_state:
     st.session_state["current_question"] = qm.get_random_question(seen_questions=st.session_state["seen_questions"], chapters=selected_chapters)
+
+
+# Display the score in an expander with prettier formatting
+with st.expander("Show Score"):
+    col1, col2, col3 = st.columns(3)
+    col1.metric("Total Answered", st.session_state['total_answered'])
+    col2.metric("Total Correct", st.session_state['total_correct'])
+    if st.session_state['total_answered'] > 0:
+        accuracy = st.session_state['total_correct'] / st.session_state['total_answered'] * 100
+    else:
+        accuracy = 0
+    col3.metric("Accuracy", f"{accuracy:.1f}%")
+    
 
 # Display feedback message
 if st.session_state["feedback_message"]:
