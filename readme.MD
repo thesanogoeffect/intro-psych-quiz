@@ -12,8 +12,8 @@ This project is being actively developed into an interactive web app using **Str
 ### Database Structure
 
 The project will utilize multiple database layers to organize and refine the quality of questions. The database layers are outlined as follows:  
-L1 in GSheets, L2-5 in SQLite in the GitHub repo, updated by regular GitHub Actions.
-L5 will also be available in CSV format and in parquet format for faster access.
+L1 in GSheets, L2-3 in SQLite in the GitHub repo, updated by regular GitHub Actions.
+L3 will also be available in CSV format and in parquet format for faster access.
 
 - **L1 - Raw Question Submissions**: All obtained questions, including:
   - **Source**: Indicates where the question originated (e.g., Google Form, previous years' questions, Google Doc, OpenStax book).
@@ -84,8 +84,8 @@ The app will employ a multi-step pipeline for validating and improving the quali
 
 - **Streamlit**: For the initial development of the web app.
 - **SQLite**: For the database.
+- **Firestore**: For the realtime user rankings. We'll be able to read the data periodically and aggregate it, for SQLite
 - **OpenAI API**: For quality checks, corrections, and ratings.
-- **Ollama?**: For automated quality checks, corrections, and ratings.
 
 ---
 
