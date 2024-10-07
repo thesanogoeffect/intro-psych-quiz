@@ -1,0 +1,32 @@
+name: Deploy with OIDC
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    permissions:
+      id-token: write
+      contents: read
+
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v3
+
+    - name: Authenticate to Google Cloud
+      id: auth
+      uses: google-github-actions/auth@v1
+      with:
+        token_format: 'access_token'
+        workload_identity_provider: 'projects/[PROJECT_NUMBER]/locations/global/workloadIdentityPools/[POOL_ID]/providers/[PROVIDER_ID]'
+        service_account: '[SERVICE_ACCOUNT_EMAIL]'
+
+    - name: Configure gcloud
+      run: |
+        gcloud config set project [PROJECT_ID]
+
+    # Your other steps that use gcloud or other Google services...

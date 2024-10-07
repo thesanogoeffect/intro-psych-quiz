@@ -1,2 +1,6 @@
 pandas
 gspread
+environs
+langchain-openai
+python-dotenv
+firebase-admin

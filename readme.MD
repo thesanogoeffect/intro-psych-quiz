@@ -73,6 +73,7 @@ The app will employ a multi-step pipeline for validating and improving the quali
 - **Filter by Source:** Allow users to filter questions by source (e.g., OpenStax, Google Form, LLM, etc.).
 - **Question Difficulty Rating:** Implement a system for users to rate the difficulty of questions, providing valuable insights for students.
 - **Ability to go back to previous questions:** Allow users to navigate back to previously answered questions for review or correction, expanding on the current mechanism.
+- add 13+ OpenStax chapters, add
 
 ### Hosting and Backend
 
