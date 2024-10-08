@@ -21,7 +21,8 @@ new_question = {
     "times_rated_difficulty": 0,
     "times_rated_quality": 0,
     "total_answered": 0,
-    "total_answered_correct": 0
+    "total_answered_correct": 0,
+    "total_times_skipped": 0,
 }
 
 # get a question by id
@@ -47,5 +48,5 @@ def delete_all_questions():
     for question in questions:
         question.reference.delete()
 
-if __name__ == "__main__":
-    delete_all_questions()
+# if __name__ == "__main__":
+#     delete_all_questions()

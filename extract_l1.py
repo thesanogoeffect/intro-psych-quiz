@@ -1,7 +1,7 @@
 from gsheets import download_l1_gsheet_to_df
 import pandas as pd
 import sqlite3
-from db_operations import create_table, dump_df_to_db
+from db_operations import create_table, process_new_questions
 
 # Step 1: Download the data from the Google Sheet
 df = download_l1_gsheet_to_df()
@@ -28,4 +28,4 @@ create_table()
 
 # Step 6: Insert new data into the SQLite database
 if not new_rows_df.empty:
-    dump_df_to_db(new_rows_df)
+    process_new_questions(new_rows_df)

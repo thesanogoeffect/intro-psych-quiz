@@ -97,7 +97,7 @@ def process_new_questions(df: pd.DataFrame):
         cursor.execute(f"SELECT id FROM l2 ORDER BY id DESC LIMIT {new_row_count}")
         new_question_ids = cursor.fetchall()
         for question_id in new_question_ids:
-            create_question(question_id)
+            create_question(question_id[0])
         conn.close()
     except Exception as e:
         print(e)

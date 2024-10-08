@@ -1,18 +1,14 @@
 <template>
   <div>
+    <!-- Your template content that might depend on the async operation -->
     <NuxtPage />
   </div>
 </template>
 
-<script>
+<script setup>
+import { onMounted } from 'vue';
 import { useQuestionStore } from "./stores/question";
-export default {
-  setup() {
-    const questionStore = useQuestionStore();
+const questionStore = useQuestionStore();
+await questionStore.setUp();
 
-    onMounted(async () => {
-      await questionStore.setUp();
-    });
-  },
-};
 </script>
