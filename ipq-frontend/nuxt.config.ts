@@ -13,8 +13,13 @@ export default defineNuxtConfig({
       messagingSenderId: process.env.FIREBASE_MESSAGING_SENDER_ID,
       appId: process.env.FIREBASE_APP_ID,
       measurementId: process.env.FIREBASE_MEASUREMENT_ID,
-      
+
     },
+  },
+  hooks: {
+    'prerender:routes' ({ routes }) {
+      routes.clear() // Do not generate any routes (except the defaults)
+    }
   },
  
   

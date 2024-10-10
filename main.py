@@ -115,5 +115,5 @@ st.write(
 
 # GitHub link
 st.write(
-    "Or check out the project on https://github.com/thesanogoeffect/IntroPsychQuiz"
+    "Or check out the project on https://github.com/thesanogoeffect/intro-psych-quiz"
 )
