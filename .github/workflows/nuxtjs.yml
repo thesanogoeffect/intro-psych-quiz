@@ -31,9 +31,9 @@ jobs:
       - name: Navigate to ipq-frontend
         run: cd ipq-frontend
 
-      # Install dependencies and build
-      - run: npm install
-      - run: npx nuxt build --preset github_pages
+      # Install dependencies and build using Yarn
+      - run: yarn install
+      - run: yarn build --preset github_pages
 
       # Upload artifact
       - name: Upload artifact
