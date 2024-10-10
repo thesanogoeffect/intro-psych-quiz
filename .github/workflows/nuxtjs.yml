@@ -1,9 +1,10 @@
 name: Deploy to GitHub Pages
 
 on:
+  workflow_dispatch:
   push:
-    paths:
-      - 'ipq-frontend/**'
+    branches:
+      - main
 
 jobs:
   build:
@@ -15,37 +16,28 @@ jobs:
         with:
           node-version: "20"
       
-      # Create .env file from secrets
-      - name: Create .env file
-        run: |
-          echo "FIREBASE_API_KEY=${{ secrets.FIREBASE_API_KEY }}" >> ./ipq-frontend/.env
-          echo "FIREBASE_AUTH_DOMAIN=${{ secrets.FIREBASE_AUTH_DOMAIN }}" >> ./ipq-frontend/.env
-          echo "FIREBASE_PROJECT_ID=${{ secrets.FIREBASE_PROJECT_ID }}" >> ./ipq-frontend/.env
-          echo "FIREBASE_STORAGE_BUCKET=${{ secrets.FIREBASE_STORAGE_BUCKET }}" >> ./ipq-frontend/.env
-          echo "FIREBASE_MESSAGING_SENDER_ID=${{ secrets.FIREBASE_MESSAGING_SENDER_ID }}" >> ./ipq-frontend/.env
-          echo "FIREBASE_APP_ID=${{ secrets.FIREBASE_APP_ID }}" >> ./ipq-frontend/.env
-          echo "FIREBASE_MEASUREMENT_ID=${{ secrets.FIREBASE_MEASUREMENT_ID }}" >> ./ipq-frontend/.env
-      
-      # Install dependencies and build using Yarn in ipq-frontend folder
+      # Navigate to ipq-frontend folder and install dependencies using yarn
       - name: Install dependencies
         run: yarn install
         working-directory: ./ipq-frontend
-
+      
+      # Build the project inside the ipq-frontend folder
       - name: Build project
         run: npx nuxt build --preset github_pages
         working-directory: ./ipq-frontend
-
-      # Upload artifact
+      
+      # Upload the build artifacts from the ipq-frontend folder
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
         with:
           path: ./ipq-frontend/.output/public
 
+  # Deployment job
   deploy:
     needs: build
     permissions:
-      pages: write
-      id-token: write
+      pages: write      # to deploy to Pages
+      id-token: write   # to verify the deployment originates from an appropriate source
     environment:
       name: github_pages
       url: ${{ steps.deployment.outputs.page_url }}
