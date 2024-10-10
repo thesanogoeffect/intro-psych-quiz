@@ -27,13 +27,14 @@ jobs:
           echo "FIREBASE_APP_ID=${{ secrets.FIREBASE_APP_ID }}" >> ./ipq-frontend/.env
           echo "FIREBASE_MEASUREMENT_ID=${{ secrets.FIREBASE_MEASUREMENT_ID }}" >> ./ipq-frontend/.env
       
-      # Navigate to ipq-frontend folder
-      - name: Navigate to ipq-frontend
-        run: cd ipq-frontend
+      # Install dependencies and build using Yarn in ipq-frontend folder
+      - name: Install dependencies
+        run: yarn install
+        working-directory: ./ipq-frontend
 
-      # Install dependencies and build using Yarn
-      - run: yarn install
-      - run: yarn build --preset github_pages
+      - name: Build project
+        run: yarn build --preset github_pages
+        working-directory: ./ipq-frontend
 
       # Upload artifact
       - name: Upload artifact
