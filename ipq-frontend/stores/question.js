@@ -112,7 +112,7 @@ export const useQuestionStore = defineStore("question", {
     },
     async loadQuestionsFromJSON() {
       try {
-        const response = await fetch("/l3.json");
+        const response = await fetch("/intro-psych-quiz/l3.json");
         if (!response.ok) {
           throw new Error("Failed to load questions from JSON file");
         }
