@@ -1,10 +1,9 @@
 name: Deploy to GitHub Pages
 
 on:
-  workflow_dispatch:
   push:
-    branches:
-      - main
+    paths:
+      - 'ipq-frontend/**'
 
 jobs:
   build:
@@ -33,7 +32,7 @@ jobs:
         working-directory: ./ipq-frontend
 
       - name: Build project
-        run: yarn build --preset github_pages
+        run: npx nuxt build --preset github_pages
         working-directory: ./ipq-frontend
 
       # Upload artifact
