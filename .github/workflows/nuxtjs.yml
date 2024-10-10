@@ -21,9 +21,9 @@ jobs:
         run: yarn install
         working-directory: ./ipq-frontend
       
-      # Build the project inside the ipq-frontend folder
+      # Set NUXT_APP_BASE_URL and build the project inside the ipq-frontend folder
       - name: Build project
-        run: npx nuxt build --preset github_pages
+        run: NUXT_APP_BASE_URL=/intro-psych-quiz/ npx nuxt build --preset github_pages
         working-directory: ./ipq-frontend
       
       # Upload the build artifacts from the ipq-frontend folder
