@@ -1,3 +1,4 @@
+import { useQuestionStatsStore } from "#imports";
 export const useQuestionStore = defineStore("question", {
   state: () => ({
     total_shown_questions: 0,
@@ -112,7 +113,7 @@ export const useQuestionStore = defineStore("question", {
     },
     async loadQuestionsFromJSON() {
       try {
-        const response = await fetch("/intro-psych-quiz/l3.json");
+        const response = await fetch("/l3.json");
         if (!response.ok) {
           throw new Error("Failed to load questions from JSON file");
         }
@@ -142,25 +143,38 @@ export const useQuestionStore = defineStore("question", {
 
       // Generate the initial queue
       await this.generateQueue(this.selected_chapters, this.selected_sources);
-      this.currentQuestion = await this.popQuestion();
+      // here, pop withou calling .getFromQueue
+      this.currentQuestion = await this.getFromQueue(true);
+    },
+    async reSetUpAfterFiltersChange() {
+      // Generate the initial queue
+      await this.generateQueue(this.selected_chapters, this.selected_sources);
+      // here, call .getFromQueue with blockAnalytics set to true
+      this.currentQuestion = await this.getFromQueue(true);
     },
     async generateQueue(chapter_ids = [], sources = [], question_ids = []) {
       // Filter and randomize the questions to generate a queue
-      this.questionQueue = this.randomQuestions(chapter_ids, sources, question_ids).map((question) => {
+      this.questionQueue = this.randomQuestions(
+        chapter_ids,
+        sources,
+        question_ids
+      ).map((question) => {
         // Create the answers array
         const answers = [
           question.correct_answer,
           question.distractor_1,
           question.distractor_2,
-          question.distractor_3
+          question.distractor_3,
         ];
-    
+
         // Shuffle the answers array
         const shuffledAnswers = answers.sort(() => 0.5 - Math.random());
-    
+
         // Find the index of the correct answer in the shuffled array
-        const correctAnswerIndex = shuffledAnswers.indexOf(question.correct_answer);
-    
+        const correctAnswerIndex = shuffledAnswers.indexOf(
+          question.correct_answer
+        );
+
         // Return the formatted question object
         return {
           id: question.id,
@@ -175,7 +189,9 @@ export const useQuestionStore = defineStore("question", {
         };
       });
     },
-    async popQuestion() {
+    async getFromQueue(blockAnalytics = false) {
+      const questionStatsStore = useQuestionStatsStore();
+
       if (this.questionQueue.length === 0) {
         console.info("The question queue is empty! Refilling the queue...");
 
@@ -189,13 +205,19 @@ export const useQuestionStore = defineStore("question", {
         }
       }
 
+      if (this.currentQuestion && !blockAnalytics) {
+        await questionStatsStore.incrementCurrentQuestionFields();
+      }
       // Pop the first question from the queue and set it as the current question
       const nextQuestion = this.questionQueue.shift();
-      this.currentQuestion = nextQuestion;
+      await questionStatsStore.fetchQuestionStats(String(nextQuestion.id)); // TODO change later so that more than one question can be fetched at a time this.currentQuestion = nextQuestion;
+      // now submit the stats for the previous question to Firestore
 
+      questionStatsStore.resetIncrementFields();
       return nextQuestion;
     },
     async skipQuestion() {
+      const questionStatsStore = useQuestionStatsStore();
       if (!this.currentQuestion) {
         console.error("No current question to skip.");
         return;
@@ -214,13 +236,17 @@ export const useQuestionStore = defineStore("question", {
       // Add the current question to answerHistory
       this.answerHistory.push(this.currentQuestion);
 
+      questionStatsStore.incrementCurrentQuestionFields[
+        "total_times_skipped"
+      ] = true;
       // Pop the next question and set it as the current question
-      this.currentQuestion = await this.popQuestion();
+      this.currentQuestion = await this.getFromQueue();
 
       // Increment counters
       this.incrementTotalSkippedQuestions();
     },
     async answerCurrentQuestion(guessed_index) {
+      const questionStatsStore = useQuestionStatsStore();
       if (!this.currentQuestion) {
         console.error("No current question to answer.");
         return;
@@ -228,11 +254,27 @@ export const useQuestionStore = defineStore("question", {
 
       this.currentQuestion.guessed_index = guessed_index;
       this.currentQuestion.skipped = false;
-      const isCorrect = guessed_index === this.currentQuestion.correct_answer_index;
+      const isCorrect =
+        guessed_index === this.currentQuestion.correct_answer_index;
+
+      if (isCorrect) {
+        questionStatsStore.current_question_increment_fields[
+          "total_answered_correct"
+        ] = true;
+      }
+      questionStatsStore.current_question_increment_fields[
+        "times_answered"
+      ] = true;
 
       console.log("User's answer index:", guessed_index);
-      console.log("Correct answer index:", this.currentQuestion.correct_answer_index);
-      console.log("User's answer:", this.currentQuestion.answers[guessed_index]);
+      console.log(
+        "Correct answer index:",
+        this.currentQuestion.correct_answer_index
+      );
+      console.log(
+        "User's answer:",
+        this.currentQuestion.answers[guessed_index]
+      );
       console.log("Was the user's answer correct?", isCorrect);
 
       // Add the current question to answerHistory
@@ -255,7 +297,7 @@ export const useQuestionStore = defineStore("question", {
       }
 
       // Pop the next question and set it as the current question
-      this.currentQuestion = await this.popQuestion();
+      this.currentQuestion = await this.getFromQueue();
     },
   },
 });

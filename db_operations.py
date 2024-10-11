@@ -28,6 +28,7 @@ from firestore import create_question, delete_question
 # also there is a possiblity that this question is a spin-off of another question or llm generated
 # spinoff_id - integer (id of the original question)
 # is_llm_generated - boolean
+# revision - integer (incremented every time the question is edited)
 
 
 def create_table():

@@ -12,17 +12,13 @@ COLLECTION_NAME = "questions"
 client = firestore.client()
 
 new_question = {
-    "difficulty_score_sum": 0,
-    "quality_score_sum": 0,
-    "seen_times": 0,
-    "times_flagged_as_incorrect": 0,
-    "times_flagged_as_misleading": 0,
-    "times_flagged_other_problem": 0,
-    "times_rated_difficulty": 0,
-    "times_rated_quality": 0,
-    "total_answered": 0,
+    "times_got_asked": 0,
     "total_answered_correct": 0,
     "total_times_skipped": 0,
+    "times_flagged": 0,
+    "total_answered": 0,
+    "times_upvoted": 0,
+    "times_downvoted": 0,
 }
 
 # get a question by id
@@ -48,5 +44,5 @@ def delete_all_questions():
     for question in questions:
         question.reference.delete()
 
-# if __name__ == "__main__":
-#     delete_all_questions()
+if __name__ == "__main__":
+    delete_all_questions()
