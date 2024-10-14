@@ -67,6 +67,12 @@ export const useQuestionStore = defineStore("question", {
 
     getSkipsRemaining: (state) => state.skipsRemaining,
 
+    getSkippedQuestions: (state) => state.total_skipped_questions,
+    
+    getSelectedChapters: (state) => state.selected_chapters,
+
+    getSelectedSources: (state) => state.selected_sources,
+
     getTotalShownQuestions: (state) => state.total_shown_questions,
 
     getTotalAnsweredQuestions: (state) => state.total_answered_questions,
@@ -151,6 +157,9 @@ export const useQuestionStore = defineStore("question", {
       await this.generateQueue(this.selected_chapters, this.selected_sources);
       // here, call .getFromQueue with blockAnalytics set to true
       this.currentQuestion = await this.getFromQueue(true);
+      this.resetIncrementFields();
+      this.reviewMode = false;
+
     },
     async generateQueue(chapter_ids = [], sources = [], question_ids = []) {
       // Filter and randomize the questions to generate a queue
@@ -206,14 +215,15 @@ export const useQuestionStore = defineStore("question", {
       }
 
       if (this.currentQuestion && !blockAnalytics) {
-        await questionStatsStore.incrementCurrentQuestionFields();
+        await questionStatsStore.incrementCurrentQuestionFields(); //firestore
       }
       // Pop the first question from the queue and set it as the current question
       const nextQuestion = this.questionQueue.shift();
       await questionStatsStore.fetchQuestionStats(String(nextQuestion.id)); // TODO change later so that more than one question can be fetched at a time this.currentQuestion = nextQuestion;
       // now submit the stats for the previous question to Firestore
 
-      questionStatsStore.resetIncrementFields();
+      questionStatsStore.resetIncrementFields(); //firestore
+      this.incrementTotalShownQuestions();
       return nextQuestion;
     },
     async skipQuestion() {

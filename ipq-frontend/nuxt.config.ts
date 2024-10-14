@@ -4,11 +4,11 @@ export default defineNuxtConfig({
   devtools: { enabled: true },
   ssr: false,
   modules: ["@pinia/nuxt", "vuetify-nuxt-module"],
-  hooks: {
-    'prerender:routes' ({ routes }) {
-      routes.clear() // Do not generate any routes (except the defaults)
-    }
-  },
+  // // hooks: {
+  // //   'prerender:routes' ({ routes }) {
+  // //     routes.clear() // Do not generate any routes (except the defaults)
+  // //   }
+  // },
   vuetify: {
     vuetifyOptions: './vuetify.config.ts'
   }
