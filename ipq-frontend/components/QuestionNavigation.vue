@@ -4,12 +4,14 @@
       icon="mdi-arrow-left"
       :disabled="!canGoLeft"
       @click="useLeftArrow"
+      class="navigation-button"
     >
     </v-btn>
     <v-btn
       icon="mdi-arrow-right"
       :disabled="!canGoRight"
       @click="useRightArrow"
+      class="navigation-button"
     >
     </v-btn>
   </v-container>
@@ -92,3 +94,11 @@ onBeforeUnmount(() => {
   window.removeEventListener('keydown', handleKeydown);
 });
 </script>
+
+
+<style scoped>
+.navigation-button {
+  background-color: #C81919;
+  color: white;
+}
+</style>

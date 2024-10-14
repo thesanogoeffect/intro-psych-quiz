@@ -14,23 +14,26 @@ export const useQuestionStatsStore = defineStore("questionstats", {
     // the following keep track whether the user has upvoted, downvoted, flagged etc.
     upvote_cache: {},  // a dictionary of question_id to true/false
     downvote_cache: {}, // a dictionary of question_id to true/false
-    flag_cache: {}, // a dictionary of question_id to true/false
+     // a dictionary of question_id to true/false
 
-    current_question_increment_fields: {
-      times_got_asked: true,
-      total_answered_correct: false,
-      total_times_skipped: false,
-      times_flagged: false,
-      total_answered: false,
-      times_upvoted: false,
-      times_downvoted: false,
-    }, // a dictionary of fields to increment
+      current_question_increment_fields: {
+        times_asked: true,
+        times_answered_correct: false,
+        times_skipped: false,
+        times_flagged: false,
+        times_answered: false,
+        times_upvoted: false,
+        times_downvoted: false,
+      }, // a dictionary of fields to increment
   }),
 
   getters: {
     // Get the stats for the current question
     currentQuestionStats: (state) => {
       return state.current_question_stats;
+    },
+    getQuestionStatsById: (state) => (question_id) => {
+      return state.question_cache[question_id];
     },
   },
 
@@ -64,6 +67,8 @@ export const useQuestionStatsStore = defineStore("questionstats", {
       for (const field in this.current_question_increment_fields) {
         if (this.current_question_increment_fields[field]) {
           fields_to_increment_array.push(field);
+          // also increment the field in the cache
+          this.current_question_stats[field] += 1;
         }
       }
       console.log(
@@ -148,11 +153,11 @@ export const useQuestionStatsStore = defineStore("questionstats", {
     // reset current_question_increment_fields
     resetIncrementFields() {
       this.current_question_increment_fields = {
-        times_got_asked: true,
-        total_answered_correct: false,
-        total_times_skipped: false,
+        times_asked: true,
+        times_answered_correct: false,
+        times_skipped: false,
         times_flagged: false,
-        total_answered: false,
+        times_answered: false,
         times_upvoted: false,
         times_downvoted: false,
       };

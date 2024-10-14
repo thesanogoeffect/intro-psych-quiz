@@ -1,6 +1,5 @@
 # connect to Firestore when we need to touch the live data
 
-# columns: difficulty_score_sum, quality_score_sum, seen_times, times_flagged_as_incorrect, times_flagged_as_misleading, times_flagged_other_problem, times_rated_difficulty, times_rated_quality, total_answered, total_answered_correct
 import firebase_admin
 from firebase_admin import credentials
 from firebase_admin import firestore
@@ -12,11 +11,11 @@ COLLECTION_NAME = "questions"
 client = firestore.client()
 
 new_question = {
-    "times_got_asked": 0,
-    "total_answered_correct": 0,
-    "total_times_skipped": 0,
+    "times_asked": 0,
+    "times_answered_correct": 0,
+    "times_skipped": 0,
     "times_flagged": 0,
-    "total_answered": 0,
+    "times_answered": 0,
     "times_upvoted": 0,
     "times_downvoted": 0,
 }

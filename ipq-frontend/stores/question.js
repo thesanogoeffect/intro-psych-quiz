@@ -92,6 +92,8 @@ export const useQuestionStore = defineStore("question", {
 
           getCurrentlyReviewedQuestion: (state) => state.currentlyReviewedQuestion,
 
+          getChapterById: (state) => (chapter_id) => state.BOOK_CHAPTER_NAMES[chapter_id],
+
           getCurrentQuestion: (state) => state.currentQuestion,
 
           getSkipsRemaining: (state) => state.skipsRemaining,
@@ -217,7 +219,7 @@ export const useQuestionStore = defineStore("question", {
       this.currentQuestion = await this.getFromQueue(true);
     },
     async reSetUpAfterFiltersChange() {
-      questionStatsStore = useQuestionStatsStore();
+      const questionStatsStore = useQuestionStatsStore();
       // Generate the initial queue
       await this.generateQueue(this.selected_chapters, this.selected_sources);
       // here, call .getFromQueue with blockAnalytics set to true
@@ -311,7 +313,7 @@ export const useQuestionStore = defineStore("question", {
       this.answerHistory.push(this.currentQuestion);
 
       questionStatsStore.incrementCurrentQuestionFields[ // increment for firestore purposes
-        "total_times_skipped"
+        "times_skipped"
       ] = true;
       // Pop the next question and set it as the current question
       this.currentQuestion = await this.getFromQueue();
@@ -334,7 +336,7 @@ export const useQuestionStore = defineStore("question", {
 
       if (isCorrect) {
         questionStatsStore.current_question_increment_fields[
-          "total_answered_correct"
+          "times_answered_correct"
         ] = true;
       }
       questionStatsStore.current_question_increment_fields[

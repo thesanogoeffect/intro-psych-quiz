@@ -23,8 +23,8 @@
         <p>Because... it was</p>
 
         <p><strong>How can I contact you?</strong></p>
-        <p>For any questions or suggestions, hit me up at jakubwerner1@gmail.com or WhatsApp. I have already implemented some of your suggestions, thanks for that! Especially Tim, Suri, Eme and others.</p>
-        <p>Special thanks to Daniël Lakens for endorsing the idea</p>
+        <p>For any questions or suggestions, hit me up at jakubwerner1@gmail.com or WhatsApp. I have already implemented some of your them, thanks for that! Especially to Tim, Aaravee, Suri, Eme.</p>
+        <p>Special thanks also to Daniël Lakens for endorsing the idea</p>
         <br><p>Created by Jakub Werner</p>
     </div>
 </template>
