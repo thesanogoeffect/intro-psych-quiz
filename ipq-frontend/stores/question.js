@@ -236,7 +236,7 @@ export const useQuestionStore = defineStore("question", {
       // Add the current question to answerHistory
       this.answerHistory.push(this.currentQuestion);
 
-      questionStatsStore.incrementCurrentQuestionFields[
+      questionStatsStore.incrementCurrentQuestionFields[ // increment for firestore purposes
         "total_times_skipped"
       ] = true;
       // Pop the next question and set it as the current question

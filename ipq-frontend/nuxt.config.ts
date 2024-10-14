@@ -8,7 +8,10 @@ export default defineNuxtConfig({
     'prerender:routes' ({ routes }) {
       routes.clear() // Do not generate any routes (except the defaults)
     }
-  }, 
+  },
+  vuetify: {
+    vuetifyOptions: './vuetify.config.ts'
+  }
  
   
 });
