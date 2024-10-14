@@ -29,14 +29,16 @@ export async function getQuestionById(id) {
   }
 
 // Function to increment the fields of a question
-export async function incrementQuestionFields(id, updates, negative = false) {
-  const { $questionsRef } = useNuxtApp(); // Access the injected questionsRef
-  const questionDocRef = doc($questionsRef, id);
+export function incrementQuestionFields(id, updates, negative = false) {
+  setTimeout(async () => {
+    const { $questionsRef } = useNuxtApp(); // Access the injected questionsRef
+    const questionDocRef = doc($questionsRef, id);
 
-  const updateData = {};
+    const updateData = {};
     updates.forEach((key) => {
-        updateData[key] = increment(negative ? -1 : 1);
+      updateData[key] = increment(negative ? -1 : 1);
     });
 
-  await updateDoc(questionDocRef, updateData);
+    await updateDoc(questionDocRef, updateData);
+  }, 0);
 }

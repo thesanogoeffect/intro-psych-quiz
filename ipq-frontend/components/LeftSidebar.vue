@@ -16,7 +16,7 @@
               <v-icon color="primary"
                 >mdi-checkbox-marked-circle-outline</v-icon
               >
-              Answered: {{ userStore.getAnsweredQuestions }}
+              Answered: {{ userStore.getTotalAnsweredQuestions }}
             </v-col>
           </v-row>
           <v-row>
@@ -37,7 +37,7 @@
               Skips Left: {{ userStore.getSkipsRemaining }}
             </v-col>
           </v-row>
-          <v-row v-if="userStore.getAnsweredQuestions > 0" justify="center">
+          <v-row v-show="userStore.getTotalAnsweredQuestions > 0" justify="center">
             <v-col cols="12" class="text-center">
               <v-progress-circular
                 :model-value="userStore.getAnsweredCorrectlyPercentage"

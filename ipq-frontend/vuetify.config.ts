@@ -8,11 +8,13 @@ export default defineVuetifyConfiguration({
       light: {
         colors: {
           primary: "#C81919",
+          background: "#C81919",
         },
       },
       dark: {
         colors: {
           primary: "#C81919",
+          background: "#C81919",
         },
       },
     },

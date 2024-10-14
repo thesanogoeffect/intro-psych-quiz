@@ -5,15 +5,40 @@ export const useQuestionStore = defineStore("question", {
     total_answered_questions: 0,
     total_correct_answers: 0,
     total_skipped_questions: 0,
-    answerHistory: [], // Store the full question objects with guesses for easier UI display
+
     all_questions: [], // as loaded from JSON file, including all original data
     questionQueue: [], // queue holding the questions waiting to be asked
-
     currentQuestion: null, // the current question being asked
+
     skipsRemaining: 3, // number of skips remaining for the user
+
     selected_chapters: [],
+    all_chapters: [],
     selected_sources: [],
+    all_sources: [],
+
+    answerHistory: [], // Store the full question objects with guesses for easier UI display
     reviewMode: false,
+    currentReviewPosition: 0, //
+    currentlyReviewedQuestion: null,
+    BOOK_CHAPTER_NAMES: {
+      1: "Introduction to Psychology",
+      2: "Psychological Research",
+      3: "Biopsychology",
+      4: "States of Consciousness",
+      5: "Sensation and Perception",
+      6: "Learning",
+      7: "Thinking and Intelligence",
+      8: "Memory",
+      9: "Lifespan Development",
+      10: "Motivation and Emotion",
+      11: "Personality",
+      12: "Social Psychology",
+      13: "Industrial-Organizational Psychology",
+      14: "Stress, Lifestyle, and Health",
+      15: "Psychological Disorders",
+      16: "Therapy and Treatment",
+    },
   }),
   getters: {
     filteredQuestions:
@@ -57,29 +82,39 @@ export const useQuestionStore = defineStore("question", {
         // Shuffle the filtered questions
         const shuffled = filteredQuestions.sort(() => 0.5 - Math.random());
         return shuffled;
-      },
+            },
 
-    getReviewMode: (state) => state.reviewMode,
+          getReviewMode: (state) => state.reviewMode,
 
-    getAnswerHistory: (state) => state.answerHistory,
+          getAnswerHistory: (state) => state.answerHistory,
+          getAnswerHistoryLength: (state) => state.answerHistory.length, 
+          getCurrentReviewPosition: (state) => state.currentReviewPosition,
 
-    getCurrentQuestion: (state) => state.currentQuestion,
+          getCurrentlyReviewedQuestion: (state) => state.currentlyReviewedQuestion,
 
-    getSkipsRemaining: (state) => state.skipsRemaining,
+          getCurrentQuestion: (state) => state.currentQuestion,
 
-    getSkippedQuestions: (state) => state.total_skipped_questions,
-    
-    getSelectedChapters: (state) => state.selected_chapters,
+          getSkipsRemaining: (state) => state.skipsRemaining,
 
-    getSelectedSources: (state) => state.selected_sources,
+          getSkippedQuestions: (state) => state.total_skipped_questions,
 
-    getTotalShownQuestions: (state) => state.total_shown_questions,
+          getAllChapters: (state) => state.all_chapters,
 
-    getTotalAnsweredQuestions: (state) => state.total_answered_questions,
+          getAllSources: (state) => state.all_sources,
 
-    getTotalCorrectAnswers: (state) => state.total_correct_answers,
+          getBookChapterNames: (state) => state.BOOK_CHAPTER_NAMES,
 
-    getFilteredByChapterAndSource: (state) => {
+          getSelectedChapters: (state) => state.selected_chapters,
+
+          getSelectedSources: (state) => state.selected_sources,
+
+          getTotalShownQuestions: (state) => state.total_shown_questions,
+
+          getTotalAnsweredQuestions: (state) => state.total_answered_questions,
+
+          getTotalCorrectAnswers: (state) => state.total_correct_answers,
+
+          getFilteredByChapterAndSource: (state) => {
       return state.all_questions.filter(
         (question) =>
           state.selected_chapters.includes(question.chapter_id) &&
@@ -90,8 +125,6 @@ export const useQuestionStore = defineStore("question", {
     isQueueEmpty: (state) => state.questionQueue.length === 0,
 
     getTotalQuestions: (state) => state.all_questions.length,
-
-    getAnsweredQuestions: (state) => state.answerHistory.length,
 
     getAnsweredCorrectlyPercentage: (state) => {
       if (state.total_answered_questions === 0) return 0;
@@ -116,6 +149,37 @@ export const useQuestionStore = defineStore("question", {
     },
     toggleReviewMode() {
       this.reviewMode = !this.reviewMode;
+      if (this.getAnswerHistoryLength > 0) {
+        this.currentlyReviewedQuestion = this.answerHistory.at(-1);
+        this.currentReviewPosition = this.getAnswerHistoryLength - 1;
+      }
+    },
+    incrementCurrentReviewPosition() {
+      this.currentReviewPosition++;
+    },
+    decrementCurrentReviewPosition() {
+      this.currentReviewPosition--;
+    },
+    resetCurrentReviewPosition() {
+      this.currentReviewPosition = 0;
+    },
+    previousReviewedQuestion() {
+      if (this.currentReviewPosition === 0) {
+        // cannot go back, 
+      }
+      else {
+        this.decrementCurrentReviewPosition();
+        this.currentlyReviewedQuestion = this.answerHistory[this.currentReviewPosition];
+      }
+    },
+    nextReviewedQuestion() {
+      if (this.currentReviewPosition == this.getAnswerHistoryLength - 1) {
+        // cannot go forward
+      }
+      else {
+        this.incrementCurrentReviewPosition();
+        this.currentlyReviewedQuestion = this.answerHistory[this.currentReviewPosition];
+      }
     },
     async loadQuestionsFromJSON() {
       try {
@@ -136,8 +200,8 @@ export const useQuestionStore = defineStore("question", {
         chapters.add(question.chapter_id);
         sources.add(question.source);
       });
-      this.selected_chapters = Array.from(chapters);
-      this.selected_sources = Array.from(sources);
+      this.all_chapters = Array.from(chapters);
+      this.all_sources = Array.from(sources);
     },
     async setUp() {
       await this.loadQuestionsFromJSON();
@@ -153,13 +217,13 @@ export const useQuestionStore = defineStore("question", {
       this.currentQuestion = await this.getFromQueue(true);
     },
     async reSetUpAfterFiltersChange() {
+      questionStatsStore = useQuestionStatsStore();
       // Generate the initial queue
       await this.generateQueue(this.selected_chapters, this.selected_sources);
       // here, call .getFromQueue with blockAnalytics set to true
       this.currentQuestion = await this.getFromQueue(true);
-      this.resetIncrementFields();
+      questionStatsStore.resetIncrementFields();
       this.reviewMode = false;
-
     },
     async generateQueue(chapter_ids = [], sources = [], question_ids = []) {
       // Filter and randomize the questions to generate a queue
@@ -254,6 +318,7 @@ export const useQuestionStore = defineStore("question", {
 
       // Increment counters
       this.incrementTotalSkippedQuestions();
+      this.toggleReviewMode();
     },
     async answerCurrentQuestion(guessed_index) {
       const questionStatsStore = useQuestionStatsStore();
@@ -305,6 +370,9 @@ export const useQuestionStore = defineStore("question", {
           }
         }
       }
+
+      console.log("answerHistory:", this.answerHistory);
+      this.toggleReviewMode();
 
       // Pop the next question and set it as the current question
       this.currentQuestion = await this.getFromQueue();

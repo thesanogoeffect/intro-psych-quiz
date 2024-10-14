@@ -45,6 +45,7 @@ export default defineComponent({
   name: 'GuessQuestionWindow',
   setup() {
     const questionStore = useQuestionStore();
+    // const theme = useTheme(); for later theme tweakability
 
     const answerOptions = computed(() => {
       const currentQuestion = questionStore.getCurrentQuestion;
@@ -73,7 +74,7 @@ export default defineComponent({
 
 <style scoped>
 .question-text {
-  font-size: 1.5rem;
+  font-size: 1.35rem;
   font-weight: 500;
   margin-bottom: 1rem;
   text-align: center;
@@ -87,6 +88,7 @@ export default defineComponent({
   cursor: pointer;
   padding: 1rem;
   transition: all 0.3s ease;
+  background: color white;
 }
 
 .answer-card:hover {
@@ -94,6 +96,7 @@ export default defineComponent({
 }
 
 .answer-text {
-  font-size: 1.1rem;
+  font-size: 1.2rem;
 }
+
 </style>

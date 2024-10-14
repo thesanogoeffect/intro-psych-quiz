@@ -1,5 +1,6 @@
 import { defineStore } from "pinia";
 import { getQuestionById, incrementQuestionFields } from "~/services/firestore";
+// THIS STORE IS ONLY FOR DATA THAT GOES TO FIRESTORE!
 
 // This store enables us to access the Firestore data easily
 // It will have a function that will fetch the data from Firestore based on the question_id
