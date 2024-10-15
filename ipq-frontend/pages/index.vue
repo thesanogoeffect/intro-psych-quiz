@@ -27,6 +27,11 @@
             variant="text"
             @click="routeToAbout"
           ></v-btn>
+          <v-btn
+            icon="mdi-format-align-right"
+            variant="text"
+            @click="toggleRightDrawer"
+          ></v-btn>
         </v-app-bar>
 
         <!-- Left Navigation Drawer -->
@@ -35,7 +40,7 @@
         </v-navigation-drawer>
 
         <!-- Right Navigation Drawer (RightSidebar) -->
-        <v-navigation-drawer location="right" permanent>
+        <v-navigation-drawer v-model="rightDrawer" location="right">
           <RightSidebar />
         </v-navigation-drawer>
 
@@ -128,8 +133,10 @@ export default {
   },
   setup() {
     const drawer = ref(true);
+    const rightDrawer = ref(true);
     const router = useRouter();
     const theme = useTheme();
+    const display = useDisplay();
     const questionStore = useQuestionStore();
 
     const filterDialog = ref(false);
@@ -157,6 +164,10 @@ export default {
     function toggleTheme() {
       theme.global.name.value =
         theme.global.name.value === "light" ? "dark" : "light";
+    }
+
+    function toggleRightDrawer() {
+      rightDrawer.value = !rightDrawer.value;
     }
 
     const routeToAbout = () => {
@@ -209,6 +220,8 @@ export default {
 
     return {
       drawer,
+      rightDrawer,
+      toggleRightDrawer,
       routeToAbout,
       toggleTheme,
       filterDialog,
