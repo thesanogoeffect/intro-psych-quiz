@@ -1,21 +1,23 @@
 <template>
-  <v-container fluid class="main-container">
-    <v-row justify="center">
-      <v-col cols="12" sm="10" md="8" lg="6">
-        <GuessQuestionWindow v-if="!questionStore.reviewMode" />
-        <ReviewQuestionWindow v-else />
-        <QuestionNavigation />
-      </v-col>
-    </v-row>
+  <v-container :style="containerStyle">
+    <v-container :style="innerContainerStyle">
+      <!-- Container now has margin auto for centering -->
+      <v-row justify="center">
+        <GuessQuestionWindow v-if="!questionStore.reviewMode"></GuessQuestionWindow>
+        <ReviewQuestionWindow v-else></ReviewQuestionWindow>
+        <QuestionNavigation></QuestionNavigation>
+      </v-row>
+    </v-container>
   </v-container>
 </template>
 
 <script>
-import { defineComponent } from "vue";
+import { defineComponent, computed } from "vue";
 import { useQuestionStore } from "#imports";
 import GuessQuestionWindow from "./GuessQuestionWindow.vue";
 import ReviewQuestionWindow from "./ReviewQuestionWindow.vue";
 import QuestionNavigation from "./QuestionNavigation.vue";
+import { useDisplay } from "#imports";
 
 export default defineComponent({
   name: "MainQuestionWindow",
@@ -26,18 +28,32 @@ export default defineComponent({
   },
   setup() {
     const questionStore = useQuestionStore();
+    const display = useDisplay();
+
+    const containerStyle = computed(() => ({
+      maxWidth: "1000px",
+      margin: "auto",
+      maxHeight: "610px",
+    }));
+
+    const innerContainerStyle = computed(() => ({
+      transform: display.mdAndUp ? "scale(0.9)" : "scale(0.7)",
+      transformOrigin: "top left",
+    }));
+
     return {
       questionStore,
+      containerStyle,
+      innerContainerStyle,
     };
   },
 });
 </script>
 
 <style scoped>
-.main-container {
-  margin: auto;
-  padding: 16px; /* Optional: Adjust padding as needed */
+/* Optional: Ensure v-row does not have extra padding or margins */
+v-row {
+  margin: 0;
+  padding: 0;
 }
-
-/* Remove unnecessary styles */
 </style>

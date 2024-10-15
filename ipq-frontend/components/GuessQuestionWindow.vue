@@ -1,5 +1,5 @@
 <template>
-  <v-container>
+  <v-container :style="containerStyle">
     <!-- Card for the question -->
     <v-card class="mb-4">
       <v-card-text>
@@ -20,8 +20,8 @@
               <v-row class="d-flex align-center">
                 <!-- Button-like label (A, B, C, D) inside the card -->
                 <v-col cols="auto">
-                  <v-btn class="ma-1" text color="primary" style="font-size: 1.2rem">
-                    {{ option.label }}
+                  <v-btn class="ma-1" text color="primary" :style="buttonStyle">
+                    {{ option.label }} 
                   </v-btn>
                 </v-col>
                 <!-- Text of the answer inside the card -->
@@ -40,12 +40,13 @@
 <script>
 import { defineComponent, computed } from 'vue';
 import { useQuestionStore } from '#imports';
+import { useDisplay } from '#imports';
 
 export default defineComponent({
   name: 'GuessQuestionWindow',
   setup() {
     const questionStore = useQuestionStore();
-    // const theme = useTheme(); for later theme tweakability
+    const display = useDisplay();
 
     const answerOptions = computed(() => {
       const currentQuestion = questionStore.getCurrentQuestion;
@@ -63,10 +64,21 @@ export default defineComponent({
       await questionStore.answerCurrentQuestion(index);
     };
 
+    const containerStyle = computed(() => ({
+      transform: display.mdAndUp ? "scale(1)" : "scale(0.8)",
+      transformOrigin: "top left",
+    }));
+
+    const buttonStyle = computed(() => ({
+      fontSize: display.mdAndUp ? "1.2rem" : "1rem",
+    }));
+
     return {
       questionStore,
       answerOptions,
       handleAnswer,
+      containerStyle,
+      buttonStyle,
     };
   },
 });
@@ -91,12 +103,7 @@ export default defineComponent({
   background: color white;
 }
 
-.answer-card:hover {
-  background-color: #f1f1f1;
-}
-
 .answer-text {
   font-size: 1.2rem;
 }
-
 </style>
