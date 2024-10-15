@@ -2,9 +2,6 @@
 
 This project aims to create a centralized repository of multiple-choice questions for psychology students, using questions sourced from various contributors. The goal is to provide an interactive platform where students can practice, review, and contribute questions based on the OpenStax Psychology book.
 
-**Current Question Collection:**  
-Questions are currently collected in a collaborative [Google Doc](https://docs.google.com/document/d/14OcbX4qMwhRGgL2HfmaO_qIqZKjJfzWfvDCaZ8Kxpaw/edit).
-
 ## Plans for Development
 
 This project is being actively developed into an interactive web app using **Streamlit** and may potentially be migrated to **Vue.js** in the future for enhanced interactivity. Below is the development plan.
