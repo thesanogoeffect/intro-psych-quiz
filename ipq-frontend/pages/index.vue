@@ -132,11 +132,14 @@ export default {
     RightSidebar,
   },
   setup() {
-    const drawer = ref(true);
-    const rightDrawer = ref(true);
+    const display = useDisplay();
+    const mdAndUp = computed(() => display.mdAndUp);
+
+    const drawer = ref(mdAndUp.value);
+    const rightDrawer = ref(mdAndUp.value);
+
     const router = useRouter();
     const theme = useTheme();
-    const display = useDisplay();
     const questionStore = useQuestionStore();
 
     const filterDialog = ref(false);
@@ -160,6 +163,11 @@ export default {
       },
       { immediate: true }
     );
+
+    watch(mdAndUp, (newVal) => {
+      drawer.value = newVal;
+      rightDrawer.value = newVal;
+    });
 
     function toggleTheme() {
       theme.global.name.value =

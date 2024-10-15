@@ -54,10 +54,15 @@
 import { ref, computed } from "vue";
 import { useQuestionStatsStore } from "#imports";
 import { useQuestionStore } from "#imports";
+import { useDisplay } from "#imports";
 
 // Initialize the store
 const questionStatsStore = useQuestionStatsStore();
 const questionStore = useQuestionStore();
+const display = useDisplay();
+
+// Computed properties
+const mdAndUp = computed(() => display.mdAndUp);
 
 
 const currentQuestion = computed(() => {
