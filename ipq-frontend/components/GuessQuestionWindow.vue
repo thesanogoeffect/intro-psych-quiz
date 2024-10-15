@@ -1,7 +1,7 @@
 <template>
   <v-container :style="containerStyle">
     <!-- Card for the question -->
-    <v-card class="mb-4">
+    <v-card class="mb-4 pa-20">
       <v-card-text>
         <p class="question-text">{{ questionStore.getCurrentQuestion.question_title }}</p>
       </v-card-text>
