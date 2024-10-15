@@ -266,9 +266,6 @@ h1 {
   padding-bottom: 10px;
 }
 
-.v-card {
-  padding: 16px;
-}
 
 .v-card-text {
   padding-bottom: 0;
