@@ -35,7 +35,7 @@
         </v-navigation-drawer>
 
         <!-- Right Navigation Drawer (RightSidebar) -->
-        <v-navigation-drawer location="right">
+        <v-navigation-drawer location="right" permanent>
           <RightSidebar />
         </v-navigation-drawer>
 
@@ -48,40 +48,59 @@
 
       <v-dialog v-model="filterDialog" max-width="500px">
         <v-card>
-          <v-card-title>
-            <span class="headline">Filter Questions</span>
-          </v-card-title>
+          <v-card-title class="headline">Question Filter</v-card-title>
 
           <v-card-text>
             <!-- Chapter Selection -->
-            <v-select
-              multiple
-              variant="solo"
-              :items="availableChapters"
-              v-model="selectedChapters"
-              label="Select Chapter"
-            ></v-select>
-            <v-btn text @click="selectAllChapters">Select All Chapters</v-btn>
-            <v-btn text @click="deselectAllChapters"
-              >Deselect All Chapters</v-btn
-            ><br />
+            <div class="mb-4">
+              <v-select
+                multiple
+                variant="outlined"
+                :items="availableChapters"
+                v-model="selectedChapters"
+                label="Selected Chapters"
+              ></v-select>
+              <v-btn text class="mx-2" @click="selectAllChapters"
+                >Select All Chapters</v-btn
+              >
+              <v-btn text class="mx-2" @click="deselectAllChapters"
+                >Deselect All Chapters</v-btn
+              >
+
+              <v-divider class="my-3"></v-divider>
+
+              <v-btn outlined class="mx-2" @click="selectPreMidtermChapters"
+                >Select Pre-Midterm Chapters</v-btn
+              >
+              <v-btn outlined class="mx-2" @click="selectPostMidtermChapters"
+                >Select Post-Midterm Chapters</v-btn
+              >
+            </div>
 
             <!-- Source Selection -->
-            <v-select
-              multiple
-              variant="solo"
-              :items="availableSources"
-              v-model="selectedSources"
-              label="Select Source"
-            ></v-select>
-            <v-btn text @click="selectAllSources">Select All Sources</v-btn>
-            <v-btn text @click="deselectAllSources">Deselect All Sources</v-btn>
+            <div class="mb-4">
+              <v-select
+                multiple
+                variant="outlined"
+                :items="availableSources"
+                v-model="selectedSources"
+                label="Selected Sources"
+              ></v-select>
+              <v-btn text class="mx-2" @click="selectAllSources"
+                >Select All Sources</v-btn
+              >
+              <v-btn text class="mx-2" @click="deselectAllSources"
+                >Deselect All Sources</v-btn
+              >
+            </div>
           </v-card-text>
 
-          <v-card-actions>
-            <v-spacer></v-spacer>
+          <v-card-actions class="justify-end">
             <v-btn text @click="filterDialog = false">Cancel</v-btn>
-            <v-btn :disabled="!canApplyFilters" text @click="applyFilters"
+            <v-btn
+              :disabled="!canApplyFilters"
+              color="primary"
+              @click="applyFilters"
               >Apply</v-btn
             >
           </v-card-actions>
@@ -162,6 +181,18 @@ export default {
       selectedChapters.value = [];
     };
 
+    const selectPreMidtermChapters = () => {
+      selectedChapters.value = availableChapters.value.filter(
+        (chapter) => chapter >= 1 && chapter <= 6
+      );
+    };
+
+    const selectPostMidtermChapters = () => {
+      selectedChapters.value = availableChapters.value.filter(
+        (chapter) => chapter >= 7 && chapter <= 12
+      );
+    };
+
     const selectAllSources = () => {
       selectedSources.value = [...availableSources.value];
     };
@@ -189,6 +220,8 @@ export default {
       selectedSources,
       selectAllChapters,
       deselectAllChapters,
+      selectPreMidtermChapters,
+      selectPostMidtermChapters,
       selectAllSources,
       deselectAllSources,
     };
@@ -212,5 +245,38 @@ h1 {
 }
 .v-main {
   flex: 1;
+}
+.headline {
+  font-size: 1.5rem;
+  font-weight: bold;
+  text-align: center;
+  padding-bottom: 10px;
+}
+
+.v-card {
+  padding: 16px;
+}
+
+.v-card-text {
+  padding-bottom: 0;
+}
+
+.mb-4 {
+  margin-bottom: 16px;
+}
+
+.mx-2 {
+  margin-left: 8px;
+  margin-right: 8px;
+}
+
+.my-3 {
+  margin-top: 12px;
+  margin-bottom: 12px;
+}
+
+.justify-end {
+  display: flex;
+  justify-content: flex-end;
 }
 </style>

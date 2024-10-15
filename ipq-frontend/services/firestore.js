@@ -29,10 +29,11 @@ export async function getQuestionById(id) {
   }
 
 // Function to increment the fields of a question
-export function incrementQuestionFields(id, updates, negative = false) {
+export async function incrementQuestionFields(id, updates, negative = false) {
   setTimeout(async () => {
     const { $questionsRef } = useNuxtApp(); // Access the injected questionsRef
-    const questionDocRef = doc($questionsRef, id);
+    console.log("ID firestore trigger:", id);  // Debug log
+    const questionDocRef = doc($questionsRef, String(id));
 
     const updateData = {};
     updates.forEach((key) => {

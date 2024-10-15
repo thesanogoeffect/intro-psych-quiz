@@ -4,14 +4,15 @@
       icon="mdi-arrow-left"
       :disabled="!canGoLeft"
       @click="useLeftArrow"
-      class="navigation-button"
+      class="navigation-button mt-2"
     >
     </v-btn>
+    <InteractionsPill class="mx-7"/>
     <v-btn
       icon="mdi-arrow-right"
       :disabled="!canGoRight"
       @click="useRightArrow"
-      class="navigation-button"
+      class="navigation-button mt-2"
     >
     </v-btn>
   </v-container>
@@ -19,7 +20,9 @@
 
 <script setup>
 import { useQuestionStore } from "#imports";
+import { useQuestionStatsStore } from "#imports";
 import { ref, onMounted, onBeforeUnmount, computed } from "vue";
+import InteractionsPill from "./InteractionsPill.vue";
 
 const questionStore = useQuestionStore();
 const clickBlocked = ref(false); // Flag to block clicks
@@ -45,28 +48,29 @@ function blockClickTemporarily() {
   }, 400); 
 }
 
-function useLeftArrow() {
+async function useLeftArrow() {
   if (clickBlocked.value) return; // Prevent action if click is blocked
   blockClickTemporarily();
 
   if (questionStore.getReviewMode) {
     if (questionStore.getCurrentReviewPosition > 0) {
-      questionStore.previousReviewedQuestion();
+      await questionStore.previousReviewedQuestion();
     }
   } else {
-    questionStore.toggleReviewMode();
+    await questionStore.toggleReviewMode();
   }
 }
 
-function useRightArrow() {
+async function useRightArrow() {
   if (clickBlocked.value) return; // Prevent action if click is blocked
   blockClickTemporarily();
 
   if (questionStore.getReviewMode) {
     if (questionStore.getCurrentReviewPosition === questionStore.getAnswerHistoryLength - 1) {
-      questionStore.toggleReviewMode();
+      // this means we are at the end of the review mode and therefore we trigger next question guess again
+      await questionStore.toggleReviewMode();
     } else {
-      questionStore.nextReviewedQuestion();
+      await questionStore.nextReviewedQuestion();
     }
   } else {
     questionStore.skipQuestion();
@@ -74,13 +78,13 @@ function useRightArrow() {
 }
 
 // Handle arrow key presses
-function handleKeydown(event) {
+async function handleKeydown(event) {
   if ((event.key === 'ArrowLeft' || event.key === 'a' || event.key === 'A') && canGoLeft.value) {
     event.preventDefault(); // prevent default arrow key behavior
-    useLeftArrow();
+    await useLeftArrow();
   } else if ((event.key === 'ArrowRight' || event.key === 'd' || event.key === 'D') && canGoRight.value) {
     event.preventDefault(); // prevent default arrow key behavior
-    useRightArrow();
+    await useRightArrow();
   }
 }
 
@@ -94,7 +98,6 @@ onBeforeUnmount(() => {
   window.removeEventListener('keydown', handleKeydown);
 });
 </script>
-
 
 <style scoped>
 .navigation-button {

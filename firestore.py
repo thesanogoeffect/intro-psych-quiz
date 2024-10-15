@@ -20,10 +20,12 @@ new_question = {
     "times_downvoted": 0,
 }
 
+
 # get a question by id
 def get_question_by_id(question_id: int) -> dict:
     doc_ref = client.collection(COLLECTION_NAME).document(str(question_id))
     return doc_ref.get().to_dict()
+
 
 def create_question(question_id: int) -> None:
     doc_ref = client.collection(COLLECTION_NAME).document(str(question_id))
@@ -32,16 +34,18 @@ def create_question(question_id: int) -> None:
     doc_ref.set(question_contents)
     # set question_id as the document id
     # also set the question_id in the document
-    
+
 
 def delete_question(question_id: int) -> None:
     doc_ref = client.collection(COLLECTION_NAME).document(str(question_id))
     doc_ref.delete()
 
+
 def delete_all_questions():
     questions = client.collection(COLLECTION_NAME).stream()
     for question in questions:
         question.reference.delete()
+
 
 if __name__ == "__main__":
     delete_all_questions()

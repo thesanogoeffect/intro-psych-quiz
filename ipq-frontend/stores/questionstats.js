@@ -12,19 +12,23 @@ export const useQuestionStatsStore = defineStore("questionstats", {
     current_question_id: null,
     question_cache: {}, // a dictionary of question_id to question_stats
     // the following keep track whether the user has upvoted, downvoted, flagged etc.
-    upvote_cache: {},  // a dictionary of question_id to true/false
+    upvote_cache: {}, // a dictionary of question_id to true/false
     downvote_cache: {}, // a dictionary of question_id to true/false
-     // a dictionary of question_id to true/false
+    // a dictionary of question_id to true/false
+    flag_cache: {}, // a dictionary of question_id to true/false
 
-      current_question_increment_fields: {
-        times_asked: true,
-        times_answered_correct: false,
-        times_skipped: false,
-        times_flagged: false,
-        times_answered: false,
-        times_upvoted: false,
-        times_downvoted: false,
-      }, // a dictionary of fields to increment
+    current_questions_increment_fields: {}, // {int: dict} a dictionary of question_id to fields to increment, current proposed changes
+    cached_questions_increment_fields: {}, // keeping track of what was already sent to Firestore
+
+    new_question_increment_fields: {
+      times_asked: false,
+      times_answered_correct: false,
+      times_skipped: false,
+      times_flagged: false,
+      times_answered: false,
+      times_upvoted: false,
+      times_downvoted: false,
+    }, // a dictionary of fields to increment
   }),
 
   getters: {
@@ -35,6 +39,30 @@ export const useQuestionStatsStore = defineStore("questionstats", {
     getQuestionStatsById: (state) => (question_id) => {
       return state.question_cache[question_id];
     },
+    getCurrentIncrementFieldsbyId: (state) => (question_id) => {
+      return state.current_questions_increment_fields[question_id] || {};
+    },
+    getCachedIncrementFieldsbyId: (state) => (question_id) => {
+      return state.cached_questions_increment_fields[question_id] || {};
+    },
+    getUpvoteCache: (state) => {
+      return state.upvote_cache;
+    },
+    getDownvoteCache: (state) => {
+      return state.downvote_cache;
+    },
+    getFlagCache: (state) => {
+      return state.flag_cache;
+    },
+    getUpvoteCacheById: (state) => (question_id) => {
+      return state.upvote_cache[question_id];
+    },
+    getDownvoteCacheById: (state) => (question_id) => {
+      return state.downvote_cache[question_id];
+    },
+    getFlagCacheById: (state) => (question_id) => {
+      return state.flag_cache[question_id];
+    },
   },
 
   actions: {
@@ -43,7 +71,7 @@ export const useQuestionStatsStore = defineStore("questionstats", {
       this.current_question_id = question_id;
       // Now fetch the dict based on question_id from Firestore, if not in cache
       if (question_id in this.question_cache) {
-        this.current_question_stats = this.question_cache[question_id];
+        this.current_question_stats = this.getQuestionStatsById(question_id);
         console.log("Fetched from cache");
         console.log(this.current_question_stats);
         return;
@@ -52,6 +80,14 @@ export const useQuestionStatsStore = defineStore("questionstats", {
       console.log(this.current_question_stats);
       // save to cache
       this.question_cache[question_id] = this.current_question_stats;
+
+      //generate upvote, downvote and flag cache
+      this.upvote_cache[question_id] = false;
+      this.downvote_cache[question_id] = false;
+      this.flag_cache[question_id] = false;
+
+      // generate the increment fields
+      await this.preBuildIncrementFields([question_id]);
     },
 
     async batchFetchQuestionStats(question_ids) {
@@ -60,107 +96,95 @@ export const useQuestionStatsStore = defineStore("questionstats", {
         await this.fetchQuestionStats(question_id);
       }
     },
-    async incrementCurrentQuestionFields() {
-      // Increment the fields of the current question, that are set to true in the current_question_increment_fields dictionary
-      // go through the dictionary and generate an array of fields to increment
-      const fields_to_increment_array = [];
-      for (const field in this.current_question_increment_fields) {
-        if (this.current_question_increment_fields[field]) {
-          fields_to_increment_array.push(field);
-          // also increment the field in the cache
-          this.current_question_stats[field] += 1;
+    async incrementSpecificQuestionFields(question_id) {
+      // yeet into Firestore
+      // get the current proposed changes to Firestore
+      const fields = this.getCurrentIncrementFieldsbyId(question_id);
+      // look to see if the fields were already sent to Firestore
+      const cached_fields = this.getCachedIncrementFieldsbyId(question_id);
+      console.log("Incrementing fields for question_id: " + question_id);
+      console.log("fields", fields);
+      console.log("cached_fields", cached_fields);
+      // get only the key: value pairs that differ from the cached fields
+      const fields_to_increment = [];
+      const fields_to_decrement = [];
+      for (const [key, value] of Object.entries(fields)) {
+        if (value != cached_fields[key]) {
+          if (value) {
+            fields_to_increment.push(key);
+          } else if (!value) {
+            fields_to_decrement.push(key);
+          }
         }
       }
-      console.log(
-        "Incrementing fields for question_id:",
-        this.current_question_id
-      );
-      console.log(fields_to_increment_array);
-      // increment the fields
-      await incrementQuestionFields(
-        this.current_question_id,
-        fields_to_increment_array
-      );
+      console.log("fields_to_increment", fields_to_increment);
+      console.log("fields_to_decrement", fields_to_decrement);
+      // for the false values, decrement the fields
+      // for the true values, increment the fields
+      // process the increment fields in Firestore
+      await incrementQuestionFields(question_id, fields_to_increment, false);
+      await incrementQuestionFields(question_id, fields_to_decrement, true);
+      // update the cache
+      this.cached_questions_increment_fields[question_id] = { ...fields };
+      console.log("Incremented fields for question_id: " + question_id);
     },
-    upvoteCurrentQuestion() {
-      // Upvote the current question
-      this.current_question_increment_fields["times_upvoted"] = true;
-      this.current_question_increment_fields["times_downvoted"] = false;
-      this.upvote_cache[this.current_question_id] = true;
-      this.downvote_cache[this.current_question_id] = false;
-    },
-    downvoteCurrentQuestion() {
-      // Downvote the current question
-      this.current_question_increment_fields["times_downvoted"] = true;
-      this.current_question_increment_fields["times_upvoted"] = false;
-      this.downvote_cache[this.current_question_id] = true;
-        this.upvote_cache[this.current_question_id] = false;
-    },
-    flagCurrentQuestion() {
-      // Flag the current question
-      this.current_question_increment_fields["times_flagged"] = true;
-      this.flag_cache[this.current_question_id] = true;
-    },
-    canceUpvoteCurrentQuestion() {
-      // Deupvote the current question
-      this.current_question_increment_fields["times_upvoted"] = false;
-      this.upvote_cache[this.current_question_id] = false;
-    },
-    cancelDownvoteCurrentQuestion() {
-      // Dedownvote the current question
-      this.current_question_increment_fields["times_downvoted"] = false;
-      this.downvote_cache[this.current_question_id] = false;
-    },
-    cancelFlagCurrentQuestion() {
-      // Deflag the current question
-      this.current_question_increment_fields["times_flagged"] = false;
-      this.flag_cache[this.current_question_id] = false;
-    },
-    upvotePreviousQuestion(question_id) {
+    upvoteSpecificQuestion(question_id) {
       // Upvote the selected question in retrospect
       this.upvote_cache[question_id] = true;
-      this.downvote_cache[question_id] = false;
-      incrementQuestionFields(question_id, ["times_upvoted"], false);
-      incrementQuestionFields(question_id, ["times_downvoted"], true);
+      this.current_questions_increment_fields[question_id]["times_upvoted"] = true;
+      if (this.getDownvoteCacheById(question_id)) {
+        this.cancelDownvoteSpecificQuestion(question_id);
+      }
+      // also increment the field in the cache
+      this.question_cache[question_id]["times_upvoted"] += 1;
     },
-    downvotePreviousQuestion(question_id) {
+    downvoteSpecificQuestion(question_id) {
       // Downvote the selected question in retrospect
       this.downvote_cache[question_id] = true;
-      this.upvote_cache[question_id] = false;
-      incrementQuestionFields(question_id, ["times_downvoted"], false);
-      incrementQuestionFields(question_id, ["times_upvoted"], true);
+      this.current_questions_increment_fields[question_id]["times_downvoted"] = true;
+      if (this.getUpvoteCacheById(question_id)) {
+        this.cancelUpvoteSpecificQuestion(question_id);
+      }
+      // also increment the field in the cache
+      this.question_cache[question_id]["times_downvoted"] += 1;
     },
-    flagPreviousQuestion(question_id) {
+    flagSpecificQuestion(question_id) {
       // Flag the selected question in retrospect
       this.flag_cache[question_id] = true;
-      incrementQuestionFields(question_id, ["times_flagged"]);
+      this.current_questions_increment_fields[question_id]["times_flagged"] = true;
+      // also increment the field in the cache
+      this.question_cache[question_id]["times_flagged"] += 1;
     },
-    cancelUpvotePreviousQuestion(question_id) {
+    cancelUpvoteSpecificQuestion(question_id) {
       // Deupvote the selected question in retrospect
       this.upvote_cache[question_id] = false;
-      incrementQuestionFields(question_id, ["times_upvoted"], true);
+      this.current_questions_increment_fields[question_id]["times_upvoted"] = false;
+      // also increment the field in the cache
+      this.question_cache[question_id]["times_upvoted"] -= 1;
     },
-    cancelDownvotePreviousQuestion(question_id) {
+    cancelDownvoteSpecificQuestion(question_id) {
       // Dedownvote the selected question in retrospect
       this.downvote_cache[question_id] = false;
-      incrementQuestionFields(question_id, ["times_downvoted"], true);
+      this.current_questions_increment_fields[question_id]["times_downvoted"] = false;
+      // also increment the field in the cache
+      this.question_cache[question_id]["times_downvoted"] -= 1;
     },
-    cancelFlagPreviousQuestion(question_id) {
+    cancelFlagSpecificQuestion(question_id) {
       // Deflag the selected question in retrospect
       this.flag_cache[question_id] = false;
-      incrementQuestionFields(question_id, ["times_flagged"], true);
+      this.current_questions_increment_fields[question_id]["times_flagged"] = false;
+      // also increment the field in the cache
+      this.question_cache[question_id]["times_flagged"] -= 1;
     },
     // reset current_question_increment_fields
-    resetIncrementFields() {
-      this.current_question_increment_fields = {
-        times_asked: true,
-        times_answered_correct: false,
-        times_skipped: false,
-        times_flagged: false,
-        times_answered: false,
-        times_upvoted: false,
-        times_downvoted: false,
-      };
-    },
+
+    async preBuildIncrementFields(ids) {
+      // populate the current_questions_increment_fields and cached_questions_increment_fields with new_question_increment_fields
+      for (const id of ids) {
+        this.current_questions_increment_fields[id] = { ...this.new_question_increment_fields };
+        this.cached_questions_increment_fields[id] = { ...this.new_question_increment_fields };
+      }
+    }
+
   },
 });

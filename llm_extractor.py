@@ -131,8 +131,7 @@ def process_book_text_questions(book_text: str, chapter_id:int) -> pd.DataFrame:
     df["source"] = "Book"
     df["chapter_id"] = chapter_id
     df["author"] = ""
-    df["student_id"] = ""
     df["timestamp"] = pd.Timestamp.now(tz=pytz.timezone('Europe/Amsterdam')).strftime('%m/%d/%Y %H:%M:%S')
-    df = df[["timestamp", "question_title", "chapter_id", "correct_answer", "distractor_1", "distractor_2", "distractor_3", "source", "author", "student_id"]]
+    df = df[["timestamp", "question_title", "chapter_id", "correct_answer", "distractor_1", "distractor_2", "distractor_3", "source", "author"]]
     return df
 

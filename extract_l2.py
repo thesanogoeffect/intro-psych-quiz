@@ -22,7 +22,7 @@ def create_l3():
     # get the l2 data
     df = load_db_into_df()
     # keep only the columns we want
-    df = df[["id", "timestamp", "question_title", "chapter_id", "correct_answer", "distractor_1", "distractor_2", "distractor_3", "source", "author", "student_id"]]
+    df = df[["id", "timestamp", "question_title", "chapter_id", "correct_answer", "distractor_1", "distractor_2", "distractor_3", "source", "author"]]
     # save the l2 data as l3
     df.to_csv("l3.csv", index=False)
     # now also save it as json

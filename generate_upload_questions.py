@@ -1,7 +1,7 @@
 from llm_extractor import process_book_text_questions 
 from gsheets import download_l1_gsheet_to_df, upload_l1_df_to_gsheet
 # matching the following table format in GSheets:
-# timestamp	question_title	chapter_id	correct_answer	distractor_1	distractor_2	distractor_3	source	author	student_id
+# timestamp	question_title	chapter_id	correct_answer	distractor_1	distractor_2	distractor_3	source	author
 
 # we want different ways to be able to generate questions
 

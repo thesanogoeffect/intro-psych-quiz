@@ -82,41 +82,42 @@ export const useQuestionStore = defineStore("question", {
         // Shuffle the filtered questions
         const shuffled = filteredQuestions.sort(() => 0.5 - Math.random());
         return shuffled;
-            },
+      },
 
-          getReviewMode: (state) => state.reviewMode,
+    getReviewMode: (state) => state.reviewMode,
 
-          getAnswerHistory: (state) => state.answerHistory,
-          getAnswerHistoryLength: (state) => state.answerHistory.length, 
-          getCurrentReviewPosition: (state) => state.currentReviewPosition,
+    getAnswerHistory: (state) => state.answerHistory,
+    getAnswerHistoryLength: (state) => state.answerHistory.length,
+    getCurrentReviewPosition: (state) => state.currentReviewPosition,
 
-          getCurrentlyReviewedQuestion: (state) => state.currentlyReviewedQuestion,
+    getCurrentlyReviewedQuestion: (state) => state.currentlyReviewedQuestion,
 
-          getChapterById: (state) => (chapter_id) => state.BOOK_CHAPTER_NAMES[chapter_id],
+    getChapterById: (state) => (chapter_id) =>
+      state.BOOK_CHAPTER_NAMES[chapter_id],
 
-          getCurrentQuestion: (state) => state.currentQuestion,
+    getCurrentQuestion: (state) => state.currentQuestion,
 
-          getSkipsRemaining: (state) => state.skipsRemaining,
+    getSkipsRemaining: (state) => state.skipsRemaining,
 
-          getSkippedQuestions: (state) => state.total_skipped_questions,
+    getSkippedQuestions: (state) => state.total_skipped_questions,
 
-          getAllChapters: (state) => state.all_chapters,
+    getAllChapters: (state) => state.all_chapters,
 
-          getAllSources: (state) => state.all_sources,
+    getAllSources: (state) => state.all_sources,
 
-          getBookChapterNames: (state) => state.BOOK_CHAPTER_NAMES,
+    getBookChapterNames: (state) => state.BOOK_CHAPTER_NAMES,
 
-          getSelectedChapters: (state) => state.selected_chapters,
+    getSelectedChapters: (state) => state.selected_chapters,
 
-          getSelectedSources: (state) => state.selected_sources,
+    getSelectedSources: (state) => state.selected_sources,
 
-          getTotalShownQuestions: (state) => state.total_shown_questions,
+    getTotalShownQuestions: (state) => state.total_shown_questions,
 
-          getTotalAnsweredQuestions: (state) => state.total_answered_questions,
+    getTotalAnsweredQuestions: (state) => state.total_answered_questions,
 
-          getTotalCorrectAnswers: (state) => state.total_correct_answers,
+    getTotalCorrectAnswers: (state) => state.total_correct_answers,
 
-          getFilteredByChapterAndSource: (state) => {
+    getFilteredByChapterAndSource: (state) => {
       return state.all_questions.filter(
         (question) =>
           state.selected_chapters.includes(question.chapter_id) &&
@@ -149,8 +150,20 @@ export const useQuestionStore = defineStore("question", {
     incrementTotalSkippedQuestions() {
       this.total_skipped_questions++;
     },
-    toggleReviewMode() {
+    async toggleReviewMode() {
+      const questionStatsStore = useQuestionStatsStore();
+      await questionStatsStore.incrementSpecificQuestionFields(
+        this.reviewMode
+          ? this.currentlyReviewedQuestion.id
+          : this.currentQuestion.id
+      );
       this.reviewMode = !this.reviewMode;
+      if (!this.reviewMode) {
+        // if we just exited review mode, the user has seen the question
+        questionStatsStore.current_questions_increment_fields[
+          this.currentQuestion.id
+        ]["times_asked"] = true;
+      }
       if (this.getAnswerHistoryLength > 0) {
         this.currentlyReviewedQuestion = this.answerHistory.at(-1);
         this.currentReviewPosition = this.getAnswerHistoryLength - 1;
@@ -165,27 +178,38 @@ export const useQuestionStore = defineStore("question", {
     resetCurrentReviewPosition() {
       this.currentReviewPosition = 0;
     },
-    previousReviewedQuestion() {
+    async previousReviewedQuestion() {
+      const questionStatsStore = useQuestionStatsStore();
       if (this.currentReviewPosition === 0) {
-        // cannot go back, 
-      }
-      else {
+        // cannot go back,
+      } else {
         this.decrementCurrentReviewPosition();
-        this.currentlyReviewedQuestion = this.answerHistory[this.currentReviewPosition];
+        await questionStatsStore.incrementSpecificQuestionFields(
+          this.currentlyReviewedQuestion.id
+        );
+        this.currentlyReviewedQuestion =
+          this.answerHistory[this.currentReviewPosition];
+        
       }
     },
-    nextReviewedQuestion() {
+    async nextReviewedQuestion() {
+      const questionStatsStore = useQuestionStatsStore();
       if (this.currentReviewPosition == this.getAnswerHistoryLength - 1) {
         // cannot go forward
-      }
-      else {
+      } else {
         this.incrementCurrentReviewPosition();
-        this.currentlyReviewedQuestion = this.answerHistory[this.currentReviewPosition];
+        await questionStatsStore.incrementSpecificQuestionFields(
+          this.currentlyReviewedQuestion.id
+        );
+        this.currentlyReviewedQuestion =
+          this.answerHistory[this.currentReviewPosition];
+        // also increment to Firestore
+        
       }
     },
     async loadQuestionsFromJSON() {
       try {
-        const response = await fetch("/l3.json");
+        const response = await fetch((process.env.NODE_ENV === "development") ? "/l3.json" : "/intro-psych-quiz/l3.json");
         if (!response.ok) {
           throw new Error("Failed to load questions from JSON file");
         }
@@ -207,6 +231,7 @@ export const useQuestionStore = defineStore("question", {
     },
     async setUp() {
       await this.loadQuestionsFromJSON();
+      const questionStatsStore = useQuestionStatsStore();
 
       // Check if all_questions is loaded
       console.log("All Questions:", this.all_questions);
@@ -215,16 +240,25 @@ export const useQuestionStore = defineStore("question", {
 
       // Generate the initial queue
       await this.generateQueue(this.selected_chapters, this.selected_sources);
-      // here, pop withou calling .getFromQueue
+      this.incrementTotalShownQuestions();
       this.currentQuestion = await this.getFromQueue(true);
+      questionStatsStore.current_questions_increment_fields[
+        this.currentQuestion.id
+      ]["times_asked"] = true;
+      // here, pop withou calling .getFromQueue
     },
     async reSetUpAfterFiltersChange() {
       const questionStatsStore = useQuestionStatsStore();
+      // first, flush to Firestore
+      await questionStatsStore.incrementSpecificQuestionFields(this.reviewMode? this.currentlyReviewedQuestion.id : this.currentQuestion.id);
       // Generate the initial queue
       await this.generateQueue(this.selected_chapters, this.selected_sources);
       // here, call .getFromQueue with blockAnalytics set to true
       this.currentQuestion = await this.getFromQueue(true);
-      questionStatsStore.resetIncrementFields();
+      this.incrementTotalShownQuestions();
+      questionStatsStore.current_questions_increment_fields[
+        this.currentQuestion.id
+      ]["times_asked"] = true;
       this.reviewMode = false;
     },
     async generateQueue(chapter_ids = [], sources = [], question_ids = []) {
@@ -241,7 +275,6 @@ export const useQuestionStore = defineStore("question", {
           question.distractor_2,
           question.distractor_3,
         ];
-
         // Shuffle the answers array
         const shuffledAnswers = answers.sort(() => 0.5 - Math.random());
 
@@ -279,17 +312,10 @@ export const useQuestionStore = defineStore("question", {
           return null;
         }
       }
-
-      if (this.currentQuestion && !blockAnalytics) {
-        await questionStatsStore.incrementCurrentQuestionFields(); //firestore
-      }
       // Pop the first question from the queue and set it as the current question
       const nextQuestion = this.questionQueue.shift();
       await questionStatsStore.fetchQuestionStats(String(nextQuestion.id)); // TODO change later so that more than one question can be fetched at a time this.currentQuestion = nextQuestion;
-      // now submit the stats for the previous question to Firestore
-
-      questionStatsStore.resetIncrementFields(); //firestore
-      this.incrementTotalShownQuestions();
+      await questionStatsStore.preBuildIncrementFields([nextQuestion.id]);
       return nextQuestion;
     },
     async skipQuestion() {
@@ -312,15 +338,14 @@ export const useQuestionStore = defineStore("question", {
       // Add the current question to answerHistory
       this.answerHistory.push(this.currentQuestion);
 
-      questionStatsStore.incrementCurrentQuestionFields[ // increment for firestore purposes
-        "times_skipped"
-      ] = true;
+      questionStatsStore.current_questions_increment_fields[
+        this.currentQuestion.id
+      ]["times_skipped"] = true;
       // Pop the next question and set it as the current question
+      await this.toggleReviewMode();
       this.currentQuestion = await this.getFromQueue();
-
       // Increment counters
       this.incrementTotalSkippedQuestions();
-      this.toggleReviewMode();
     },
     async answerCurrentQuestion(guessed_index) {
       const questionStatsStore = useQuestionStatsStore();
@@ -335,13 +360,13 @@ export const useQuestionStore = defineStore("question", {
         guessed_index === this.currentQuestion.correct_answer_index;
 
       if (isCorrect) {
-        questionStatsStore.current_question_increment_fields[
-          "times_answered_correct"
-        ] = true;
+        questionStatsStore.current_questions_increment_fields[
+          this.currentQuestion.id
+        ]["times_answered_correct"] = true;
       }
-      questionStatsStore.current_question_increment_fields[
-        "times_answered"
-      ] = true;
+      questionStatsStore.current_questions_increment_fields[
+        this.currentQuestion.id
+      ]["times_answered"] = true;
 
       console.log("User's answer index:", guessed_index);
       console.log(
@@ -374,7 +399,7 @@ export const useQuestionStore = defineStore("question", {
       }
 
       console.log("answerHistory:", this.answerHistory);
-      this.toggleReviewMode();
+      await this.toggleReviewMode();
 
       // Pop the next question and set it as the current question
       this.currentQuestion = await this.getFromQueue();

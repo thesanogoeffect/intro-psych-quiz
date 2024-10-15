@@ -47,7 +47,6 @@ def create_table():
         distractor_3 TEXT NOT NULL,
         source TEXT,
         author TEXT,
-        student_id TEXT,
         is_sensible_llm BOOLEAN,
         is_grammatical_llm BOOLEAN,
         is_relevant_chapter_llm BOOLEAN,

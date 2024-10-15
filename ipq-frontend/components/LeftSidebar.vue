@@ -114,7 +114,6 @@
 </template>
 
 <script>
-import { computed } from "vue";
 import { useQuestionStore } from "#imports";
 import { useQuestionStatsStore } from "#imports";
 
