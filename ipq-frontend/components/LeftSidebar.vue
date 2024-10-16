@@ -6,49 +6,47 @@
           <h2 class="mb-2 text-center">Stats</h2>
           <!-- Existing User Stats -->
           <v-row>
-            <v-col cols="2">
+            <v-col cols="2" xs="3">
               <v-icon color="secondary">mdi-eye-outline</v-icon>
             </v-col>
-            <v-col cols="7"> Total Shown: </v-col>
-            <v-col>
+            <v-col cols="7" xs="6"> Total Shown: </v-col>
+            <v-col cols="3" xs="3">
               {{ userStore.getTotalShownQuestions }}
             </v-col>
           </v-row>
           <v-row>
-            <v-col cols="2">
-              <v-icon color="primary"
-                >mdi-checkbox-marked-circle-outline</v-icon
-              >
+            <v-col cols="2" xs="3">
+              <v-icon color="primary">mdi-checkbox-marked-circle-outline</v-icon>
             </v-col>
-            <v-col cols="7"> Answered: </v-col>
-            <v-col>
+            <v-col cols="7" xs="6"> Answered: </v-col>
+            <v-col cols="3" xs="3">
               {{ userStore.getTotalAnsweredQuestions }}
             </v-col>
           </v-row>
           <v-row>
-            <v-col cols="2">
+            <v-col cols="2" xs="3">
               <v-icon color="success">mdi-check-circle-outline</v-icon>
             </v-col>
-            <v-col cols="7"> Correct: </v-col>
-            <v-col>
+            <v-col cols="7" xs="6"> Correct: </v-col>
+            <v-col cols="3" xs="3">
               {{ userStore.getTotalCorrectAnswers }}
             </v-col>
           </v-row>
           <v-row>
-            <v-col cols="2">
+            <v-col cols="2" xs="3">
               <v-icon color="warning">mdi-skip-next-circle-outline</v-icon>
             </v-col>
-            <v-col cols="7"> Skipped: </v-col>
-            <v-col>
+            <v-col cols="7" xs="6"> Skipped: </v-col>
+            <v-col cols="3" xs="3">
               {{ userStore.getSkippedQuestions }}
             </v-col>
           </v-row>
           <v-row>
-            <v-col cols="2">
+            <v-col cols="2" xs="3">
               <v-icon color="info">mdi-help-circle-outline</v-icon>
             </v-col>
-            <v-col cols="7">Skips Left:</v-col>
-            <v-col> {{ userStore.getSkipsRemaining }}</v-col>
+            <v-col cols="7" xs="6">Skips Left:</v-col>
+            <v-col cols="3" xs="3"> {{ userStore.getSkipsRemaining }}</v-col>
           </v-row>
           <v-row
             v-show="userStore.getTotalAnsweredQuestions > 0"
@@ -97,9 +95,7 @@
             </v-row>
             <v-row>
               <v-col>
-                <v-icon color="primary"
-                  >mdi-checkbox-marked-circle-outline</v-icon
-                >
+                <v-icon color="primary">mdi-checkbox-marked-circle-outline</v-icon>
                 Times Answered: {{ questionStats.times_answered }}
               </v-col>
             </v-row>
