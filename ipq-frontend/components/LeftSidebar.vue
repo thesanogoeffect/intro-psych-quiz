@@ -82,33 +82,48 @@
               {{ chapter ? chapter.name : "Unknown Chapter" }}
             </h3>
             <v-row>
-              <v-col>
+              <v-col cols="2" xs="3">
                 <v-icon color="secondary">mdi-eye-outline</v-icon>
-                Times Asked: {{ questionStats.times_asked }}
+              </v-col>
+              <v-col cols="7" xs="6"> Times Asked: </v-col>
+              <v-col cols="3" xs="3">
+                {{ questionStats.times_asked }}
               </v-col>
             </v-row>
             <v-row>
-              <v-col>
+              <v-col cols="2" xs="3">
                 <v-icon color="success">mdi-check-circle-outline</v-icon>
-                Answered Correctly: {{ questionStats.times_answered_correct }}
+              </v-col>
+              <v-col cols="7" xs="6"> Answered Correctly: </v-col>
+              <v-col cols="3" xs="3">
+                {{ questionStats.times_answered_correct }}
               </v-col>
             </v-row>
             <v-row>
-              <v-col>
+              <v-col cols="2" xs="3">
                 <v-icon color="primary">mdi-checkbox-marked-circle-outline</v-icon>
-                Times Answered: {{ questionStats.times_answered }}
+              </v-col>
+              <v-col cols="7" xs="6"> Times Answered: </v-col>
+              <v-col cols="3" xs="3">
+                {{ questionStats.times_answered }}
               </v-col>
             </v-row>
             <v-row>
-              <v-col>
+              <v-col cols="2" xs="3">
                 <v-icon color="warning">mdi-skip-next-circle-outline</v-icon>
-                Times Skipped: {{ questionStats.times_skipped }}
+              </v-col>
+              <v-col cols="7" xs="6"> Times Skipped: </v-col>
+              <v-col cols="3" xs="3">
+                {{ questionStats.times_skipped }}
               </v-col>
             </v-row>
             <v-row>
-              <v-col>
+              <v-col cols="2" xs="3">
                 <v-icon color="error">mdi-flag-outline</v-icon>
-                Times Flagged: {{ questionStats.times_flagged }}
+              </v-col>
+              <v-col cols="7" xs="6"> Times Flagged: </v-col>
+              <v-col cols="3" xs="3">
+                {{ questionStats.times_flagged }}
               </v-col>
             </v-row>
             <v-row v-show="questionStats.times_answered > 0" justify="center">
