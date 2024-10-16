@@ -4,9 +4,6 @@
         <NuxtLink to="/">Back to Home</NuxtLink>
         <br><p>Developed for TU/e with ❤️ by Jakub Werner</p>
         <p>Thanks to prof. Daniël Lakens for endorsing the idea, also special thanks to Tim, Aaravee and others </p>
-
-
-        <p><i>Pro tip - you can use A+D or Arrow keys to cycle between the questions!</i></p>
         <h2>F.A.Q.:</h2>
         <p><strong>What exactly is this and why does it exist?</strong></p>
         <p>I wanted to create a resource for fellow P&T students after seeing the prev years' students submitted questions. The idea was great, but sometimes there were mistakes in the questions, or they were not really good.

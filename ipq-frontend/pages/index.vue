@@ -1,5 +1,7 @@
 <template>
   <v-app>
+    <LandingPopup />
+
     <v-card>
       <v-layout column fill-height>
         <!-- App Bar -->
@@ -27,6 +29,8 @@
             variant="text"
             @click="routeToAbout"
           ></v-btn>
+          <v-btn icon="mdi-help-circle" @click="openPopup"></v-btn>
+          
           <v-btn
             icon="mdi-format-align-right"
             variant="text"
@@ -35,7 +39,7 @@
         </v-app-bar>
 
         <!-- Left Navigation Drawer -->
-        <v-navigation-drawer v-model="drawer" location="left" v-if="drawer">
+        <v-navigation-drawer v-model="drawer" location="left">
           <LeftSidebar />
         </v-navigation-drawer>
 
@@ -116,13 +120,15 @@
 </template>
 
 <script>
-import { ref, computed, watch } from "vue";
+import { ref, computed, watch, onMounted } from "vue";
 import { useRouter } from "vue-router";
 import { useTheme } from "vuetify";
 import LeftSidebar from "~/components/LeftSidebar.vue";
 import MainQuestionWindow from "~/components/MainQuestionWindow.vue";
 import RightSidebar from "~/components/RightSidebar.vue";
 import { useQuestionStore } from "#imports";
+import LandingPopup from "~/components/LandingPopup.vue";
+import { useGeneralStore } from "~/stores/generalstore";
 
 export default {
   name: "Home",
@@ -141,6 +147,7 @@ export default {
     const router = useRouter();
     const theme = useTheme();
     const questionStore = useQuestionStore();
+    const generalStore = useGeneralStore();
 
     const filterDialog = ref(false);
 
@@ -226,9 +233,24 @@ export default {
       );
     });
 
+    const openPopup = () => {
+      generalStore.toggleLandingPopup();
+    };
+
+    // onMounted(() => {
+    //   const currentHour = new Date().getHours();
+    //   theme.global.name.value =
+    //     currentHour >= 18 || currentHour < 6 ? "dark" : "light";
+    // });
+    // Set theme based on client's local time
+    
+    
+
     return {
+      openPopup,
       drawer,
       rightDrawer,
+      openPopup,
       toggleRightDrawer,
       routeToAbout,
       toggleTheme,
@@ -251,10 +273,6 @@ export default {
 </script>
 
 <style scoped>
-h1 {
-  color: #42b983;
-}
-
 .v-layout {
   display: flex;
   flex-direction: column;
@@ -273,7 +291,6 @@ h1 {
   text-align: center;
   padding-bottom: 10px;
 }
-
 
 .v-card-text {
   padding-bottom: 0;
