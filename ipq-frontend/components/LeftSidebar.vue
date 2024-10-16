@@ -6,36 +6,54 @@
           <h2 class="mb-2 text-center">Stats</h2>
           <!-- Existing User Stats -->
           <v-row>
-            <v-col>
+            <v-col cols="2">
               <v-icon color="secondary">mdi-eye-outline</v-icon>
-              Total Shown: {{ userStore.getTotalShownQuestions }}
+            </v-col>
+            <v-col cols="7"> Total Shown: </v-col>
+            <v-col>
+              {{ userStore.getTotalShownQuestions }}
             </v-col>
           </v-row>
           <v-row>
+            <v-col cols="2">
+              <v-icon color="primary"
+                >mdi-checkbox-marked-circle-outline</v-icon
+              >
+            </v-col>
+            <v-col cols="7"> Answered: </v-col>
             <v-col>
-              <v-icon color="primary">mdi-checkbox-marked-circle-outline</v-icon>
-              Answered: {{ userStore.getTotalAnsweredQuestions }}
+              {{ userStore.getTotalAnsweredQuestions }}
             </v-col>
           </v-row>
           <v-row>
-            <v-col>
+            <v-col cols="2">
               <v-icon color="success">mdi-check-circle-outline</v-icon>
-              Correct: {{ userStore.getTotalCorrectAnswers }}
+            </v-col>
+            <v-col cols="7"> Correct: </v-col>
+            <v-col>
+              {{ userStore.getTotalCorrectAnswers }}
             </v-col>
           </v-row>
           <v-row>
-            <v-col>
+            <v-col cols="2">
               <v-icon color="warning">mdi-skip-next-circle-outline</v-icon>
-              Skipped: {{ userStore.getSkippedQuestions }}
+            </v-col>
+            <v-col cols="7"> Skipped: </v-col>
+            <v-col>
+              {{ userStore.getSkippedQuestions }}
             </v-col>
           </v-row>
           <v-row>
-            <v-col>
+            <v-col cols="2">
               <v-icon color="info">mdi-help-circle-outline</v-icon>
-              Skips Left: {{ userStore.getSkipsRemaining }}
             </v-col>
+            <v-col cols="7">Skips Left:</v-col>
+            <v-col> {{ userStore.getSkipsRemaining }}</v-col>
           </v-row>
-          <v-row v-show="userStore.getTotalAnsweredQuestions > 0" justify="center">
+          <v-row
+            v-show="userStore.getTotalAnsweredQuestions > 0"
+            justify="center"
+          >
             <v-col cols="12" class="text-center">
               <v-progress-circular
                 :model-value="userPercentage"
@@ -62,7 +80,9 @@
           <!-- Global Stats Section -->
           <div v-if="showGlobalStats">
             <h2 class="mb-2 mt-4">Community Stats</h2>
-            <h3 class="mb-3">{{ chapter ? chapter.name : 'Unknown Chapter' }}</h3>
+            <h3 class="mb-3">
+              {{ chapter ? chapter.name : "Unknown Chapter" }}
+            </h3>
             <v-row>
               <v-col>
                 <v-icon color="secondary">mdi-eye-outline</v-icon>
@@ -77,7 +97,9 @@
             </v-row>
             <v-row>
               <v-col>
-                <v-icon color="primary">mdi-checkbox-marked-circle-outline</v-icon>
+                <v-icon color="primary"
+                  >mdi-checkbox-marked-circle-outline</v-icon
+                >
                 Times Answered: {{ questionStats.times_answered }}
               </v-col>
             </v-row>
@@ -101,7 +123,9 @@
                   size="78"
                   width="10"
                 >
-                  <span :class="globalPercentageClass">{{ correctPercentage.toFixed(1) }}%</span>
+                  <span :class="globalPercentageClass"
+                    >{{ correctPercentage.toFixed(1) }}%</span
+                  >
                 </v-progress-circular>
                 <div>Community Percentage</div>
               </v-col>
@@ -174,7 +198,9 @@ export default {
     },
     questionStats() {
       return (
-        this.questionStatsStore.getQuestionStatsById(this.currentQuestionId) || {
+        this.questionStatsStore.getQuestionStatsById(
+          this.currentQuestionId
+        ) || {
           times_asked: 0,
           times_answered_correct: 0,
           times_skipped: 0,
