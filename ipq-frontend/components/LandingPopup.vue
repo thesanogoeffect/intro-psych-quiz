@@ -1,8 +1,8 @@
 <template>
-  <v-dialog v-model="welcomeDialog" max-width="800px" persistent>
+  <v-dialog v-model="welcomeDialog" max-width="800px">
     <v-card>
-      <v-card-title class="headline">Welcome!</v-card-title>
-      <v-card-text>
+      <v-card-title class="headline text-center">Welcome!</v-card-title>
+      <v-card-text class="mx-4">
         <p>
           Hi, welcome to the preview version of the Intro to Psychology Quiz. I
           hope you find it useful!
@@ -70,7 +70,7 @@
         </p>
         <v-btn color="primary" @click="closeDialog">Sounds good</v-btn>
         <br />
-        <p>
+        <p class="">
           Good luck, <br />
           Jakub
         </p>
