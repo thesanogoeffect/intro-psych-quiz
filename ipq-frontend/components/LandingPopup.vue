@@ -68,7 +68,7 @@
           I use 🍪 to remember if you have seen this, and won't show it to you
           again. You can always find it in the top menu.
         </p>
-        <v-btn color="primary" @click="closeDialog">I agree</v-btn>
+        <v-btn color="primary" @click="closeDialog">Sounds good</v-btn>
         <br />
         <p>
           Good luck, <br />
