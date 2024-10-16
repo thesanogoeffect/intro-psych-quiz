@@ -3,7 +3,7 @@
         <h1>About</h1>
         <NuxtLink to="/">Back to Home</NuxtLink>
         <br><p>Developed for TU/e with ❤️ by Jakub Werner</p>
-        <p>Thanks to pro. Daniël Lakens for endorsing the idea, also special thanks to Tim, Aaravee and others </p>
+        <p>Thanks to prof. Daniël Lakens for endorsing the idea, also special thanks to Tim, Aaravee and others </p>
 
 
         <p><i>Pro tip - you can use A+D or Arrow keys to cycle between the questions!</i></p>
