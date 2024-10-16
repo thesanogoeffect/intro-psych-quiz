@@ -1,5 +1,5 @@
 <template>
-  <v-dialog v-model="welcomeDialog" max-width="800px" persisent>
+  <v-dialog v-model="welcomeDialog" max-width="800px" persistent>
     <v-card>
       <v-card-title class="headline">Welcome!</v-card-title>
       <v-card-text>
@@ -90,12 +90,12 @@ export default {
 
     const closeDialog = () => {
       generalStore.toggleLandingPopup();
-      localStorage.setItem("hasSeenWelcomeDialog", "true");
+      localStorage.setItem("hasSeenWelcomeDialog", true);
     };
     onMounted(() => {
       const hasSeenWelcomeDialog = localStorage.getItem("hasSeenWelcomeDialog");
       if (!hasSeenWelcomeDialog) {
-        welcomeDialog.value = true;
+        generalStore.landingPopup = true;
       }
     });
     return {
