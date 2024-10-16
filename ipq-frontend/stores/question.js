@@ -163,6 +163,7 @@ export const useQuestionStore = defineStore("question", {
         questionStatsStore.current_questions_increment_fields[
           this.currentQuestion.id
         ]["times_asked"] = true;
+        this.incrementTotalShownQuestions();
       }
       if (this.getAnswerHistoryLength > 0) {
         this.currentlyReviewedQuestion = this.answerHistory.at(-1);
