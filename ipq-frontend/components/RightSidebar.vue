@@ -3,7 +3,7 @@
     <v-row>
       <v-col>
         <div class="stats-container pa-3">
-          <h2 class="mb-2">Question Info</h2>
+          <h2 class="mb-2 text-center">Question Info</h2>
 
           <!-- Question ID on top -->
           <v-row>

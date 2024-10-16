@@ -3,7 +3,7 @@
     <v-row>
       <v-col>
         <div class="stats-container pa-3">
-          <h2 class="mb-2">Stats</h2>
+          <h2 class="mb-2 text-center">Stats</h2>
           <!-- Existing User Stats -->
           <v-row>
             <v-col>
