@@ -1,6 +1,7 @@
 <template>
   <v-app>
     <LandingPopup />
+    <InstructionsPopup />
 
     <v-card>
       <v-layout column fill-height>
@@ -30,7 +31,7 @@
             @click="routeToAbout"
           ></v-btn>
           <v-btn icon="mdi-help-circle" @click="openPopup"></v-btn>
-          
+
           <v-btn
             icon="mdi-format-align-right"
             variant="text"
@@ -120,14 +121,16 @@
 </template>
 
 <script>
-import { ref, computed, watch, onMounted } from "vue";
+import { ref, computed, watch, onMounted, VueElement } from "vue";
 import { useRouter } from "vue-router";
 import { useTheme } from "vuetify";
+import { useDisplay } from "#imports";
 import LeftSidebar from "~/components/LeftSidebar.vue";
 import MainQuestionWindow from "~/components/MainQuestionWindow.vue";
 import RightSidebar from "~/components/RightSidebar.vue";
 import { useQuestionStore } from "#imports";
 import LandingPopup from "~/components/LandingPopup.vue";
+import InstructionsPopup from "~/components/InstructionsPopup.vue";
 import { useGeneralStore } from "~/stores/generalstore";
 
 export default {
@@ -136,9 +139,13 @@ export default {
     LeftSidebar,
     MainQuestionWindow,
     RightSidebar,
+    LandingPopup,
+    InstructionsPopup,
   },
+
   setup() {
     const display = useDisplay();
+
     const mdAndUp = computed(() => display.mdAndUp);
 
     const drawer = ref(mdAndUp.value);
@@ -234,23 +241,22 @@ export default {
     });
 
     const openPopup = () => {
-      generalStore.toggleLandingPopup();
+      generalStore.toggleInstructionsPopup();
     };
 
-    // onMounted(() => {
-    //   const currentHour = new Date().getHours();
-    //   theme.global.name.value =
-    //     currentHour >= 18 || currentHour < 6 ? "dark" : "light";
-    // });
+    onMounted(() => {
+      const currentHour = new Date().getHours();
+      theme.global.name.value =
+        currentHour >= 18 || currentHour < 6 ? "dark" : "light";
+    });
     // Set theme based on client's local time
-    
-    
 
     return {
       openPopup,
       drawer,
+      display,
+      mdAndUp,
       rightDrawer,
-      openPopup,
       toggleRightDrawer,
       routeToAbout,
       toggleTheme,
@@ -314,4 +320,10 @@ export default {
   display: flex;
   justify-content: flex-end;
 }
+.bottom-right {
+  position: fixed;
+  bottom: 10px;
+  right: 10px;
+}
+
 </style>

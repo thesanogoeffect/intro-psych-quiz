@@ -10,6 +10,8 @@ export const useQuestionStore = defineStore("question", {
     questionQueue: [], // queue holding the questions waiting to be asked
     currentQuestion: null, // the current question being asked
 
+    alreadySeenQuestions: {}, // store the question ids that have already been seen by the user
+
     skipsRemaining: 3, // number of skips remaining for the user
 
     selected_chapters: [],
@@ -139,7 +141,8 @@ export const useQuestionStore = defineStore("question", {
 
   actions: {
     incrementTotalShownQuestions() {
-      this.total_shown_questions++;
+        this.total_shown_questions++;
+      
     },
     incrementTotalAnsweredQuestions() {
       this.total_answered_questions++;
@@ -163,7 +166,10 @@ export const useQuestionStore = defineStore("question", {
         questionStatsStore.current_questions_increment_fields[
           this.currentQuestion.id
         ]["times_asked"] = true;
-        this.incrementTotalShownQuestions();
+        if (!this.alreadySeenQuestions[this.currentQuestion.id]) {
+          this.incrementTotalShownQuestions();
+          this.alreadySeenQuestions[this.currentQuestion.id] = true;
+        }
       }
       if (this.getAnswerHistoryLength > 0) {
         this.currentlyReviewedQuestion = this.answerHistory.at(-1);

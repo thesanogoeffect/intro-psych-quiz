@@ -4,6 +4,9 @@
         <NuxtLink to="/">Back to Home</NuxtLink>
         <br><p>Developed for TU/e with ❤️ by Jakub Werner</p>
         <p>Thanks to prof. Daniël Lakens for endorsing the idea, also special thanks to Tim, Aaravee and others </p>
+        <p>This is currently not an official part of the TU/e course,
+          just a passion project. I am not responsible for any mistakes or
+          inaccuracies.</p>
         <h2>F.A.Q.:</h2>
         <p><strong>What exactly is this and why does it exist?</strong></p>
         <p>I wanted to create a resource for fellow P&T students after seeing the prev years' students submitted questions. The idea was great, but sometimes there were mistakes in the questions, or they were not really good.
@@ -23,8 +26,16 @@
         <p><strong>Did you steal the Reddit karma UI?</strong></p>
         <p>If you're from the Reddit legal team, then no, I did not</p>
 
-        <p><strong>Why does this look like it was mostly written by ChatGPT?</strong></p>
-        <p>Because...it was</p>
+        <div>
+            <a
+              href="https://www.buymeacoffee.com/thesanogoeffect"
+              target="_blank"
+              ><img
+                src="https://cdn.buymeacoffee.com/buttons/v2/default-yellow.png"
+                alt="Buy Me A Coffee"
+                style="height: 60px !important; width: 217px !important"
+            /></a>
+          </div>
     </div>
 </template>
 
