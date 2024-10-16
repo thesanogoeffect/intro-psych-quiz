@@ -12,7 +12,7 @@
         </p>
         <p><strong>Disclaimer:</strong></p>
         <p>
-          Some of the questions MIGHT BE INCORRECT, please flag them if you
+          Some of the questions <b>might be incorrect</b>, please flag them if you
           think so.
         </p>
         <p>
