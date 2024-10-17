@@ -17,7 +17,7 @@ export default defineNuxtConfig({
 
   runtimeConfig: {
     public: {
-      baseURL: process.env.BASE_URL || "https://thesanogoeffect.github.io/intro-psych-quiz/",
+      baseURL: "https://thesanogoeffect.github.io/intro-psych-quiz/",
     },
   },
 
