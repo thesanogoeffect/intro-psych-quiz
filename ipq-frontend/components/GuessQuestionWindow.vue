@@ -1,16 +1,19 @@
 <template>
-  <v-container>
+  <v-container :style="containerStyle">
     <!-- Card for the question -->
-    <v-card class="rounded-xl" elevation="1"> <!-- Wraps the whole question+answer area -->
-      <v-card class="mb-4 text-h3 rounded-lg" elevation="0"> <!-- Wraps the whole answer area -->
+    <v-card class="rounded-xl" elevation="1">
+      <!-- Question area -->
+      <v-card class="mb-4 text-h3 rounded-lg" elevation="0">
         <v-card-text>
           <p class="question-text">
             {{ questionStore.getCurrentQuestion.question_title }}
           </p>
         </v-card-text>
       </v-card>
+
       <v-divider></v-divider>
-      <!-- Card wrapping the answer options -->
+
+      <!-- Answer options -->
       <v-card class="ma-4 pa-6" elevation="0">
         <v-row>
           <v-col cols="12" class="align-center">
@@ -29,7 +32,7 @@
                     <!-- Button-like label (A, B, C, D) inside the card -->
                     <v-col cols="auto">
                       <v-btn
-                        class="ma-1"
+                        class="ma-1 answer-button"
                         text
                         color="primary"
                       >
@@ -78,11 +81,16 @@ export default defineComponent({
       await questionStore.answerCurrentQuestion(index);
     };
 
+    const containerStyle = computed(() => ({
+      transform: display.mdAndUp.value ? "scale(1)" : "scale(0.8)",
+      transformOrigin: "top left",
+    }));
 
     return {
       questionStore,
       answerOptions,
       handleAnswer,
+      containerStyle,
     };
   },
 });
@@ -100,7 +108,10 @@ export default defineComponent({
   cursor: pointer;
   padding: 1rem;
   transition: all 0.3s ease;
-  background: color white;
+}
+
+.answer-button {
+  font-size: 1.2rem;
 }
 
 .answer-text {

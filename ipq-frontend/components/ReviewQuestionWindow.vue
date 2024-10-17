@@ -38,18 +38,17 @@
                   }"
                 >
                   <v-row class="d-flex align-center">
-                    <!-- Answer label (A, B, C, D) -->
+                    <!-- Button-like label (A, B, C, D) inside the card -->
                     <v-col cols="auto">
                       <v-btn
-                        class="ma-1"
+                        class="ma-1 answer-button"
                         text
                         color="primary"
-                        :style="buttonStyle"
                       >
                         {{ option.label }}
                       </v-btn>
                     </v-col>
-                    <!-- Answer text -->
+                    <!-- Text of the answer inside the card -->
                     <v-col>
                       <p class="answer-text">{{ option.text }}</p>
                     </v-col>
@@ -111,10 +110,6 @@ export default defineComponent({
       transformOrigin: "top left",
     }));
 
-    const buttonStyle = computed(() => ({
-      fontSize: display.mdAndUp.value ? "1.2rem" : "1rem",
-    }));
-
     return {
       questionStore,
       answerOptions,
@@ -122,7 +117,6 @@ export default defineComponent({
       isIncorrectGuess,
       isCorrectGuess,
       containerStyle,
-      buttonStyle,
     };
   },
 });
@@ -140,6 +134,10 @@ export default defineComponent({
   cursor: default;
   padding: 1rem;
   transition: all 0.3s ease;
+}
+
+.answer-button {
+  font-size: 1.2rem;
 }
 
 .answer-text {
