@@ -25,11 +25,9 @@
             @click="filterDialog = true"
           ></v-btn>
           <v-btn icon="mdi-theme-light-dark" @click="toggleTheme"></v-btn>
-          <v-btn
-            icon="mdi-information"
-            variant="text"
-            @click="routeToAbout"
-          ></v-btn>
+          <NuxtLink :to="{ name: 'about' }" class="no-blue-link">
+            <v-btn icon="mdi-information" variant="text"></v-btn>
+          </NuxtLink>
           <v-btn icon="mdi-help-circle" @click="openPopup"></v-btn>
 
           <v-btn
@@ -122,7 +120,6 @@
 
 <script setup lang="ts">
 import { ref, computed, watch, onMounted } from "vue";
-import { useRouter } from "vue-router";
 import { useTheme } from "vuetify";
 import { useDisplay } from "#imports";
 import LeftSidebar from "~/components/LeftSidebar.vue";
@@ -142,8 +139,9 @@ useHead({
         "This is a student-made quiz app for the Intro to Psychology program at TU/e in Eindhoven",
     },
   ],
-  link: [{ rel: 'icon', type: 'image/png', href: '/intro-psych-quiz/favicon.ico' }],
-
+  link: [
+    { rel: "icon", type: "image/png", href: "/intro-psych-quiz/favicon.ico" },
+  ],
 });
 
 const display = useDisplay();
@@ -153,7 +151,6 @@ const mdAndUp = computed(() => display.mdAndUp.value);
 const drawer = ref(true);
 const rightDrawer = ref(true);
 
-const router = useRouter();
 const theme = useTheme();
 const questionStore = useQuestionStore();
 const generalStore = useGeneralStore();
@@ -184,7 +181,6 @@ watch(mdAndUp, (newVal) => {
   rightDrawer.value = newVal;
 });
 
-
 function toggleTheme() {
   theme.global.name.value =
     theme.global.name.value === "light" ? "dark" : "light";
@@ -193,10 +189,6 @@ function toggleTheme() {
 function toggleRightDrawer() {
   rightDrawer.value = !rightDrawer.value;
 }
-
-const routeToAbout = () => {
-  router.push({ path: "/about" });
-};
 
 const applyFilters = () => {
   questionStore.selected_chapters = selectedChapters.value;
@@ -294,5 +286,9 @@ onMounted(() => {
   position: fixed;
   bottom: 10px;
   right: 10px;
+}
+.no-blue-link {
+  color: inherit;
+  text-decoration: none;
 }
 </style>
