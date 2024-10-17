@@ -11,7 +11,9 @@ export default defineNuxtConfig({
       routes.clear(); // Do not generate any routes (except the defaults)
     },
   },
-  
+  app: {
+    baseURL: '/intro-psych-quiz/', // Change this to your repository's name
+  },
   vuetify: {
     vuetifyOptions: "./vuetify.config.ts",
   },

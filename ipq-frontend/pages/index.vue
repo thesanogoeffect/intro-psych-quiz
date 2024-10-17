@@ -149,7 +149,7 @@ useHead({
 
 const display = useDisplay();
 
-const mdAndUp = computed(() => display.mdAndUp);
+const mdAndUp = computed(() => display.mdAndUp.value);
 
 const drawer = ref(true);
 const rightDrawer = ref(true);
@@ -181,9 +181,10 @@ watch(
 );
 
 watch(mdAndUp, (newVal) => {
-  drawer.value = newVal.value;
-  rightDrawer.value = newVal.value;
+  drawer.value = newVal;
+  rightDrawer.value = newVal;
 });
+
 
 function toggleTheme() {
   theme.global.name.value =
