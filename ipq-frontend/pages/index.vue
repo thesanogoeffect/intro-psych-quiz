@@ -142,7 +142,7 @@ useHead({
         "This is a student-made quiz app for the Intro to Psychology program at TU/e in Eindhoven",
     },
   ],
-  link: [{ rel: 'icon', type: 'image/png', href: '/favicon.png' }],
+  link: [{ rel: 'icon', type: 'image/png', href: '/intro-psych-quiz/favicon.png' }],
 
 });
 
