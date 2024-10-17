@@ -70,10 +70,10 @@
                 v-model="selectedChapters"
                 label="Selected Chapters"
               ></v-select>
-              <v-btn text class="mx-2" @click="selectAllChapters"
+              <v-btn class="mx-2" @click="selectAllChapters"
                 >Select All Chapters</v-btn
               >
-              <v-btn text class="mx-2" @click="deselectAllChapters"
+              <v-btn class="mx-2" @click="deselectAllChapters"
                 >Deselect All Chapters</v-btn
               >
 
@@ -96,17 +96,17 @@
                 v-model="selectedSources"
                 label="Selected Sources"
               ></v-select>
-              <v-btn text class="mx-2" @click="selectAllSources"
+              <v-btn class="mx-2" @click="selectAllSources"
                 >Select All Sources</v-btn
               >
-              <v-btn text class="mx-2" @click="deselectAllSources"
+              <v-btn class="mx-2" @click="deselectAllSources"
                 >Deselect All Sources</v-btn
               >
             </div>
           </v-card-text>
 
           <v-card-actions class="justify-end">
-            <v-btn text @click="filterDialog = false">Cancel</v-btn>
+            <v-btn @click="filterDialog = false">Cancel</v-btn>
             <v-btn
               :disabled="!canApplyFilters"
               color="primary"
@@ -151,8 +151,8 @@ const display = useDisplay();
 
 const mdAndUp = computed(() => display.mdAndUp);
 
-const drawer = ref(mdAndUp.value);
-const rightDrawer = ref(mdAndUp.value);
+const drawer = ref(true);
+const rightDrawer = ref(true);
 
 const router = useRouter();
 const theme = useTheme();
@@ -181,8 +181,8 @@ watch(
 );
 
 watch(mdAndUp, (newVal) => {
-  drawer.value = newVal;
-  rightDrawer.value = newVal;
+  drawer.value = newVal.value;
+  rightDrawer.value = newVal.value;
 });
 
 function toggleTheme() {
