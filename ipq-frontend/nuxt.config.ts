@@ -11,15 +11,15 @@ export default defineNuxtConfig({
       routes.clear(); // Do not generate any routes (except the defaults)
     },
   },
-  app: {
-    baseURL: "/intro-psych-quiz/", // Change this to your repository's name
-  },
+  // app: {
+  //   baseURL: "/intro-psych-quiz/", // Change this to your repository's name
+  // },
 
-  runtimeConfig: {
-    public: {
-      baseURL: "https://thesanogoeffect.github.io/intro-psych-quiz/",
-    },
-  },
+  // runtimeConfig: {
+  //   public: {
+  //     baseURL: "https://thesanogoeffect.github.io/intro-psych-quiz/",
+  //   },
+  // },
 
   vuetify: {
     vuetifyOptions: "./vuetify.config.ts",
