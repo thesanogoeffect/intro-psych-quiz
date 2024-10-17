@@ -11,9 +11,7 @@ export default defineNuxtConfig({
       routes.clear(); // Do not generate any routes (except the defaults)
     },
   },
-  app: {
-    baseURL: process.env.NODE_ENV === 'production' ? '/intro-psych-quiz/' : '/',
-  },
+  
   vuetify: {
     vuetifyOptions: "./vuetify.config.ts",
   },
