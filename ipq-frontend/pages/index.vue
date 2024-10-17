@@ -120,8 +120,8 @@
   </v-app>
 </template>
 
-<script>
-import { ref, computed, watch, onMounted, VueElement } from "vue";
+<script setup lang="ts">
+import { ref, computed, watch, onMounted } from "vue";
 import { useRouter } from "vue-router";
 import { useTheme } from "vuetify";
 import { useDisplay } from "#imports";
@@ -133,149 +133,119 @@ import LandingPopup from "~/components/LandingPopup.vue";
 import InstructionsPopup from "~/components/InstructionsPopup.vue";
 import { useGeneralStore } from "~/stores/generalstore";
 
-export default {
-  name: "Home",
-  components: {
-    LeftSidebar,
-    MainQuestionWindow,
-    RightSidebar,
-    LandingPopup,
-    InstructionsPopup,
+useHead({
+  title: "Intro to Psych Quiz",
+  meta: [
+    {
+      name: "description",
+      content:
+        "This is a student-made quiz app for the Intro to Psychology program at TU/e in Eindhoven",
+    },
+  ],
+  bodyAttrs: {
+    class: "test",
   },
+});
 
-  setup() {
-    const display = useDisplay();
+const display = useDisplay();
 
-    const mdAndUp = computed(() => display.mdAndUp);
+const mdAndUp = computed(() => display.mdAndUp);
 
-    const drawer = ref(mdAndUp.value);
-    const rightDrawer = ref(mdAndUp.value);
+const drawer = ref(mdAndUp.value);
+const rightDrawer = ref(mdAndUp.value);
 
-    const router = useRouter();
-    const theme = useTheme();
-    const questionStore = useQuestionStore();
-    const generalStore = useGeneralStore();
+const router = useRouter();
+const theme = useTheme();
+const questionStore = useQuestionStore();
+const generalStore = useGeneralStore();
 
-    const filterDialog = ref(false);
+const filterDialog = ref(false);
 
-    const availableChapters = computed(() => questionStore.getAllChapters);
-    const availableSources = computed(() => questionStore.getAllSources);
+const availableChapters = computed(() => questionStore.getAllChapters);
+const availableSources = computed(() => questionStore.getAllSources);
 
-    const selectedChapters = ref([]);
-    const selectedSources = ref([]);
+const selectedChapters = ref([]);
+const selectedSources = ref([]);
 
-    // Automatically select all options when they are loaded
-    watch(
-      [availableChapters, availableSources],
-      ([newChapters, newSources]) => {
-        if (newChapters && newChapters.length > 0) {
-          selectedChapters.value = [...newChapters];
-        }
-        if (newSources && newSources.length > 0) {
-          selectedSources.value = [...newSources];
-        }
-      },
-      { immediate: true }
-    );
-
-    watch(mdAndUp, (newVal) => {
-      drawer.value = newVal;
-      rightDrawer.value = newVal;
-    });
-
-    function toggleTheme() {
-      theme.global.name.value =
-        theme.global.name.value === "light" ? "dark" : "light";
+watch(
+  [availableChapters, availableSources],
+  ([newChapters, newSources]) => {
+    if (newChapters && newChapters.length > 0) {
+      selectedChapters.value = [...newChapters];
     }
-
-    function toggleRightDrawer() {
-      rightDrawer.value = !rightDrawer.value;
+    if (newSources && newSources.length > 0) {
+      selectedSources.value = [...newSources];
     }
-
-    const routeToAbout = () => {
-      router.push({ path: "/about" });
-    };
-
-    const applyFilters = () => {
-      // Implement your filter logic here
-      questionStore.selected_chapters = selectedChapters.value;
-      questionStore.selected_sources = selectedSources.value;
-      questionStore.reSetUpAfterFiltersChange();
-
-      // Close the dialog after applying filters
-      filterDialog.value = false;
-    };
-
-    const selectAllChapters = () => {
-      selectedChapters.value = [...availableChapters.value];
-    };
-
-    const deselectAllChapters = () => {
-      selectedChapters.value = [];
-    };
-
-    const selectPreMidtermChapters = () => {
-      selectedChapters.value = availableChapters.value.filter(
-        (chapter) => chapter >= 1 && chapter <= 6
-      );
-    };
-
-    const selectPostMidtermChapters = () => {
-      selectedChapters.value = availableChapters.value.filter(
-        (chapter) => chapter >= 7 && chapter <= 12
-      );
-    };
-
-    const selectAllSources = () => {
-      selectedSources.value = [...availableSources.value];
-    };
-
-    const deselectAllSources = () => {
-      selectedSources.value = [];
-    };
-
-    const canApplyFilters = computed(() => {
-      return (
-        selectedChapters.value.length > 0 && selectedSources.value.length > 0
-      );
-    });
-
-    const openPopup = () => {
-      generalStore.toggleInstructionsPopup();
-    };
-
-    onMounted(() => {
-      const currentHour = new Date().getHours();
-      theme.global.name.value =
-        currentHour >= 18 || currentHour < 6 ? "dark" : "light";
-    });
-    // Set theme based on client's local time
-
-    return {
-      openPopup,
-      drawer,
-      display,
-      mdAndUp,
-      rightDrawer,
-      toggleRightDrawer,
-      routeToAbout,
-      toggleTheme,
-      filterDialog,
-      applyFilters,
-      canApplyFilters,
-      availableChapters,
-      availableSources,
-      selectedChapters,
-      selectedSources,
-      selectAllChapters,
-      deselectAllChapters,
-      selectPreMidtermChapters,
-      selectPostMidtermChapters,
-      selectAllSources,
-      deselectAllSources,
-    };
   },
+  { immediate: true }
+);
+
+watch(mdAndUp, (newVal) => {
+  drawer.value = newVal;
+  rightDrawer.value = newVal;
+});
+
+function toggleTheme() {
+  theme.global.name.value =
+    theme.global.name.value === "light" ? "dark" : "light";
+}
+
+function toggleRightDrawer() {
+  rightDrawer.value = !rightDrawer.value;
+}
+
+const routeToAbout = () => {
+  router.push({ path: "/about" });
 };
+
+const applyFilters = () => {
+  questionStore.selected_chapters = selectedChapters.value;
+  questionStore.selected_sources = selectedSources.value;
+  questionStore.reSetUpAfterFiltersChange();
+  filterDialog.value = false;
+};
+
+const selectAllChapters = () => {
+  selectedChapters.value = [...availableChapters.value];
+};
+
+const deselectAllChapters = () => {
+  selectedChapters.value = [];
+};
+
+const selectPreMidtermChapters = () => {
+  selectedChapters.value = availableChapters.value.filter(
+    (chapter) => chapter >= 1 && chapter <= 6
+  );
+};
+
+const selectPostMidtermChapters = () => {
+  selectedChapters.value = availableChapters.value.filter(
+    (chapter) => chapter >= 7 && chapter <= 12
+  );
+};
+
+const selectAllSources = () => {
+  selectedSources.value = [...availableSources.value];
+};
+
+const deselectAllSources = () => {
+  selectedSources.value = [];
+};
+
+const canApplyFilters = computed(() => {
+  return selectedChapters.value.length > 0 && selectedSources.value.length > 0;
+});
+
+const openPopup = () => {
+  generalStore.toggleInstructionsPopup();
+};
+
+onMounted(() => {
+  const currentHour = new Date().getHours();
+  theme.global.name.value =
+    currentHour >= 18 || currentHour < 6 ? "dark" : "light";
+});
 </script>
 
 <style scoped>
@@ -325,5 +295,4 @@ export default {
   bottom: 10px;
   right: 10px;
 }
-
 </style>
