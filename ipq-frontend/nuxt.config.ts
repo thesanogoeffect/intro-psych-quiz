@@ -25,3 +25,4 @@ export default defineNuxtConfig({
     vuetifyOptions: "./vuetify.config.ts",
   },
 });
+
