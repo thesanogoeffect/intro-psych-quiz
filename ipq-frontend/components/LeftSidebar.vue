@@ -2,7 +2,7 @@
   <v-container v-if="isStoreInitialized" class="py-3">
     <v-row>
       <v-col>
-        <div class="stats-container pa-3">
+        <v-container class="stats-container pa-3 rounded-xl">
           <h2 class="mb-2 text-center">Session Stats</h2>
           <!-- Existing User Stats -->
           <v-row>
@@ -142,7 +142,7 @@
               </v-col>
             </v-row>
           </div>
-        </div>
+        </v-container>
       </v-col>
     </v-row>
   </v-container>

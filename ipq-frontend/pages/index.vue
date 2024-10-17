@@ -54,8 +54,8 @@
         </v-container>
       </v-layout>
 
-      <v-dialog v-model="filterDialog" max-width="500px">
-        <v-card>
+      <v-dialog v-model="filterDialog" max-width="600px">
+        <v-card class="rounded-xl">
           <v-card-title class="headline">Question Filter</v-card-title>
 
           <v-card-text>
@@ -68,20 +68,20 @@
                 v-model="selectedChapters"
                 label="Selected Chapters"
               ></v-select>
-              <v-btn class="mx-2" @click="selectAllChapters"
+              <v-btn class="my-2 rounded-xl" @click="selectAllChapters"
                 >Select All Chapters</v-btn
               >
-              <v-btn class="mx-2" @click="deselectAllChapters"
+              <v-btn class="my-2 rounded-xl" @click="deselectAllChapters"
                 >Deselect All Chapters</v-btn
               >
 
-              <v-divider class="my-3"></v-divider>
+              <v-divider class=""></v-divider>
 
-              <v-btn outlined class="mx-2" @click="selectPreMidtermChapters"
-                >Select Pre-Midterm Chapters</v-btn
+              <v-btn outlined class="my-2 rounded-xl" @click="selectPreMidtermChapters"
+                >Pre-Midterm Chapters</v-btn
               >
-              <v-btn outlined class="mx-2" @click="selectPostMidtermChapters"
-                >Select Post-Midterm Chapters</v-btn
+              <v-btn outlined class="my-2 rounded-xl" @click="selectPostMidtermChapters"
+                >Post-Midterm Chapters</v-btn
               >
             </div>
 
@@ -94,10 +94,10 @@
                 v-model="selectedSources"
                 label="Selected Sources"
               ></v-select>
-              <v-btn class="mx-2" @click="selectAllSources"
+              <v-btn class="my-2 rounded-xl" @click="selectAllSources"
                 >Select All Sources</v-btn
               >
-              <v-btn class="mx-2" @click="deselectAllSources"
+              <v-btn class="my-2 rounded-xl" @click="deselectAllSources"
                 >Deselect All Sources</v-btn
               >
             </div>

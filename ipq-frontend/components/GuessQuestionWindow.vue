@@ -1,49 +1,63 @@
 <template>
-  <v-container :style="containerStyle">
+  <v-container>
     <!-- Card for the question -->
-    <v-card class="mb-4 pa-20">
-      <v-card-text>
-        <p class="question-text">{{ questionStore.getCurrentQuestion.question_title }}</p>
-      </v-card-text>
-    </v-card>
-
-    <!-- Card wrapping the answer options -->
-    <v-row justify="center">
-      <v-col cols="12">
-        <v-row
-          v-for="(option, index) in answerOptions"
-          :key="index"
-          class="d-flex align-center answer-row"
-        >
-          <v-col cols="12">
-            <v-card class="answer-card" @click="handleAnswer(index)" elevation="2">
-              <v-row class="d-flex align-center">
-                <!-- Button-like label (A, B, C, D) inside the card -->
-                <v-col cols="auto">
-                  <v-btn class="ma-1" text color="primary" :style="buttonStyle">
-                    {{ option.label }} 
-                  </v-btn>
-                </v-col>
-                <!-- Text of the answer inside the card -->
-                <v-col>
-                  <p class="answer-text">{{ option.text }}</p>
-                </v-col>
-              </v-row>
-            </v-card>
+    <v-card class="rounded-xl" elevation="1"> <!-- Wraps the whole question+answer area -->
+      <v-card class="mb-4 text-h3 rounded-lg" elevation="0"> <!-- Wraps the whole answer area -->
+        <v-card-text>
+          <p class="question-text">
+            {{ questionStore.getCurrentQuestion.question_title }}
+          </p>
+        </v-card-text>
+      </v-card>
+      <v-divider></v-divider>
+      <!-- Card wrapping the answer options -->
+      <v-card class="ma-4 pa-6" elevation="0">
+        <v-row>
+          <v-col cols="12" class="align-center">
+            <v-row
+              v-for="(option, index) in answerOptions"
+              :key="index"
+              class="align-center answer-row"
+            >
+              <v-col cols="12">
+                <v-card
+                  class="answer-card rounded-pill"
+                  @click="handleAnswer(index)"
+                  elevation="2"
+                >
+                  <v-row class="d-flex align-center">
+                    <!-- Button-like label (A, B, C, D) inside the card -->
+                    <v-col cols="auto">
+                      <v-btn
+                        class="ma-1"
+                        text
+                        color="primary"
+                      >
+                        {{ option.label }}
+                      </v-btn>
+                    </v-col>
+                    <!-- Text of the answer inside the card -->
+                    <v-col>
+                      <p class="answer-text">{{ option.text }}</p>
+                    </v-col>
+                  </v-row>
+                </v-card>
+              </v-col>
+            </v-row>
           </v-col>
         </v-row>
-      </v-col>
-    </v-row>
+      </v-card>
+    </v-card>
   </v-container>
 </template>
 
 <script>
-import { defineComponent, computed } from 'vue';
-import { useQuestionStore } from '#imports';
-import { useDisplay } from '#imports';
+import { defineComponent, computed } from "vue";
+import { useQuestionStore } from "#imports";
+import { useDisplay } from "#imports";
 
 export default defineComponent({
-  name: 'GuessQuestionWindow',
+  name: "GuessQuestionWindow",
   setup() {
     const questionStore = useQuestionStore();
     const display = useDisplay();
@@ -60,25 +74,15 @@ export default defineComponent({
     });
 
     const handleAnswer = async (index) => {
-      console.log('Selected answer index:', index);
+      console.log("Selected answer index:", index);
       await questionStore.answerCurrentQuestion(index);
     };
 
-    const containerStyle = computed(() => ({
-      transform: display.mdAndUp ? "scale(1)" : "scale(0.8)",
-      transformOrigin: "top left",
-    }));
-
-    const buttonStyle = computed(() => ({
-      fontSize: display.mdAndUp ? "1.2rem" : "1rem",
-    }));
 
     return {
       questionStore,
       answerOptions,
       handleAnswer,
-      containerStyle,
-      buttonStyle,
     };
   },
 });
@@ -86,14 +90,10 @@ export default defineComponent({
 
 <style scoped>
 .question-text {
-  font-size: 1.35rem;
+  font-size: 1.4rem;
   font-weight: 500;
   margin-bottom: 1rem;
   text-align: center;
-}
-
-.answer-row {
-  margin-bottom: 1rem;
 }
 
 .answer-card {

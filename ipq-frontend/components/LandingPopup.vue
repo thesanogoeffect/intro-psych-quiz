@@ -1,6 +1,6 @@
 <template>
   <v-dialog v-model="generalStore.landingPopup" max-width="800px">
-    <v-card>
+    <v-card class="rounded-xl">
       <v-card-title class="headline text-center">Welcome!</v-card-title>
       <v-card-text class="mx-4">
         <p>

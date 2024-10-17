@@ -2,7 +2,7 @@
   <v-container v-if="currentQuestion" class="py-3">
     <v-row>
       <v-col>
-        <div class="stats-container pa-3">
+        <v-container class="stats-container pa-3 rounded-xl">
           <h2 class="mb-2 text-center">Question Details</h2>
 
           <!-- Question ID on top -->
@@ -36,7 +36,7 @@
               Author: {{ author || '-' }}
             </v-col>
           </v-row>
-        </div>
+        </v-container>
       </v-col>
     </v-row>
   </v-container>

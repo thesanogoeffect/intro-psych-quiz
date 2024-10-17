@@ -37,7 +37,7 @@ export default defineComponent({
     }));
 
     const innerContainerStyle = computed(() => ({
-      transform: display.mdAndUp ? "scale(0.9)" : "scale(0.7)",
+      transform: display.mdAndUp.value ? "scale(0.9)" : "scale(0.7)",
       transformOrigin: "top left",
     }));
 

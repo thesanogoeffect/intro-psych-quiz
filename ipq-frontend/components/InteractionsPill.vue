@@ -62,7 +62,7 @@ const questionStore = useQuestionStore();
 const display = useDisplay();
 
 // Computed properties
-const mdAndUp = computed(() => display.mdAndUp);
+const mdAndUp = computed(() => display.mdAndUp.value);
 
 
 const currentQuestion = computed(() => {

@@ -1,6 +1,6 @@
 <template>
     <v-dialog v-model="generalStore.instructionsPopup" max-width="800px">
-        <v-card>
+        <v-card class="rounded-xl">
             <v-card-title class="headline text-center">Help</v-card-title>
             <v-card-text class="mx-4">
                 <h3><strong>Instructions:</strong></h3>

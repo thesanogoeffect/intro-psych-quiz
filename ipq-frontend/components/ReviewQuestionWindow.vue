@@ -1,82 +1,119 @@
 <template>
-  <v-container>
+  <v-container :style="containerStyle">
     <!-- Card for the question -->
-    <v-card class="mb-4">
-      <v-card-text>
-        <p class="question-text" v-if="questionStore.currentlyReviewedQuestion">{{ questionStore.currentlyReviewedQuestion.question_title }}</p>
-      </v-card-text>
-    </v-card>
+    <v-card class="rounded-xl" elevation="1">
+      <!-- Question area -->
+      <v-card class="mb-4 text-h3 rounded-lg" elevation="0">
+        <v-card-text>
+          <p class="question-text" v-if="questionStore.currentlyReviewedQuestion">
+            {{ questionStore.currentlyReviewedQuestion.question_title }}
+          </p>
+        </v-card-text>
+      </v-card>
 
-    <!-- Card wrapping the answer options -->
-    <v-row justify="center">
-      <v-col cols="12">
-        <v-row
-          v-for="(option, index) in answerOptions"
-          :key="index"
-          class="d-flex align-center answer-row"
-        >
-          <v-col cols="12">
-            <v-card
-              class="answer-card"
-              :elevation="2"
-              :class="{
-                'correct-answer': isCorrectAnswer(index) && !questionStore.currentlyReviewedQuestion.skipped,
-                'skipped-correct-answer': isCorrectAnswer(index) && questionStore.currentlyReviewedQuestion.skipped,
-                'incorrect-guess': isIncorrectGuess(index),
-                'correct-guess': isCorrectGuess(index),
-              }"
+      <v-divider></v-divider>
+
+      <!-- Answer options -->
+      <v-card class="ma-4 pa-6" elevation="0">
+        <v-row>
+          <v-col cols="12" class="align-center">
+            <v-row
+              v-for="(option, index) in answerOptions"
+              :key="index"
+              class="align-center answer-row"
             >
-              <v-row class="d-flex align-center">
-                <!-- Letter label (A, B, C, D) inside the card -->
-                <v-col cols="auto">
-                  <div class="answer-label ma-1">
-                    {{ option.label }}
-                  </div>
-                </v-col>
-                <!-- Text of the answer inside the card -->
-                <v-col>
-                  <p class="answer-text">{{ option.text }}</p>
-                </v-col>
-              </v-row>
-            </v-card>
+              <v-col cols="12">
+                <v-card
+                  class="answer-card rounded-pill"
+                  :elevation="2"
+                  :class="{
+                    'correct-answer':
+                      isCorrectAnswer(index) &&
+                      !questionStore.currentlyReviewedQuestion.skipped,
+                    'skipped-correct-answer':
+                      isCorrectAnswer(index) &&
+                      questionStore.currentlyReviewedQuestion.skipped,
+                    'incorrect-guess': isIncorrectGuess(index),
+                    'correct-guess': isCorrectGuess(index),
+                  }"
+                >
+                  <v-row class="d-flex align-center">
+                    <!-- Answer label (A, B, C, D) -->
+                    <v-col cols="auto">
+                      <v-btn
+                        class="ma-1"
+                        text
+                        color="primary"
+                        :style="buttonStyle"
+                      >
+                        {{ option.label }}
+                      </v-btn>
+                    </v-col>
+                    <!-- Answer text -->
+                    <v-col>
+                      <p class="answer-text">{{ option.text }}</p>
+                    </v-col>
+                  </v-row>
+                </v-card>
+              </v-col>
+            </v-row>
           </v-col>
         </v-row>
-      </v-col>
-    </v-row>
+      </v-card>
+    </v-card>
   </v-container>
 </template>
 
 <script>
 import { defineComponent, computed } from "vue";
-import { useQuestionStore } from "#imports";
+import { useQuestionStore, useDisplay } from "#imports";
 
 export default defineComponent({
   name: "ReviewQuestionWindow",
   setup() {
     const questionStore = useQuestionStore();
-    // questionStore.currentlyReviewedQuestion has the following extra parameters: .skipped (boolean), correct_answer_index (int), and guessed_index (int)
+    const display = useDisplay();
 
     const answerOptions = computed(() => {
       if (!questionStore.currentlyReviewedQuestion) {
         return [];
       }
-      return questionStore.currentlyReviewedQuestion.answers.map((answer, index) => ({
-        label: String.fromCharCode(65 + index), // Convert index to letter (A, B, C, D, ...)
-        text: answer,
-      }));
+      return questionStore.currentlyReviewedQuestion.answers.map(
+        (answer, index) => ({
+          label: String.fromCharCode(65 + index), // A, B, C, D...
+          text: answer,
+        })
+      );
     });
 
     const isCorrectAnswer = (index) => {
-      return index === questionStore.currentlyReviewedQuestion.correct_answer_index;
+      return (
+        index === questionStore.currentlyReviewedQuestion.correct_answer_index
+      );
     };
 
     const isIncorrectGuess = (index) => {
-      return index === questionStore.currentlyReviewedQuestion.guessed_index && index !== questionStore.currentlyReviewedQuestion.correct_answer_index;
+      return (
+        index === questionStore.currentlyReviewedQuestion.guessed_index &&
+        index !== questionStore.currentlyReviewedQuestion.correct_answer_index
+      );
     };
 
     const isCorrectGuess = (index) => {
-      return index === questionStore.currentlyReviewedQuestion.guessed_index && index === questionStore.currentlyReviewedQuestion.correct_answer_index;
+      return (
+        index === questionStore.currentlyReviewedQuestion.guessed_index &&
+        index === questionStore.currentlyReviewedQuestion.correct_answer_index
+      );
     };
+
+    const containerStyle = computed(() => ({
+      transform: display.mdAndUp.value ? "scale(1)" : "scale(0.8)",
+      transformOrigin: "top left",
+    }));
+
+    const buttonStyle = computed(() => ({
+      fontSize: display.mdAndUp.value ? "1.2rem" : "1rem",
+    }));
 
     return {
       questionStore,
@@ -84,6 +121,8 @@ export default defineComponent({
       isCorrectAnswer,
       isIncorrectGuess,
       isCorrectGuess,
+      containerStyle,
+      buttonStyle,
     };
   },
 });
@@ -91,51 +130,38 @@ export default defineComponent({
 
 <style scoped>
 .question-text {
-  font-size: 1.35rem;
+  font-size: 1.4rem;
   font-weight: 500;
   margin-bottom: 1rem;
   text-align: center;
 }
 
-.answer-row {
-  margin-bottom: 1rem;
-}
-
 .answer-card {
-  padding: 1.15rem; /* Added extra padding to increase the size */
-  transition: all 0.3s ease;
   cursor: default;
-}
-
-.answer-label {
-  font-size: 1.3rem; /* Slightly increased label font size */
-  font-weight: 500;
-  color: #C81919;
+  padding: 1rem;
+  transition: all 0.3s ease;
 }
 
 .answer-text {
-  font-size: 1.2rem; /* Slightly increased text size */
+  font-size: 1.2rem;
 }
 
-/* Correct answer (highlighted green if not skipped) */
+/* Styling for different answer states */
 .correct-answer {
   background-color: #4caf50; /* Vuetify success color */
   color: white;
 }
 
-/* Skipped correct answer (light green) */
 .skipped-correct-answer {
   background-color: #c8e6c9; /* Light green */
   color: black;
 }
 
-/* Incorrect guess (highlighted red) */
 .incorrect-guess {
-  background-color: #ff9800; /* Vuetify warn color */
+  background-color: #ff9800; /* Vuetify warning color */
   color: white;
 }
 
-/* Correct guess (highlighted green) */
 .correct-guess {
   background-color: #4caf50; /* Vuetify success color */
   color: white;
