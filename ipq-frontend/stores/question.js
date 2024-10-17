@@ -216,9 +216,7 @@ export const useQuestionStore = defineStore("question", {
     },
     async loadQuestionsFromJSON() {
       try {
-        // const response = await fetch((process.env.NODE_ENV === "development") ? "/l3.json" : "/intro-psych-quiz/l3.json");
         const response = await $fetch("/l3.json");
-        console.log("Response:", response);
         this.all_questions = response;
       } catch (error) {
         console.error(error.message);
