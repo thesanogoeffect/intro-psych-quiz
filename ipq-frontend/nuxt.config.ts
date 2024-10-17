@@ -12,9 +12,15 @@ export default defineNuxtConfig({
     },
   },
   app: {
-    baseURL: '/intro-psych-quiz/', // Change this to your repository's name
+    baseURL: "/intro-psych-quiz/", // Change this to your repository's name
   },
-  
+
+  runtimeConfig: {
+    public: {
+      baseURL: process.env.BASE_URL || "https://thesanogoeffect.github.io/intro-psych-quiz/",
+    },
+  },
+
   vuetify: {
     vuetifyOptions: "./vuetify.config.ts",
   },
