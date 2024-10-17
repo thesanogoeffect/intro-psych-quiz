@@ -177,8 +177,13 @@ watch(
 );
 
 watch(mdAndUp, (newVal) => {
-  drawer.value = newVal;
-  rightDrawer.value = newVal;
+  if (!newVal) {
+    drawer.value = false;
+    rightDrawer.value = false;
+  } else {
+    drawer.value = true;
+    rightDrawer.value = true;
+  }
 });
 
 function toggleTheme() {
