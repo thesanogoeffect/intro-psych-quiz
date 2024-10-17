@@ -8,36 +8,38 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
-    defaults:
-      run:
-        working-directory: ./ipq-frontend
     steps:
       - uses: actions/checkout@v4
-
       - run: corepack enable
-
       - uses: actions/setup-node@v4
         with:
           node-version: "20"
-
+      
+      # Navigate to ipq-frontend folder and install dependencies using yarn
       - name: Install dependencies
         run: yarn install
-
+        working-directory: ./ipq-frontend
+      
+      # Set NUXT_APP_BASE_URL and build the project inside the ipq-frontend folder
       - name: Build project
         run: NUXT_APP_BASE_URL=/intro-psych-quiz/ npx nuxt build --preset github_pages
-
+        working-directory: ./ipq-frontend
+      
+      # Upload the build artifacts from the ipq-frontend folder
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
         with:
-          path: .output/public
+          path: ./ipq-frontend/.output/public
 
+  # Deployment job
   deploy:
     needs: build
     permissions:
-      pages: write
-      id-token: write
+      pages: write      # to deploy to Pages
+      id-token: write   # to verify the deployment originates from an appropriate source
     environment:
       name: github_pages
+      url: ${{ steps.deployment.outputs.page_url }}
     runs-on: ubuntu-latest
     steps:
       - name: Deploy to GitHub Pages
