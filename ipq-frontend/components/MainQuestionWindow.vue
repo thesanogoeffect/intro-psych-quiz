@@ -3,7 +3,9 @@
     <v-container :style="innerContainerStyle">
       <!-- Container now has margin auto for centering -->
       <v-row justify="center">
-        <GuessQuestionWindow v-if="!questionStore.reviewMode"></GuessQuestionWindow>
+        <GuessQuestionWindow
+          v-if="!questionStore.reviewMode"
+        ></GuessQuestionWindow>
         <ReviewQuestionWindow v-else></ReviewQuestionWindow>
         <QuestionNavigation></QuestionNavigation>
       </v-row>
