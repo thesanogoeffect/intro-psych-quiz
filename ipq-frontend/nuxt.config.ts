@@ -14,6 +14,7 @@ export default defineNuxtConfig({
   app: {
     baseURL: '/intro-psych-quiz/', // Change this to your repository's name
   },
+  
   vuetify: {
     vuetifyOptions: "./vuetify.config.ts",
   },
