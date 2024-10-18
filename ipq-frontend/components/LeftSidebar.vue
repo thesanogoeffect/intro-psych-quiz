@@ -77,7 +77,7 @@
 
           <!-- Global Stats Section -->
           <div v-if="showGlobalStats">
-            <h2 class="mb-2 mt-4 text-center">Community Stats</h2>
+            <h2 class="mb-2 mt-4 text-center">Community Stats for Question</h2>
             <h3 class="mb-3">
               {{ chapter ? chapter.name : "Unknown Chapter" }}
             </h3>
