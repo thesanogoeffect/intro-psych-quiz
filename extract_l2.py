@@ -4,17 +4,22 @@ from db_operations import load_db_into_df
 
 # in L3, we want less features again. the final features are:
 # id INTEGER PRIMARY KEY AUTOINCREMENT,
-#         timestamp TEXT NOT NULL,
-#         question_title TEXT NOT NULL,
-#         chapter_id INTEGER NOT NULL,
-#         correct_answer TEXT NOT NULL,
-#         distractor_1 TEXT NOT NULL,
-#         distractor_2 TEXT NOT NULL,
-#         distractor_3 TEXT NOT NULL,
-#         source TEXT,
-#         author TEXT,
-#         student_id TEXT,
-
+        # id INTEGER PRIMARY KEY AUTOINCREMENT,
+        # timestamp TEXT NOT NULL,
+        # question_title TEXT NOT NULL,
+        # chapter_id INTEGER NOT NULL,
+        # correct_answer TEXT NOT NULL,
+        # distractor_1 TEXT NOT NULL,
+        # distractor_2 TEXT NOT NULL,
+        # distractor_3 TEXT NOT NULL,
+        # source TEXT,
+        # author TEXT,
+        # chapter_id_llm BOOLEAN,
+        # description_llm TEXT,
+        # is_correct_llm BOOLEAN,
+        # quality_score_llm INTEGER,
+        # is_spinoff BOOLEAN,
+        # spinoff_id INTEGER,
 
 # at first, we just export all questions from L2, later we will add heuristics to filter out the best questions and discard duplicates
 # it's ok to have l3 only .csv, .json, no need for a database

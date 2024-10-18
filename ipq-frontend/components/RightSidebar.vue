@@ -17,7 +17,8 @@
           <v-row>
             <v-col>
               <v-icon color="primary">mdi-book</v-icon>
-              Chapter: {{ chapter ? chapterId + ' - ' + chapter : 'Unknown Chapter' }}
+              Chapter:
+              {{ chapter ? chapterId + " - " + chapter : "Unknown Chapter" }}
             </v-col>
           </v-row>
 
@@ -25,7 +26,7 @@
           <v-row>
             <v-col>
               <v-icon color="secondary">mdi-book-open-page-variant</v-icon>
-              Source: {{ source || 'N/A' }}
+              Source: {{ source || "N/A" }}
             </v-col>
           </v-row>
 
@@ -33,21 +34,29 @@
           <v-row>
             <v-col>
               <v-icon color="primary">mdi-account</v-icon>
-              Author: {{ author || '-' }}
+              Author: {{ author || "-" }}
             </v-col>
           </v-row>
         </v-container>
       </v-col>
+      <v-expansion-panels
+        v-if="questionStore.getReviewMode">
+        <v-expansion-panel class="rounded-lg" title="ChatGPT Explanation">
+          <v-expansion-panel-text>
+            <span v-html="llmExplanation"></span>
+          </v-expansion-panel-text>
+        </v-expansion-panel>
+      </v-expansion-panels>
     </v-row>
   </v-container>
 </template>
 
 <script>
-import { computed } from 'vue';
-import { useQuestionStore } from '#imports';
+import { computed } from "vue";
+import { useQuestionStore } from "#imports";
 
 export default {
-  name: 'RightSidebar',
+  name: "RightSidebar",
   setup() {
     const questionStore = useQuestionStore();
 
@@ -57,7 +66,14 @@ export default {
         : questionStore.getCurrentQuestion
     );
     const currentQuestionId = computed(() => currentQuestion.value.id);
-
+    // const llmExplanation = computed(
+    //   () => currentQuestion.value.llm_explanation
+    // );
+    const llmExplanation = computed(() => {
+      return currentQuestion.value.llm_explanation
+        ? currentQuestion.value.llm_explanation
+        : "No explanation available.";
+    });
     const author = computed(() => currentQuestion.value.author);
     const source = computed(() => currentQuestion.value.source);
     const chapterId = computed(() => currentQuestion.value.chapter_id);
@@ -72,6 +88,8 @@ export default {
       source,
       chapterId,
       chapter,
+      llmExplanation,
+      questionStore,
     };
   },
 };

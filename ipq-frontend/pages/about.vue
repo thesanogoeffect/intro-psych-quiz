@@ -35,7 +35,7 @@
         GitHub Pages & GitHub Actions! I only pay for the OpenAI tokens,
         but with the new GPT-4o mini, costs are practically nonexistent. If you
         like the project and want to attempt something similar yourself, feel free
-        to contact me. In case you're also a student, make sure to check out the GitHub Student Pack!
+        to contact me. In case you're also a student, check out the GitHub Student Pack!
       </p>
   
       <p><strong>How can I contact you?</strong></p>
@@ -46,7 +46,7 @@
       </p>
   
       <p><strong>Did you steal the Reddit karma UI?</strong></p>
-      <p>If you're from the Reddit legal team, then no, I did not.</p>
+      <p>If you're from the Reddit legal team, then no, I did not</p>
   
       <div class="links">
         <a

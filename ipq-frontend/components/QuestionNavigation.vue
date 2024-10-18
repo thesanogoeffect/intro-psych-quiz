@@ -45,7 +45,7 @@ function blockClickTemporarily() {
   clickBlocked.value = true;
   setTimeout(() => {
     clickBlocked.value = false;
-  }, 400); 
+  }, 300); 
 }
 
 const processingAnswer = computed(() => {

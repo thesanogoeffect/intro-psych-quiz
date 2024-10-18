@@ -47,23 +47,12 @@ def create_table():
         distractor_3 TEXT NOT NULL,
         source TEXT,
         author TEXT,
-        is_sensible_llm BOOLEAN,
-        is_grammatical_llm BOOLEAN,
-        is_relevant_chapter_llm BOOLEAN,
-        is_complete_llm BOOLEAN,
+        chapter_id_llm BOOLEAN,
+        description_llm TEXT,
         is_correct_llm BOOLEAN,
-        is_misleading_llm BOOLEAN,
-        is_sensible_human BOOLEAN,
-        is_grammatical_human BOOLEAN,
-        is_relevant_chapter_human BOOLEAN,
-        is_complete_human BOOLEAN,
-        is_correct_human BOOLEAN,
-        is_misleading_human BOOLEAN,
-        quality_score_llm FLOAT,
-        difficulty_score_llm FLOAT,
+        quality_score_llm INTEGER,
         is_spinoff BOOLEAN,
         spinoff_id INTEGER,
-        is_llm_generated BOOLEAN
 
     );
     """

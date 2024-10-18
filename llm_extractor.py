@@ -266,7 +266,7 @@ def canvas_student_q_organized_to_raw_dict(text: str) -> dict:
 
 
 def llm_get_chapter(
-    question_title: str, answers: str, currently_presumed_chapter: int
+    question_title: str, answers: str
 ) -> int:
     # we can use the model to get the chapter of the question
     system_template = """
@@ -409,7 +409,6 @@ def llm_get_chapter(
     input_dict = {
         "question_title": question_title,
         "answers": answers,
-        "currently_presumed_chapter": currently_presumed_chapter,
     }
 
     # Get the string output
@@ -424,6 +423,155 @@ def llm_get_chapter(
         chapter = 0
     
     return chapter
+
+def llm_get_description(question_title: str, answers: str, correct_answer: str) -> str:
+    # we can use the model to get the description of the question
+    system_template = """
+        Given the following question and answers from the OpenStax Psychology 2e textbook, give a very brief description/explanation. The description should be in basic HTML with <p> tags for paragraphs and <b> tags for bold text. 
+        It should explain why the answer is correct and why the distractors are incorrect, if possible - but don't use the letters A to D nor the order of the options,
+          as they will be randomized!!! Instead just mention the answers by value, or abbreviate them. Also, you don't have to necesarrily mention all distractors. A good description should be informative and concise. Keep in mind
+          that freshmen Psychology students are the target audience.
+
+        Input:
+        Question title: "{question_title}"
+        Answers: "{answers}"
+        Correct answer: "{correct_answer}"
+
+        Output format (valid HTML):
+        <div> DESCRIPTION </div>
+    """
+    prompt_template = ChatPromptTemplate.from_messages(
+        [("system", system_template), ("user", "{question_title}\n{answers}\n{correct_answer}")]
+    )
+    chain = prompt_template | model | parser
+
+    input_dict = {
+        "question_title": question_title,
+        "answers": answers,
+        "correct_answer": correct_answer,
+    }
+
+    # Get the string output
+    description_str = chain.invoke(input_dict)
+
+    return description_str
+
+
+def llm_get_sensible(question_title: str, answers: str, correct_answer: str) -> bool:
+    system_template = """
+        Given the following question and answers from the OpenStax Psychology 2e textbook, predict whether the question is sensible ("YES") or not ("NO"). A sensible question is one that
+        can be understood, is relevant, and is not very misleading. It's fine if the grammar is wrong, the answer is incorrect or the question is incomplete. Just
+        focus on the question itself.
+
+        Input:
+        Question title: "{question_title}"
+        Answers: "{answers}"
+        Correct answer: "{correct_answer}"
+
+        Output: "YES" or "NO"
+    """
+    prompt_template = ChatPromptTemplate.from_messages(
+        [("system", system_template), ("user", "{question_title}\n{answers}\n{correct_answer}")]
+    )
+    chain = prompt_template | model | parser
+
+    input_dict = {
+        "question_title": question_title,
+        "answers": answers,
+        "correct_answer": correct_answer,
+    }
+
+    # Get the string output
+    # Attempt to parse the string output to a boolean
+    try:
+        sensible = chain.invoke(input_dict) == "YES"
+    except ValueError:
+        # Handle ValueError
+        print("Error: Could not parse sensible value.")
+        sensible = False
+
+    return sensible
+
+def llm_get_correct(question_title: str, answers: str, correct_answer: str) -> bool:
+    system_template = """
+        Given the following question and answers from the OpenStax Psychology 2e textbook, predict whether the question is correct ("YES") or not ("NO"). A correct question is one that
+        has a correct answer and the distractors are incorrect. It's fine if the grammar is wrong, the question is incomplete or the question is misleading. Just
+        focus on the question itself.
+
+        Input:
+        Question title: "{question_title}"
+        Answers: "{answers}"
+        Correct answer: "{correct_answer}"
+
+        Output: "YES" or "NO"
+    """
+    prompt_template = ChatPromptTemplate.from_messages(
+        [("system", system_template), ("user", "{question_title}\n{answers}\n{correct_answer}")]
+    )
+    chain = prompt_template | model | parser
+
+    input_dict = {
+        "question_title": question_title,
+        "answers": answers,
+        "correct_answer": correct_answer,
+    }
+
+    # Get the string output
+    # Attempt to parse the string output to a boolean
+    try:
+        correct = chain.invoke(input_dict) == "YES"
+    except ValueError:
+        # Handle ValueError
+        print("Error: Could not parse correct value.")
+        correct = False
+
+    return correct
+
+def llm_adjust_question(question_dict: dict) -> dict:
+    # we can use the model to adjust the question
+    model = ChatOpenAI(model="gpt-4o") # we use a larger model for this task
+    system_template = """
+        Given the following student-made question and answers from the OpenStax Psychology 2e textbook, adjust the question to make it more correct, sensible, not misleading grammatical, complete, correct. You can alter the question title, correct answer, distractors or anything else you see fit, but
+        do so only if needed and it really helps - try to prefer the original where possible - the students will appreciate it. They can be very simple or low quality questions, that's okay. As long as it's sensible, not misleading and correct.
+        It's perfectly fine if you return the original, if there is nothing wrong with it.
+        The final question should be in the Python dictionary format below.
+
+        Input:
+        {{
+            "question_title": "{question_title}",
+            "correct_answer": "{correct_answer}",
+            "distractor_1": "{distractor_1}",
+            "distractor_2": "{distractor_2}",
+            "distractor_3": "{distractor_3}"
+        }}
+
+        Output format (valid JSON):
+        {{
+            "question_title": "<question_title>",
+            "correct_answer": "<correct_answer>",
+            "distractor_1": "<distractor_1>",
+            "distractor_2": "<distractor_2>",
+            "distractor_3": "<distractor_3>"
+        }}
+    """
+    prompt_template = ChatPromptTemplate.from_messages(
+        [("system", system_template), ("user", "{question_dict}")]
+    )
+    chain = prompt_template | model | parser
+
+    input_dict = {"question_dict": question_dict}
+
+    # Get the string output
+    question_str = chain.invoke(input_dict)
+
+    # Attempt to parse the string output to a dictionary
+    try:
+        question_dict = json.loads(question_str)
+    except json.JSONDecodeError:
+        # Handle JSON parsing error
+        question_dict = {}
+
+    return question_dict
 
 def get_student_id_chapter(canvas_student_id_composite: str):
     # try to get the chapter from the student id, depends on whether they have submitted it correctly, return a tuple of the student id and the chapter
@@ -446,6 +594,10 @@ def canvas_student_q_to_db_ready_dict(original_text: str) -> dict:
         raise ValueError("Could not parse student_id")
     if chapter is None:
         chapter = llm_get_chapter(raw_dict["question_title"], f"A) {raw_dict['answer_a']}\nB) {raw_dict['answer_b']}\nC) {raw_dict['answer_c']}\nD) {raw_dict['answer_d']}")
+
+    llm_description = llm_get_description(raw_dict["question_title"], f"A) {raw_dict['answer_a']}\nB) {raw_dict['answer_b']}\nC) {raw_dict['answer_c']}\nD) {raw_dict['answer_d']}", raw_dict["marked_correct_answer"])
+
+    print(llm_description)
 
     
 
