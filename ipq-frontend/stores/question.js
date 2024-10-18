@@ -18,6 +18,7 @@ export const useQuestionStore = defineStore("question", {
     all_chapters: [],
     selected_sources: [],
     all_sources: [],
+    processingAnswer: false,
 
     answerHistory: [], // Store the full question objects with guesses for easier UI display
     reviewMode: false,
@@ -43,6 +44,7 @@ export const useQuestionStore = defineStore("question", {
     },
   }),
   getters: {
+    getProcessingAnswer: (state) => state.processingAnswer,
     filteredQuestions:
       (state) =>
       (chapter_ids = [], sources = [], question_ids = []) => {
@@ -352,6 +354,7 @@ export const useQuestionStore = defineStore("question", {
       this.incrementTotalSkippedQuestions();
     },
     async answerCurrentQuestion(guessed_index) {
+      this.processingAnswer = true;
       const questionStatsStore = useQuestionStatsStore();
       if (!this.currentQuestion) {
         console.error("No current question to answer.");
@@ -407,6 +410,7 @@ export const useQuestionStore = defineStore("question", {
 
       // Pop the next question and set it as the current question
       this.currentQuestion = await this.getFromQueue();
+      this.processingAnswer = false;
     },
   },
 });

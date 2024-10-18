@@ -48,8 +48,12 @@ function blockClickTemporarily() {
   }, 400); 
 }
 
+const processingAnswer = computed(() => {
+  return questionStore.getProcessingAnswer;
+});
+
 async function useLeftArrow() {
-  if (clickBlocked.value) return; // Prevent action if click is blocked
+  if (clickBlocked.value || processingAnswer.value) return; // Prevent action if click is blocked
   blockClickTemporarily();
 
   if (questionStore.getReviewMode) {
@@ -62,7 +66,7 @@ async function useLeftArrow() {
 }
 
 async function useRightArrow() {
-  if (clickBlocked.value) return; // Prevent action if click is blocked
+  if (clickBlocked.value || processingAnswer.value) return; // Prevent action if click is blocked
   blockClickTemporarily();
 
   if (questionStore.getReviewMode) {
