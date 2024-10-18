@@ -39,8 +39,7 @@
           </v-row>
         </v-container>
       </v-col>
-      <v-expansion-panels
-        v-if="questionStore.getReviewMode">
+      <v-expansion-panels v-if="questionStore.getReviewMode">
         <v-expansion-panel class="rounded-lg" title="ChatGPT Explanation">
           <v-expansion-panel-text>
             <span v-html="llmExplanation"></span>
@@ -66,12 +65,9 @@ export default {
         : questionStore.getCurrentQuestion
     );
     const currentQuestionId = computed(() => currentQuestion.value.id);
-    // const llmExplanation = computed(
-    //   () => currentQuestion.value.llm_explanation
-    // );
     const llmExplanation = computed(() => {
-      return currentQuestion.value.llm_explanation
-        ? currentQuestion.value.llm_explanation
+      return currentQuestion.value.description_llm
+        ? currentQuestion.value.description_llm
         : "No explanation available.";
     });
     const author = computed(() => currentQuestion.value.author);

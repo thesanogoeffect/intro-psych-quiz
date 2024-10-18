@@ -52,7 +52,7 @@ def create_table():
         is_correct_llm BOOLEAN,
         quality_score_llm INTEGER,
         is_spinoff BOOLEAN,
-        spinoff_id INTEGER,
+        spinoff_id INTEGER
 
     );
     """
@@ -62,6 +62,11 @@ def create_table():
 def dump_df_to_db(df : pd.DataFrame):
     conn = sqlite3.connect("l2.db")
     df.to_sql('l2', conn, if_exists='append', index=False)
+    conn.close()
+
+def replace_df_in_db(df: pd.DataFrame):
+    conn = sqlite3.connect("l2.db")
+    df.to_sql('l2', conn, if_exists='replace', index=False)
     conn.close()
 
 def delete_question(question_id: int) -> None:

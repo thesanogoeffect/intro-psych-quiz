@@ -35,7 +35,7 @@ def extract_dict_from_question_text(text: str) -> dict:
         
         Input text: "{text}"
         
-        Output format (valid JSON): {{
+        Output format: {{
             "question_title": "<question_title>",
             "correct_answer": "<correct_answer>",
             "distractor_1": "<distractor_1>",
@@ -158,9 +158,9 @@ def canvas_student_q_raw_to_dict(text: str):
     # now, we can also process the student-made questions
     system_template = """
             You will see a student-made question from the Intro to Psychology course at TU/e, which uses the OpenStax Psychology 2e textbook. I have provided an example.
-            I want you to process the question into the Python dictionary format below. The 7-to-9 digit number at the beginning followed by the dot is the student_id.
+            The 7-to-9 digit number at the beginning followed by the dot is the student_id.
             Make any fields, that are missing or cannot be inferred, as an empty string. Do not alter the submissions themselves in any way except for handling non-unicode characters, it is very important to keep them authentic!
-            The students marked the correct answer with an asterisk (*). It doesn't matter if the marked correct answer is wrong.
+            The students marked the correct answer with an asterisk (*). It doesn't matter if the marked correct answer is wrong. The output should be only be a dictionary starting with {{ and ending with }}
             
             Example Input 1:
 
@@ -235,7 +235,7 @@ def canvas_student_q_organized_to_raw_dict(text: str) -> dict:
         
         Input text: "{text}"
         
-        Output format (valid JSON): {{
+        Output format: {{
             "question_title": "<question_title>",
             "student_id": "<student_id>",
             "marked_correct_answer": "<marked_correct_answer>",
@@ -265,9 +265,7 @@ def canvas_student_q_organized_to_raw_dict(text: str) -> dict:
     return question_dict
 
 
-def llm_get_chapter(
-    question_title: str, answers: str
-) -> int:
+def llm_get_chapter(question_title: str, answers: str) -> int:
     # we can use the model to get the chapter of the question
     system_template = """
         Given the question title and answers, predict the chapter number in the OpenStax Psychology 2e textbook that the student-made question belongs to. Just for recap, the OpenStax Psychology 2e textbook has 16 chapters. Try to think critically about the question and its content.
@@ -421,16 +419,17 @@ def llm_get_chapter(
         # Handle ValueError
         print("Error: Could not parse chapter number.")
         chapter = 0
-    
+
     return chapter
+
 
 def llm_get_description(question_title: str, answers: str, correct_answer: str) -> str:
     # we can use the model to get the description of the question
     system_template = """
-        Given the following question and answers from the OpenStax Psychology 2e textbook, give a very brief description/explanation. The description should be in basic HTML with <p> tags for paragraphs and <b> tags for bold text. 
-        It should explain why the answer is correct and why the distractors are incorrect, if possible - but don't use the letters A to D nor the order of the options,
-          as they will be randomized!!! Instead just mention the answers by value, or abbreviate them. Also, you don't have to necesarrily mention all distractors. A good description should be informative and concise. Keep in mind
-          that freshmen Psychology students are the target audience.
+        Given the following question and answers from the OpenStax Psychology 2e textbook, give a very brief explanation. The description should be in basic HTML with <p> tags for paragraphs and <b> tags for bold text. 
+        It should explain why the answer is correct and why the distractors are incorrect, if possible - but don't use the letters A to D nor the order of the options (e.g. avoid "both A and B" or "neither A nor B", but also "first option" or "last option"),
+          as they will be randomized!!! Instead just mention the answers directly, or abbreviate them if neccessary. A good description should be informative and concise. Keep in mind
+          that freshmen Psychology students are the target audience. Make it flow and be readable.
 
         Input:
         Question title: "{question_title}"
@@ -441,7 +440,10 @@ def llm_get_description(question_title: str, answers: str, correct_answer: str) 
         <div> DESCRIPTION </div>
     """
     prompt_template = ChatPromptTemplate.from_messages(
-        [("system", system_template), ("user", "{question_title}\n{answers}\n{correct_answer}")]
+        [
+            ("system", system_template),
+            ("user", "{question_title}\n{answers}\n{correct_answer}"),
+        ]
     )
     chain = prompt_template | model | parser
 
@@ -471,7 +473,10 @@ def llm_get_sensible(question_title: str, answers: str, correct_answer: str) -> 
         Output: "YES" or "NO"
     """
     prompt_template = ChatPromptTemplate.from_messages(
-        [("system", system_template), ("user", "{question_title}\n{answers}\n{correct_answer}")]
+        [
+            ("system", system_template),
+            ("user", "{question_title}\n{answers}\n{correct_answer}"),
+        ]
     )
     chain = prompt_template | model | parser
 
@@ -490,13 +495,17 @@ def llm_get_sensible(question_title: str, answers: str, correct_answer: str) -> 
         print("Error: Could not parse sensible value.")
         sensible = False
 
+
+    print("sensible", sensible)
+
     return sensible
+
 
 def llm_get_correct(question_title: str, answers: str, correct_answer: str) -> bool:
     system_template = """
-        Given the following question and answers from the OpenStax Psychology 2e textbook, predict whether the question is correct ("YES") or not ("NO"). A correct question is one that
-        has a correct answer and the distractors are incorrect. It's fine if the grammar is wrong, the question is incomplete or the question is misleading. Just
-        focus on the question itself.
+        Given the following student-made question and answers from the OpenStax Psychology 2e textbook, predict whether the question can be considered as correct ("YES") or not ("NO"). A correct question is one that
+        has a correct answer and the distractors are all incorrect. It's fine if the grammar is wrong, the question is incomplete or the question is misleading. Just
+        focus on the question itself. Keep in mind that they are Psychology freshmen, so be lenient. Not perfect or not specific enough is fine. Confusing rods and cones is not.
 
         Input:
         Question title: "{question_title}"
@@ -506,7 +515,10 @@ def llm_get_correct(question_title: str, answers: str, correct_answer: str) -> b
         Output: "YES" or "NO"
     """
     prompt_template = ChatPromptTemplate.from_messages(
-        [("system", system_template), ("user", "{question_title}\n{answers}\n{correct_answer}")]
+        [
+            ("system", system_template),
+            ("user", "{question_title}\n{answers}\n{correct_answer}"),
+        ]
     )
     chain = prompt_template | model | parser
 
@@ -527,25 +539,37 @@ def llm_get_correct(question_title: str, answers: str, correct_answer: str) -> b
 
     return correct
 
-def llm_adjust_question(question_dict: dict) -> dict:
+
+def llm_adjust_question(
+    question_title: str,
+    marked_correct_answer: str,
+    answer_1: str,
+    answer_2: str,
+    answer_3: str,
+    answer_4: str,
+) -> dict:
     # we can use the model to adjust the question
-    model = ChatOpenAI(model="gpt-4o") # we use a larger model for this task
+    model = ChatOpenAI(model="gpt-4o")  # we use a larger model for this task
     system_template = """
-        Given the following student-made question and answers from the OpenStax Psychology 2e textbook, adjust the question to make it more correct, sensible, not misleading grammatical, complete, correct. You can alter the question title, correct answer, distractors or anything else you see fit, but
-        do so only if needed and it really helps - try to prefer the original where possible - the students will appreciate it. They can be very simple or low quality questions, that's okay. As long as it's sensible, not misleading and correct.
-        It's perfectly fine if you return the original, if there is nothing wrong with it.
-        The final question should be in the Python dictionary format below.
+        Given the following student-made question and answers from the OpenStax Psychology 2e textbook, adjust the question to make it more correct, sensible, not misleading, grammatical, complete. You can alter the question title, correct answer, distractors or anything else you see fit, but
+        do so only if it's really needed, try to keep it as authentic as possible. Simple or low quality questions are okay. As long as it's sensible, not seriously misleading or obviously wrong.
+        It's perfectly fine if you return the original, if deemed good enough. If one of the distractors is lazily made or missing, feel free to replace it with a better one. I want you to be relatively lenient, as they are freshmen Psychology students.
+        Where you do make changes, try to follow the material in the OpenStax Psychology 2e textbook.
+        Change the correct answer only if it's wrong - if it's reasonably correct, it's fine. It doesn't have to be perfect or super specific.  Your task is not to make the question perfect, but to make it better.
+        The rules don't apply for grammar, spelling, punctuation, formatting etc. - you don't have to be lenient. Also ensure that the answers have the same case-style.
+        The answers will be randomized, so make sure they don't rely on "A to D" nor the order of the options (e.g. avoid "both A and B" or "neither A nor B"), also replace "all of the above" and similar with other non-position-based options ("all other answers except...").
 
         Input:
         {{
             "question_title": "{question_title}",
-            "correct_answer": "{correct_answer}",
-            "distractor_1": "{distractor_1}",
-            "distractor_2": "{distractor_2}",
-            "distractor_3": "{distractor_3}"
+            "marked_correct_answer": "{marked_correct_answer}",
+            "answer_a": "{answer_a}",
+            "answer_b": "{answer_b}",
+            "answer_c": "{answer_c}",
+            "answer_d": "{answer_d}"
         }}
 
-        Output format (valid JSON):
+        Output format:
         {{
             "question_title": "<question_title>",
             "correct_answer": "<correct_answer>",
@@ -554,24 +578,37 @@ def llm_adjust_question(question_dict: dict) -> dict:
             "distractor_3": "<distractor_3>"
         }}
     """
+
     prompt_template = ChatPromptTemplate.from_messages(
-        [("system", system_template), ("user", "{question_dict}")]
+        [("system", system_template), ("user", "{question_title}\n{marked_correct_answer}\n{answer_a}\n{answer_b}\n{answer_c}\n{answer_d}")]
     )
     chain = prompt_template | model | parser
 
-    input_dict = {"question_dict": question_dict}
+    input_dict = {
+        "question_title": question_title,
+        "marked_correct_answer": marked_correct_answer,
+        "answer_a": answer_1,
+        "answer_b": answer_2,
+        "answer_c": answer_3,
+        "answer_d": answer_4,
+    }
 
     # Get the string output
     question_str = chain.invoke(input_dict)
+    print("got the question", question_str)
+
 
     # Attempt to parse the string output to a dictionary
     try:
         question_dict = json.loads(question_str)
     except json.JSONDecodeError:
+        print("Error: Could not parse question.")
         # Handle JSON parsing error
         question_dict = {}
 
+
     return question_dict
+
 
 def get_student_id_chapter(canvas_student_id_composite: str):
     # try to get the chapter from the student id, depends on whether they have submitted it correctly, return a tuple of the student id and the chapter
@@ -580,11 +617,11 @@ def get_student_id_chapter(canvas_student_id_composite: str):
         return (canvas_student_id_composite[:7], canvas_student_id_composite[7])
     else:
         return (canvas_student_id_composite, None)
-    
+
 
 def canvas_student_q_to_db_ready_dict(original_text: str) -> dict:
     raw_dict = canvas_student_q_organized_to_raw_dict(original_text)
-    # try 
+    # try
     student_id, chapter = None, None
     try:
         student_id, chapter = get_student_id_chapter(raw_dict["student_id"])
@@ -593,15 +630,39 @@ def canvas_student_q_to_db_ready_dict(original_text: str) -> dict:
     if student_id is None:
         raise ValueError("Could not parse student_id")
     if chapter is None:
-        chapter = llm_get_chapter(raw_dict["question_title"], f"A) {raw_dict['answer_a']}\nB) {raw_dict['answer_b']}\nC) {raw_dict['answer_c']}\nD) {raw_dict['answer_d']}")
+        chapter = llm_get_chapter(
+            raw_dict["question_title"],
+            f"A) {raw_dict['answer_a']}\nB) {raw_dict['answer_b']}\nC) {raw_dict['answer_c']}\nD) {raw_dict['answer_d']}",
+        )
 
-    llm_description = llm_get_description(raw_dict["question_title"], f"A) {raw_dict['answer_a']}\nB) {raw_dict['answer_b']}\nC) {raw_dict['answer_c']}\nD) {raw_dict['answer_d']}", raw_dict["marked_correct_answer"])
-
+    if not llm_get_sensible(
+        raw_dict["question_title"],
+        f"A) {raw_dict['answer_a']}\nB) {raw_dict['answer_b']}\nC) {raw_dict['answer_c']}\nD) {raw_dict['answer_d']}",
+        raw_dict["marked_correct_answer"],
+    ):
+        return {}
+    adjusted_dict = llm_adjust_question(
+        raw_dict["question_title"],
+        raw_dict["marked_correct_answer"],
+        raw_dict["answer_a"],
+        raw_dict["answer_b"],
+        raw_dict["answer_c"],
+        raw_dict["answer_d"],
+    )
+    print("the dict", adjusted_dict)
+    llm_description = llm_get_description(
+        adjusted_dict["question_title"],
+        f"A) {adjusted_dict['distractor_1']}\nB) {adjusted_dict['distractor_2']}\nC) {adjusted_dict['distractor_3']}\nD) {adjusted_dict['correct_answer']}",
+        adjusted_dict["correct_answer"],
+    )
+    adjusted_dict["student_id"] = student_id
+    adjusted_dict["chapter_id"] = chapter
+    adjusted_dict["description_llm"] = llm_description
     print(llm_description)
 
-    
+    print(raw_dict)
 
-
+    return adjusted_dict
 
 
 if __name__ == "__main__":
@@ -614,4 +675,60 @@ if __name__ == "__main__":
             D) (1) = increase, (2) = decrease
             """
     )
-   
+    raw_dict2 = canvas_student_q_to_db_ready_dict(  # step 1, we get the dict
+        """
+        08123451. If a parent tries to stop a child from misbehaving by scolding them, which teaching method is applied by the parent?
+
+        A) Positive reinforcement
+        *B) Positive punishment
+        C) Negative reinforcement
+        D) Negative punishment
+        """
+    )
+
+    raw_dict3 = canvas_student_q_to_db_ready_dict(  # step 1, we get the dict
+        """
+                17304445. What sort of pain is felt immediately when suffering an injury?
+
+        A) tonic pain
+        *B) phasic pain
+        C) phantom pain
+        D) You won't feel the pain.
+        """
+    )
+    raw_dict4 = canvas_student_q_to_db_ready_dict(  # step 1, we get the dict
+        """
+        08123455. Imagine someone getting struck in the head by an arrow. The arrow penatrates Wernicke's area, causing its functions to cease.
+What would happen if this person were to engage in a conversation with someone else?
+
+A) He cannot understand what is said to him, nor can he talk back
+B) He can engage in a normal conversation, but he cannot identify the face of the other person.
+*C) He cannot understand what is said to him, but he could talk back.
+D) He is completely paralyzed.
+
+        """
+    )
+
+    raw_dict5 = canvas_student_q_to_db_ready_dict(  # step 1, we get the dict
+        """
+        08123455. Imagine someone getting struck in the head by an arrow. The arrow penatrates Wernicke's area, causing its functions to cease.
+What would happen if this person were to engage in a conversation with someone else?
+
+A) He cannot understand what is said to him, nor can he talk back
+B) He can engage in a normal conversation, but he cannot identify the face of the other person.
+*C) He cannot understand what is said to him, but he could talk back.
+D) He is completely paralyzed.
+
+        """
+    )
+
+    raw_dict6 = canvas_student_q_to_db_ready_dict(  # step 1, we get the dict
+        """
+        07677712. In a research, the researchers look back at the events of the second world war and its effects. What kind of research is this?
+
+A) longitudinal research
+B) cross-sectional research
+*C) Archival research.
+D) experiment
+    """
+    )

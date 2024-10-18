@@ -32,8 +32,7 @@
       <p><strong>What did it cost to make the app, and how did you pay for the hosting?</strong></p>
       <p>
         Nothing so far! Thanks to Vuetify, the generous Firebase free tier, and
-        GitHub Pages & GitHub Actions! I only pay for the OpenAI tokens,
-        but with the new GPT-4o mini, costs are practically nonexistent. If you
+        GitHub Pages & GitHub Actions! I only pay for the OpenAI tokens. If you
         like the project and want to attempt something similar yourself, feel free
         to contact me. In case you're also a student, check out the GitHub Student Pack!
       </p>

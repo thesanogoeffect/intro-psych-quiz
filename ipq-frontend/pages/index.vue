@@ -78,11 +78,13 @@
               <v-divider class=""></v-divider>
 
               <v-btn outlined class="my-2 rounded-xl" @click="selectPreMidtermChapters"
-                >Pre-Midterm Chapters</v-btn
+                >'24 Pre-Midterm Chapters</v-btn
               >
               <v-btn outlined class="my-2 rounded-xl" @click="selectPostMidtermChapters"
-                >Post-Midterm Chapters</v-btn
+                >'24 Post-Midterm Chapters</v-btn
               >
+              <v-btn outlined class="my-2 rounded-xl" @click="selectAllTUEChapters"
+                >'24 All Exam Chapters</v-btn>
             </div>
 
             <!-- Source Selection -->
@@ -167,7 +169,7 @@ watch(
   [availableChapters, availableSources],
   ([newChapters, newSources]) => {
     if (newChapters && newChapters.length > 0) {
-      selectedChapters.value = [...newChapters];
+      selectAllTUEChapters();
     }
     if (newSources && newSources.length > 0) {
       selectedSources.value = [...newSources];
@@ -218,9 +220,15 @@ const selectPreMidtermChapters = () => {
 
 const selectPostMidtermChapters = () => {
   selectedChapters.value = availableChapters.value.filter(
-    (chapter) => chapter >= 7 && chapter <= 12
+    (chapter) => chapter >= 7 && chapter <= 14 && chapter !== 13 && chapter !== 11
   );
 };
+
+const selectAllTUEChapters = () => {
+  // premidterm + postmidterm
+  selectedChapters.value = availableChapters.value.filter(
+    (chapter) => chapter !== 13 && chapter !== 11
+  );
 
 const selectAllSources = () => {
   selectedSources.value = [...availableSources.value];

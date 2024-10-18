@@ -7,6 +7,7 @@
           Hi, welcome to the preview version of the Intro to Psychology Quiz. I
           hope you find it useful!
         </p>
+        <p>Please upvote, downvote and flag as much as possible. It means we all have better questions 🙏</p>
         <p>
           You can find instructions and more info in the top menu.
         </p>

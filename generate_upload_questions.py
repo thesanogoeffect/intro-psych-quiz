@@ -15,33 +15,29 @@ def upload_questions_from_book(chapter_id: int, book_text : str) -> None:
     upload_l1_df_to_gsheet(df)
 
 
-# upload_questions_from_book(12, """
-# 24. Altruism is a form of prosocial behavior that is motivated by ________.
-# a. feeling good about oneself
-# b. selfless helping of others
-# c. earning a reward
-# d. showing bravery to bystanders
-# 25. After moving to a new apartment building, research suggests that Sam will be most likely to become
-# friends with ________.
-# a. his next door neighbor
-# b. someone who lives three floors up in the apartment building
-# c. someone from across the street
-# d. his new postal delivery person
-# 26. What trait do both men and women tend to look for in a romantic partner?
-# a. sense of humor
-# b. social skills
-# c. leadership potential
-# d. physical attractiveness
-# 27. According to the triangular theory of love, what type of love is defined by passion and intimacy but no
-# commitment?
-# a. consummate love
-# b. empty love
-# c. romantic love
-# d. liking
-# 28. According to social exchange theory, humans want to maximize the ________ and minimize the ________
-# in relationships.
-# a. intimacy; commitment
-# b. benefits; costs
-# c. costs; benefits
-# d. passion; intimacy
-# """)
+upload_questions_from_book(14, """
+17. Which of the following is not one of the presumed components of happiness?
+a. using our talents to help improve the lives of others
+b. learning new skills
+c. regular pleasurable experiences
+d. identifying and using our talents to enrich our lives
+18. Researchers have identified a number of factors that are related to happiness. Which of the following is
+not one of them?
+a. age
+b. annual income up to $75,000
+c. physical attractiveness
+d. marriage
+19. How does positive affect differ from optimism?
+a. Optimism is more scientific than positive affect.
+b. Positive affect is more scientific than optimism.
+c. Positive affect involves feeling states, whereas optimism involves expectations.
+d. Optimism involves feeling states, whereas positive affect involves expectations.
+20. Carson enjoys writing mystery novels, and has even managed to publish some of his work. When he’s
+writing, Carson becomes extremely focused on his work; in fact, he becomes so absorbed that that he
+often loses track of time, often staying up well past 3 a.m. Carson’s experience best illustrates the concept
+of ________.
+a. happiness set point
+b. adaptation
+c. positive affect
+d. flow
+""")

@@ -3,6 +3,7 @@
 import firebase_admin
 from firebase_admin import credentials
 from firebase_admin import firestore
+import pandas as pd
 
 cred = credentials.Certificate("firebase_credentials.json")
 firebase_admin.initialize_app(cred)
@@ -45,6 +46,27 @@ def delete_all_questions():
     questions = client.collection(COLLECTION_NAME).stream()
     for question in questions:
         question.reference.delete()
+
+def get_firestore_stats_df() -> pd.DataFrame:
+    # get id - times_flagged - times_asked - times_answered_correct - times_skipped - times_answered - times_upvoted - times_downvoted - flagged_percentage - correct_percentage - skipped_percentage - answered_percentage - upvoted_percentage - downvoted_percentage
+    # get all questions
+    # get all the stats
+    # calculate the percentages
+    # return the dataframe
+    questions = client.collection(COLLECTION_NAME).stream()
+    question_stats = []
+    for question in questions:
+        question_dict = question.to_dict()
+        question_stats.append(question_dict)
+    df = pd.DataFrame(question_stats)
+    df["flagged_percentage"] = df["times_flagged"] / df["times_asked"]
+    df["correct_percentage"] = df["times_answered_correct"] / df["times_asked"]
+    df["skipped_percentage"] = df["times_skipped"] / df["times_asked"]
+    df["answered_percentage"] = df["times_answered"] / df["times_asked"]
+    df["upvoted_percentage"] = df["times_upvoted"] / df["times_asked"]
+    df["downvoted_percentage"] = df["times_downvoted"] / df["times_asked"]
+    return df 
+
 
 
 if __name__ == "__main__":
