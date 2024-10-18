@@ -23,13 +23,20 @@
         <ul>
           <li>
             We are getting closer to a full release on 21-10-2024!
-            The app currently still doesn't work on mobile, but I'm working on it 💪
+           
           </li>
+          <li> The mobile version is still not functional, I'm working on it 💪</li>
         </ul>
-        <v-container class="text-center">
+        <v-container v-if="!mdAndUp.value" class="text-center">
         <v-btn color="primary" @click="closeDialog">Sounds good</v-btn>
+        <br />
         </v-container>
         <br />
+
+        <p>If you have any feedback or want to support the project, check the /about page ❤️</p>
+        <br />
+
+
         <p>
           Enjoy! <br />
           Jakub
@@ -42,10 +49,13 @@
 <script>
 import { ref, onMounted } from "vue";
 import { useGeneralStore } from "~/stores/generalstore";
+import { useDisplay } from "#imports";
 export default {
   name: "LandingPopup",
   setup() {
     const generalStore = useGeneralStore();
+    const display = useDisplay();
+    const mdAndUp = computed(() => display.mdAndUp);
 
     const closeDialog = () => {
       generalStore.toggleLandingPopup();
@@ -54,6 +64,7 @@ export default {
     return {
       closeDialog,
       generalStore,
+      mdAndUp,
     };
   },
 };

@@ -36,6 +36,8 @@
                 style="height: 60px !important; width: 217px !important"
             /></a>
           </div>
+            <!-- Place this tag where you want the button to render. -->
+<github-button href="https://github.com/thesanogoeffect/intro-psych-quiz" data-color-scheme="no-preference: dark_dimmed; light: light; dark: dark;" data-icon="octicon-star" data-size="large" aria-label="Star thesanogoeffect/intro-psych-quiz on GitHub">Star</github-button>
     </div>
 </template>
 

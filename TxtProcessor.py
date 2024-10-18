@@ -1,4 +1,5 @@
-"""Module for the parsing of the question/answer .txt files"""
+"""Module for the parsing of the question/answer .txt files
+WE DO NOT USE THIS ANYMORE, DEPRECATED"""
 
 import pandas as pd
 import re
