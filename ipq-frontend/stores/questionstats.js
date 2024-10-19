@@ -108,12 +108,14 @@ export const useQuestionStatsStore = defineStore("questionstats", {
         if (value != cached_fields[key]) {
           if (value) {
             fields_to_increment.push(key);
+            this.question_cache[question_id][key] += 1;
           } else if (!value) {
             fields_to_decrement.push(key);
+            this.question_cache[question_id][key] -= 1;
           }
         }
       }
-
+      // now also update the cache
       // for the false values, decrement the fields
       // for the true values, increment the fields
       // process the increment fields in Firestore
@@ -121,6 +123,7 @@ export const useQuestionStatsStore = defineStore("questionstats", {
       await incrementQuestionFields(question_id, fields_to_decrement, true);
       // update the cache
       this.cached_questions_increment_fields[question_id] = { ...fields };
+
     },
     upvoteSpecificQuestion(question_id) {
       // Upvote the selected question in retrospect
@@ -129,8 +132,6 @@ export const useQuestionStatsStore = defineStore("questionstats", {
       if (this.getDownvoteCacheById(question_id)) {
         this.cancelDownvoteSpecificQuestion(question_id);
       }
-      // also increment the field in the cache
-      this.question_cache[question_id]["times_upvoted"] += 1;
     },
     downvoteSpecificQuestion(question_id) {
       // Downvote the selected question in retrospect
@@ -139,36 +140,31 @@ export const useQuestionStatsStore = defineStore("questionstats", {
       if (this.getUpvoteCacheById(question_id)) {
         this.cancelUpvoteSpecificQuestion(question_id);
       }
-      // also increment the field in the cache
-      this.question_cache[question_id]["times_downvoted"] += 1;
+
     },
     flagSpecificQuestion(question_id) {
       // Flag the selected question in retrospect
       this.flag_cache[question_id] = true;
       this.current_questions_increment_fields[question_id]["times_flagged"] = true;
-      // also increment the field in the cache
-      this.question_cache[question_id]["times_flagged"] += 1;
+
     },
     cancelUpvoteSpecificQuestion(question_id) {
       // Deupvote the selected question in retrospect
       this.upvote_cache[question_id] = false;
       this.current_questions_increment_fields[question_id]["times_upvoted"] = false;
-      // also increment the field in the cache
-      this.question_cache[question_id]["times_upvoted"] -= 1;
+
     },
     cancelDownvoteSpecificQuestion(question_id) {
       // Dedownvote the selected question in retrospect
       this.downvote_cache[question_id] = false;
       this.current_questions_increment_fields[question_id]["times_downvoted"] = false;
-      // also increment the field in the cache
-      this.question_cache[question_id]["times_downvoted"] -= 1;
+
     },
     cancelFlagSpecificQuestion(question_id) {
       // Deflag the selected question in retrospect
       this.flag_cache[question_id] = false;
       this.current_questions_increment_fields[question_id]["times_flagged"] = false;
-      // also increment the field in the cache
-      this.question_cache[question_id]["times_flagged"] -= 1;
+
     },
     // reset current_question_increment_fields
 
