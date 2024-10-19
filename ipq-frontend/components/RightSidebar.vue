@@ -21,7 +21,7 @@
               {{ chapter ? chapterId + " - " + chapter : "Unknown Chapter" }}
             </v-col>
             <v-col class="d-flex justify-end align-center">
-              <a :href="reportLink" target="_blank" title="Report this question">
+              <a :href="reportLink" target="_blank" title="Report wrong chapter">
                 <v-icon color="red">mdi-alert-circle</v-icon>
               </a>
             </v-col>
