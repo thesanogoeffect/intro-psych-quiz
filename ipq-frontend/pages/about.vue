@@ -40,6 +40,8 @@
       in the course and can help me review the flagged questions.
       Feel free to contact me if you're interested.
 
+      If you also like web design (even if you know little, you know more than me :D) and want to help me with the UI, that would be great!
+
     </p>
     <h2>F.A.Q.:</h2>
     <p><strong>What exactly is this and why does it exist?</strong></p>
