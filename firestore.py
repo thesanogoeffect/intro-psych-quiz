@@ -67,7 +67,18 @@ def get_firestore_stats_df() -> pd.DataFrame:
     df["downvoted_percentage"] = df["times_downvoted"] / df["times_asked"]
     return df 
 
-
+def reset_all_firestore_stats():
+    questions = client.collection(COLLECTION_NAME).stream()
+    for question in questions:
+        question.reference.update({
+            "times_asked": 0,
+            "times_answered_correct": 0,
+            "times_skipped": 0,
+            "times_flagged": 0,
+            "times_answered": 0,
+            "times_upvoted": 0,
+            "times_downvoted": 0,
+        })
 
 if __name__ == "__main__":
     delete_all_questions()

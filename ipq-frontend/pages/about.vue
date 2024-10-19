@@ -45,8 +45,7 @@
       inaccuracies.
     </p>
     <p>
-      If you want to support the project: I am looking for people who have good
-      grades in the course and can help me review the flagged questions. Feel
+      If you want to support the project: I am looking for people who are able help me review the flagged questions. Feel
       free to contact me if you're interested.
     </p>
     <p>
