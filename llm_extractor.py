@@ -396,7 +396,7 @@ def llm_get_chapter(question_title: str, answers: str) -> int:
         Question title: "{question_title}"
         Answers: "{answers}"
         
-        Output:
+        Output: 1 to 16
 
     """
     prompt_template = ChatPromptTemplate.from_messages(
@@ -413,6 +413,7 @@ def llm_get_chapter(question_title: str, answers: str) -> int:
     chapter_str = chain.invoke(input_dict)
 
     # Attempt to parse the string output to an integer
+    print("assuming chapter_str", chapter_str)
     try:
         chapter = int(chapter_str)
     except ValueError:

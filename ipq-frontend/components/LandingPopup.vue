@@ -29,7 +29,10 @@
         <ul>
           <li>We are getting closer to a full release on 21-10-2024!</li>
           <li>
-            The mobile version is still not functional, I'm working on it 💪
+            New feature - ChatGPT <b>explanations</b> after answering a question, on the right hand side...just don't take them too seriously 😅
+          </li>
+          <li>
+            Halfway student-made questions from 21-22 have been added in, there are more to come 😊
           </li>
         </ul>
         <v-container v-if="!mdAndUp.value" class="text-center">

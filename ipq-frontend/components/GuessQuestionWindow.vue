@@ -1,7 +1,7 @@
 <template>
   <v-container :style="containerStyle">
     <!-- Card for the question -->
-    <v-card class="rounded-xl" elevation="1">
+    <v-card class="rounded-xl middle-card" elevation="1">
       <!-- Question area -->
       <v-card class="mb-4 text-h3 rounded-lg" elevation="0">
         <v-card-text>
@@ -58,6 +58,7 @@
 import { defineComponent, computed } from "vue";
 import { useQuestionStore } from "#imports";
 import { useDisplay } from "#imports";
+import "@/assets/global.css";
 
 export default defineComponent({
   name: "GuessQuestionWindow",
