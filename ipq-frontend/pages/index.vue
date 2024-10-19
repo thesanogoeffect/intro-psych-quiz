@@ -206,7 +206,8 @@ function toggleRightDrawer() {
 const applyFilters = () => {
   questionStore.selected_chapters = selectedChapters.value;
   questionStore.selected_sources = selectedSources.value;
-  questionStore.reSetUpAfterFiltersChange();
+  // save to local storage
+  questionStore.saveSelectedFiltersToLocalStorage();
   filterDialog.value = false;
 };
 

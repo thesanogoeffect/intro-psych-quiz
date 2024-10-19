@@ -156,6 +156,34 @@ export const useQuestionStore = defineStore("question", {
     incrementTotalSkippedQuestions() {
       this.total_skipped_questions++;
     },
+    saveSelectedFiltersToLocalStorage() {
+      localStorage.setItem(
+        "selected_chapters",
+        JSON.stringify(this.selected_chapters)
+      );
+      localStorage.setItem(
+        "selected_sources",
+        JSON.stringify(this.selected_sources)
+      );
+    },
+    loadSelectedFiltersFromLocalStorage() {
+      const selectedChapters = localStorage.getItem("selected_chapters");
+      const selectedSources = localStorage.getItem("selected_sources");
+
+      if (selectedChapters) {
+        this.selected_chapters = JSON.parse(selectedChapters);
+      }
+      else {
+        this.selected_chapters = this.DEFAULT_CHAPTERS;
+      }
+
+      if (selectedSources) {
+        this.selected_sources = JSON.parse(selectedSources);
+      }
+      else {
+        this.selected_sources = this.all_sources;
+      }
+    },
     async toggleReviewMode() {
       const questionStatsStore = useQuestionStatsStore();
       await questionStatsStore.incrementSpecificQuestionFields(
@@ -233,8 +261,6 @@ export const useQuestionStore = defineStore("question", {
       });
       this.all_chapters = Array.from(chapters);
       this.all_sources = Array.from(sources);
-      this.selected_chapters = this.DEFAULT_CHAPTERS // TODO change this to first go check if the default chapters are in all_chapters
-      this.selected_sources = this.all_sources;
     },
     async setUp() {
       await this.loadQuestionsFromJSON();
@@ -244,6 +270,9 @@ export const useQuestionStore = defineStore("question", {
       console.log("All Questions:", this.all_questions);
 
       await this.fill_filters_from_questions();
+
+      // Load selected filters from localStorage
+      this.loadSelectedFiltersFromLocalStorage();
 
       // Generate the initial queue
       await this.generateQueue(this.selected_chapters, this.selected_sources);

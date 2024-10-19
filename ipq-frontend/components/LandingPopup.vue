@@ -97,6 +97,33 @@ export default {
       generalStore.toggleLandingPopup();
     };
 
+    const setLandingPopupInLocalStorage = () => {
+      const now = new Date();
+      const expirationTime = now.getTime() + 24 * 60 * 60 * 1000; // 1 day in milliseconds
+      localStorage.setItem("landingPopupSeen", expirationTime);
+    };
+
+    const checkLandingPopupInLocalStorage = () => {
+      const landingPopupSeen = localStorage.getItem("landingPopupSeen");
+      if (landingPopupSeen && new Date().getTime() < parseInt(landingPopupSeen, 10)) {
+        generalStore.landingPopup = false; // Don't show the popup
+      }
+    };
+
+    onMounted(() => {
+      checkLandingPopupInLocalStorage();
+    });
+
+    watch(
+      () => generalStore.landingPopup,
+      (newVal) => {
+        if (!newVal) {
+          setLandingPopupInLocalStorage();
+        }
+      }
+    );
+
+
     return {
       closeDialog,
       generalStore,
