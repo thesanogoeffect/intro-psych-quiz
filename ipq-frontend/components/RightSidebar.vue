@@ -22,7 +22,7 @@
             </v-col>
             <v-col class="d-flex justify-end align-center">
               <a :href="reportLink" target="_blank" title="Report wrong chapter">
-                <v-icon color="grey">mdi-alert-circle</v-icon>
+                <v-icon color="grey">mdi-alert-circle-outline</v-icon>
               </a>
             </v-col>
           </v-row>
