@@ -67,8 +67,19 @@ def make_db_backup():
     # save the data as a csv
     df.to_csv("l2_backup.csv", index=False)
 
+
+def fix_chapter_id(question_id: int, chapter_id: int):
+    """Fix the chapter id of a question"""
+    # get the l2 data
+    df = db.load_db_into_df()
+    # update the chapter id
+    df.loc[df["id"] == question_id, "chapter_id"] = chapter_id
+    # save the updated data
+    db.replace_df_in_db(df)
+
 if __name__ == "__main__":
-    make_db_backup()
-    update_missing_chapter_ids()
+    # make_db_backup()
+    # update_missing_chapter_ids()
     # update_is_correct()
-    update_missing_descriptions()
+    # update_missing_descriptions()
+    fix_chapter_id(368, 7)
