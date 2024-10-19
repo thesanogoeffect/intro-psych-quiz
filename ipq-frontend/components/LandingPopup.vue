@@ -68,7 +68,7 @@
         </p>
         <p>
           Unfortunately, the app doesn't yet work on mobile, sorry. 😞 Please
-          visit from a larger screen device.
+          visit from a larger screen device. See you there!
         </p>
         <p></p>
 
