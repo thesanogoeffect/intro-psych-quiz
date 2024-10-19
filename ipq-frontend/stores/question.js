@@ -296,6 +296,7 @@ export const useQuestionStore = defineStore("question", {
           answers: shuffledAnswers, // Shuffled answers
           chapter_id: question.chapter_id,
           correct_answer_index: correctAnswerIndex, // Index of the correct answer
+          description_llm : question.description_llm,
           guessed_index: null,
           skipped: false,
           source: question.source,
@@ -340,7 +341,6 @@ export const useQuestionStore = defineStore("question", {
 
       // Mark the current question as skipped
       this.currentQuestion.skipped = true;
-
       // Add the current question to answerHistory
       this.answerHistory.push(this.currentQuestion);
 

@@ -165,6 +165,12 @@ const availableSources = computed(() => questionStore.getAllSources);
 const selectedChapters = ref([]);
 const selectedSources = ref([]);
 
+const selectAllTUEChapters = () => {
+  // premidterm + postmidterm
+  selectedChapters.value = availableChapters.value.filter(
+    (chapter) => chapter !== 13 && chapter !== 11
+  )};
+
 watch(
   [availableChapters, availableSources],
   ([newChapters, newSources]) => {
@@ -224,11 +230,7 @@ const selectPostMidtermChapters = () => {
   );
 };
 
-const selectAllTUEChapters = () => {
-  // premidterm + postmidterm
-  selectedChapters.value = availableChapters.value.filter(
-    (chapter) => chapter !== 13 && chapter !== 11
-  );
+
 
 const selectAllSources = () => {
   selectedSources.value = [...availableSources.value];

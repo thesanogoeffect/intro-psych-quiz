@@ -269,7 +269,7 @@ def llm_get_chapter(question_title: str, answers: str) -> int:
     # we can use the model to get the chapter of the question
     system_template = """
         Given the question title and answers, predict the chapter number in the OpenStax Psychology 2e textbook that the student-made question belongs to. Just for recap, the OpenStax Psychology 2e textbook has 16 chapters. Try to think critically about the question and its content.
-        You can definitely rule out the chapters that are not in the exam, which are 11, 13, 15 and 16.
+        You can definitely rule out the chapters that are not in the exam, which are 11, 13, 15 and 16. Output only a single integer from 1 to 16.
 
 1 - Introduction to Psychology
 
@@ -396,7 +396,7 @@ def llm_get_chapter(question_title: str, answers: str) -> int:
         Question title: "{question_title}"
         Answers: "{answers}"
         
-        Output (single int from 1 to 16):
+        Output:
 
     """
     prompt_template = ChatPromptTemplate.from_messages(

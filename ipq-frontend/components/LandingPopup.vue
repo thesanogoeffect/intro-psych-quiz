@@ -1,5 +1,9 @@
 <template>
-  <v-dialog v-model="generalStore.landingPopup" max-width="800px">
+  <v-dialog
+    v-model="generalStore.landingPopup"
+    max-width="800px"
+    v-if="!mobile.value"
+  >
     <v-card class="rounded-xl">
       <v-card-title class="headline text-center">Welcome!</v-card-title>
       <v-card-text class="mx-4">
@@ -7,14 +11,15 @@
           Hi, welcome to the preview version of the Intro to Psychology Quiz. I
           hope you find it useful!
         </p>
-        <p>Please upvote, downvote and flag as much as possible. It means we all have better questions 🙏</p>
         <p>
-          You can find instructions and more info in the top menu.
+          Please upvote, downvote and flag as much as possible. It means we all
+          have better questions 🙏
         </p>
+        <p>You can find instructions and more info in the top menu.</p>
         <h3><strong>Disclaimer:</strong></h3>
         <p>
-          Some of the questions <b>might be incorrect</b>, please flag them if you
-          think so.
+          Some of the questions <b>might be incorrect</b>, please flag them if
+          you think so.
         </p>
         <p>
           As the app is in a preview state, there might be some issues. If you
@@ -22,24 +27,50 @@
         </p>
         <h3><strong>News:</strong></h3>
         <ul>
+          <li>We are getting closer to a full release on 21-10-2024!</li>
           <li>
-            We are getting closer to a full release on 21-10-2024!
-           
+            The mobile version is still not functional, I'm working on it 💪
           </li>
-          <li> The mobile version is still not functional, I'm working on it 💪</li>
         </ul>
         <v-container v-if="!mdAndUp.value" class="text-center">
-        <v-btn color="primary" @click="closeDialog">Sounds good</v-btn>
-        <br />
+          <v-btn color="primary" @click="closeDialog">Sounds good</v-btn>
+          <br />
         </v-container>
         <br />
 
-        <p>If you have any feedback or want to support the project, check the /about page ❤️</p>
+        <p>
+          If you have any feedback or want to support the project, check the
+          /about page ❤️
+        </p>
         <br />
-
 
         <p>
           Enjoy! <br />
+          Jakub
+        </p>
+      </v-card-text>
+    </v-card>
+  </v-dialog>
+  <v-dialog
+    v-model="generalStore.landingPopup"
+    max-width="800px"
+    v-else
+    persistent="true"
+  >
+    <v-card class="rounded-xl">
+      <v-card-title class="headline text-center">Welcome!</v-card-title>
+      <v-card-text class="mx-4">
+        <p>
+          Hi, welcome to the preview version of the Intro to Psychology Quiz.
+        </p>
+        <p>
+          Unfortunately, the app doesn't yet work on mobile, sorry. 😞 Please
+          visit from a larger screen device.
+        </p>
+        <p></p>
+
+        <p>
+          Thanks for understanding! <br />
           Jakub
         </p>
       </v-card-text>
@@ -57,6 +88,7 @@ export default {
     const generalStore = useGeneralStore();
     const display = useDisplay();
     const mdAndUp = computed(() => display.mdAndUp);
+    const mobile = computed(() => display.mobile);
 
     const closeDialog = () => {
       generalStore.toggleLandingPopup();
@@ -66,6 +98,7 @@ export default {
       closeDialog,
       generalStore,
       mdAndUp,
+      mobile,
     };
   },
 };
