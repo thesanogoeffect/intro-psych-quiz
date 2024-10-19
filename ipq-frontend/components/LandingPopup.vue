@@ -8,7 +8,7 @@
       <v-card-title class="headline text-center">Welcome!</v-card-title>
       <v-card-text class="mx-4">
         <p>
-          Hi, welcome to the preview version of the Intro to Psychology Quiz. I
+          Hi, welcome to the Intro to Psychology Quiz. I
           hope you find it useful!
         </p>
         <p>
@@ -22,7 +22,7 @@
           you think so.
         </p>
         <p>
-          As the app is in a preview state, there might be some issues. If you
+          As the app is still in early stage, there might be some issues. If you
           find any, please let me know.
         </p>
         <h3><strong>News:</strong></h3>
@@ -64,7 +64,7 @@
       <v-card-title class="headline text-center">Welcome!</v-card-title>
       <v-card-text class="mx-4">
         <p>
-          Hi, welcome to the preview version of the Intro to Psychology Quiz.
+          Hi, welcome to the Intro to Psychology Quiz.
         </p>
         <p>
           Unfortunately, the app doesn't yet work on mobile, sorry. 😞 Please
