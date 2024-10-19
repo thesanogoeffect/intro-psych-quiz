@@ -20,6 +20,8 @@ export const useQuestionStore = defineStore("question", {
     all_sources: [],
     processingAnswer: false,
 
+    DEFAULT_CHAPTERS: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 12, 14],
+
     answerHistory: [], // Store the full question objects with guesses for easier UI display
     reviewMode: false,
     currentReviewPosition: 0, //
@@ -143,8 +145,7 @@ export const useQuestionStore = defineStore("question", {
 
   actions: {
     incrementTotalShownQuestions() {
-        this.total_shown_questions++;
-      
+      this.total_shown_questions++;
     },
     incrementTotalAnsweredQuestions() {
       this.total_answered_questions++;
@@ -198,7 +199,6 @@ export const useQuestionStore = defineStore("question", {
         );
         this.currentlyReviewedQuestion =
           this.answerHistory[this.currentReviewPosition];
-        
       }
     },
     async nextReviewedQuestion() {
@@ -213,7 +213,6 @@ export const useQuestionStore = defineStore("question", {
         this.currentlyReviewedQuestion =
           this.answerHistory[this.currentReviewPosition];
         // also increment to Firestore
-        
       }
     },
     async loadQuestionsFromJSON() {
@@ -234,6 +233,8 @@ export const useQuestionStore = defineStore("question", {
       });
       this.all_chapters = Array.from(chapters);
       this.all_sources = Array.from(sources);
+      this.selected_chapters = this.DEFAULT_CHAPTERS // TODO change this to first go check if the default chapters are in all_chapters
+      this.selected_sources = this.all_sources;
     },
     async setUp() {
       await this.loadQuestionsFromJSON();
@@ -256,7 +257,11 @@ export const useQuestionStore = defineStore("question", {
     async reSetUpAfterFiltersChange() {
       const questionStatsStore = useQuestionStatsStore();
       // first, flush to Firestore
-      await questionStatsStore.incrementSpecificQuestionFields(this.reviewMode? this.currentlyReviewedQuestion.id : this.currentQuestion.id);
+      await questionStatsStore.incrementSpecificQuestionFields(
+        this.reviewMode
+          ? this.currentlyReviewedQuestion.id
+          : this.currentQuestion.id
+      );
       // Generate the initial queue
       await this.generateQueue(this.selected_chapters, this.selected_sources);
       // here, call .getFromQueue with blockAnalytics set to true
@@ -296,7 +301,7 @@ export const useQuestionStore = defineStore("question", {
           answers: shuffledAnswers, // Shuffled answers
           chapter_id: question.chapter_id,
           correct_answer_index: correctAnswerIndex, // Index of the correct answer
-          description_llm : question.description_llm,
+          description_llm: question.description_llm,
           guessed_index: null,
           skipped: false,
           source: question.source,
