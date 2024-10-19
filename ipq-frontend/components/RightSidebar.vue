@@ -72,6 +72,13 @@ export default {
         : questionStore.getCurrentQuestion
     );
     const currentQuestionId = computed(() => currentQuestion.value.id);
+    const llmExplanation = computed(() => {
+      return currentQuestion.value.description_llm
+        ? currentQuestion.value.description_llm
+        : "No explanation available.";
+    });
+    const author = computed(() => currentQuestion.value.author);
+    const source = computed(() => currentQuestion.value.source);
     const chapterId = computed(() => currentQuestion.value.chapter_id);
     const chapter = computed(() =>
       questionStore.getChapterById(chapterId.value)
@@ -88,8 +95,12 @@ export default {
     return {
       currentQuestion,
       currentQuestionId,
+      author,
+      source,
       chapterId,
       chapter,
+      llmExplanation,
+      questionStore,
       reportLink,
       questionStore,
     };
