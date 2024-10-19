@@ -1,90 +1,32 @@
-# Intro to Psychology Questions
+# About
 
-This project aims to create a centralized repository of multiple-choice questions for psychology students, using questions sourced from various contributors. The goal is to provide an interactive platform where students can practice, review, and contribute questions based on the OpenStax Psychology book.
+### Links:
+- [![Buy Me A Coffee](https://cdn.buymeacoffee.com/buttons/v2/default-yellow.png)](https://www.buymeacoffee.com/thesanogoeffect)
+- [![GitHub](https://github.githubassets.com/images/modules/logos_page/GitHub-Mark.png) View GitHub Repo](https://github.com/thesanogoeffect/intro-psych-quiz)
+- [![LinkedIn](https://cdn-icons-png.flaticon.com/512/174/174857.png) Connect on LinkedIn](https://www.linkedin.com/in/jakubwerner)
 
-## Plans for Development
+### About
+Developed for TU/e with ❤️ by Jakub Werner.  
+Thanks to prof. Daniël Lakens for endorsing the idea, and special thanks to Tim and Aaravee.  
+This is not an official part of the TU/e course, just a passion project. I am not responsible for any mistakes or inaccuracies.  
 
-This project is being actively developed into an interactive web app using **Streamlit** and may potentially be migrated to **Vue.js** in the future for enhanced interactivity. Below is the development plan.
+If you want to support the project: I am looking for people who can help review flagged questions. Feel free to contact me if you're interested.
 
-### Database Structure
+If you're interested in web design (even if you know a little, you know more than me :D) and want to help with the UI, that would be great!
 
-The project will utilize multiple database layers to organize and refine the quality of questions. The database layers are outlined as follows:  
-L1 in GSheets, L2-3 in SQLite in the GitHub repo, updated by regular GitHub Actions.
-L3 will also be available in CSV format and in parquet format for faster access.
+## F.A.Q.:
 
-- **L1 - Raw Question Submissions**: All obtained questions, including:
-  - **Source**: Indicates where the question originated (e.g., Google Form, previous years' questions, Google Doc, OpenStax book).
-  - **Author**: Contributor of the question, if known.
-  - **Email**: Contact information of the contributor, if known/provided.
-  - **Date**: When the question was submitted.
-  - **Anonymous**: User requested to post the question anonymously (boolean).
+**What exactly is this and why does it exist?**  
+I wanted to create a resource for fellow P&T students after seeing previous students' submitted questions. The idea was great, but sometimes there were mistakes or the questions weren't very good. Having a platform with a voting system and verified questions (at least by an LLM) seemed like a nice idea! I hope you find it useful. The quiz is just because it's fun :)
 
-- **L2 - Validated and Rated Questions **: All questions, enriched with validation data:
-  - `is_format_valid?`: Checks if the question meets basic format requirements (e.g., has four different answer choices).
-  - `is_correct_chapter?`: Verifies if the question is relevant to the indicated chapter.
-  - `is_question_correct?`: Checks if the question itself is factually correct.
-  - `is_sufficient?`: Assesses if the question quality is sufficient to move forward in the pipeline.
-  - `llm_semantic_quality_rating`: Quality rating provided by LLMs (would probably require very frequent calls to the backend or analytics optimization/batching).
-  - `llm_semantic_difficulty_rating`: Based on LLM analysis (would probably require very frequent calls to the backend or analytics optimization/batching).
-  - `llm_semantic_distractor_quality`: Quality of distractors provided by LLMs. 
-  - 
-- **L3 - Filtered Final Set**: The set of questions available for student practice, including:
-  - Only those questions that exceed a certain quality score.
-  - Excludes duplicates (retains only the highest-quality version of any duplicate question).
+**Can I upload my questions?**  
+Unfortunately not at this time, due to potential interference with the current course format.
 
-### Processing Pipeline
+**What did it cost to make the app, and how did you pay for hosting?**  
+Nothing so far! Thanks to Vuetify, the generous Firebase free tier, and GitHub Pages & GitHub Actions! I only pay for OpenAI tokens. If you like the project and want to attempt something similar yourself, feel free to contact me. In case you're also a student, check out the GitHub Student Pack!
 
-The app will employ a multi-step pipeline for validating and improving the quality of submitted questions:
+**How can I contact you?**  
+For any questions or suggestions, reach out to me at jakubwerner1@gmail.com or via WhatsApp. I have already implemented some of your suggestions, thanks for that!
 
-1. **Step 1: Format Validation**  
-   - Check if the question has four distinct answers and makes general sense.
-   - **If not:** Discard the question or attempt an automated fix if possible.
-
-2. **Step 2: Chapter Relevance**  
-   - Verify if the question pertains to the indicated chapter.
-   - **If not:** Reassign the question to the correct chapter if applicable; otherwise, discard.
-
-3. **Step 3: Quality Assessment**  
-   - Check if the question is well-phrased, clear, and has effective distractors.
-   - **If not:** Attempt to fix or rephrase the question, or discard if it cannot be improved.
-
-### Duplicate Check
-
-- **Step 1:** Identify if a question is a direct duplicate of another in the database.
-  - **If yes:** Retain the version with the highest quality score and discard the others.
-
-### Additional Features
-
-- **Report Question Form:**  
-  Implement a form allowing users to report problematic questions, ensuring continuous improvement and curation of the question bank.
-
-- **5-Star Review System:**  
-  After answering a question, users can rate it on a 5-star scale, providing valuable quality feedback that contributes to the question's rating in **L2** and influences its inclusion in the final set in **L5**.
-
-### Ideas and Future Enhancements
-
-- **Make Google Doc Read-Only:** To prevent accidental edits or deletions, the Google Doc containing the raw questions will be made read-only.
-- **"Yoink" Mechanism:** Finding a way for DL to source questions from the database without revealing which questions are being used for the test.
-- **Database Backup:** Regularly back up the database to prevent data loss in case of accidental deletion or corruption.
-- **Autogenerated Questions:** Implement a system to generate new questions based on existing questions and distractors, potentially using only LLMs (but sparingly).
-- **Filter by Source:** Allow users to filter questions by source (e.g., OpenStax, Google Form, LLM, etc.).
-- **Question Difficulty Rating:** Implement a system for users to rate the difficulty of questions, providing valuable insights for students.
-- **Ability to go back to previous questions:** Allow users to navigate back to previously answered questions for review or correction, expanding on the current mechanism.
-- add 13+ OpenStax chapters, add
-
-### Hosting and Backend
-
-- The app will use a **simple database, probably SQLite**.
-- The initial frontend is being developed using **Streamlit**.
-- Hosted on GitHub and using GitHub Actions for pipeline automation.
-
-### Technologies and Tools
-
-- **Streamlit**: For the initial development of the web app.
-- **SQLite**: For the database.
-- **Firestore**: For the realtime user rankings. We'll be able to read the data periodically and aggregate it, for SQLite
-- **OpenAI API**: For quality checks, corrections, and ratings.
-
----
-
-This README provides an overview of the project's current state and future direction. Contributions and suggestions are welcome as we work toward building a comprehensive study tool for psychology students.
+**Did you steal the Reddit karma UI?**  
+If you're from the Reddit legal team, then no, I did not.
