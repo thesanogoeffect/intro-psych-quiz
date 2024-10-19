@@ -19,15 +19,11 @@
         <h3><strong>Disclaimer:</strong></h3>
         <p>
           Some of the questions <b>might be incorrect</b>, please flag them if
-          you think so. You can also report wrong chapters on the top right!
-        </p>
-        <p>
-          If you
-          find any issues, please let me know.
+          you think so. For wrong chapters, please rather use the report button in the chapter info. 
         </p>
         <h3><strong>News:</strong></h3>
         <ul>
-            <li>The app officially released on 21-10-2024! 🎉</li>
+            <li>The app is officially out since 21-10-2024! 🎉</li>
           <li>
             New feature - You can now see a <b>ChatGPT explanation</b> after answering a
             question. Try it out in the right sidebar!
