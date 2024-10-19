@@ -2,5 +2,6 @@ pandas
 gspread
 environs
 langchain-openai
+langchain
 python-dotenv
 firebase-admin

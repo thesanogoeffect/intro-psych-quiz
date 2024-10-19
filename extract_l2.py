@@ -1,4 +1,5 @@
 from db_operations import load_db_into_df
+import os
 # running scripts to transform the l2 (sqlite) into a cherrypicked selection (l3) based on heuristic rules (such as sensible, grammatical, relevant chapter, complete, correct, misleading and quality/difficulty scores)
 
 
@@ -33,6 +34,10 @@ def create_l3():
     # now also save it as json
     df.to_json("l3.json", orient="records")
 
+
+def copy_l3_to_public():
+    os.system("cp l3.json ../ipq-frontend/public/l3.json")
+
 if __name__ == "__main__":
     create_l3()
-
+    copy_l3_to_public()

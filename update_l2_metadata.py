@@ -82,4 +82,4 @@ if __name__ == "__main__":
     # update_missing_chapter_ids()
     # update_is_correct()
     # update_missing_descriptions()
-    fix_chapter_id(368, 7)
+    fix_chapter_id(282, 1)

@@ -13,12 +13,17 @@
             </v-col>
           </v-row>
 
-          <!-- Chapter Number and Name second -->
+          <!-- Chapter Number and Name second, with report icon -->
           <v-row>
-            <v-col>
+            <v-col cols="9">
               <v-icon color="primary">mdi-book</v-icon>
               Chapter:
               {{ chapter ? chapterId + " - " + chapter : "Unknown Chapter" }}
+            </v-col>
+            <v-col class="d-flex justify-end align-center">
+              <a :href="reportLink" target="_blank" title="Report this question">
+                <v-icon color="red">mdi-alert-circle</v-icon>
+              </a>
             </v-col>
           </v-row>
 
@@ -50,6 +55,8 @@
   </v-container>
 </template>
 
+
+
 <script>
 import { computed } from "vue";
 import { useQuestionStore } from "#imports";
@@ -65,26 +72,25 @@ export default {
         : questionStore.getCurrentQuestion
     );
     const currentQuestionId = computed(() => currentQuestion.value.id);
-    const llmExplanation = computed(() => {
-      return currentQuestion.value.description_llm
-        ? currentQuestion.value.description_llm
-        : "No explanation available.";
-    });
-    const author = computed(() => currentQuestion.value.author);
-    const source = computed(() => currentQuestion.value.source);
     const chapterId = computed(() => currentQuestion.value.chapter_id);
     const chapter = computed(() =>
       questionStore.getChapterById(chapterId.value)
     );
+    
+    const reportLink = computed(() => {
+      const baseURL = "https://docs.google.com/forms/d/e/1FAIpQLSf5j48KtwqNV3KWKYvMh6xSR3xeYgkv0TyguVvJ0jLav3s3-g/viewform?usp=pp_url";
+      const params = new URLSearchParams();
+      params.append("entry.366340186", currentQuestionId.value);
+      params.append("entry.568292540", chapterId.value);
+      return `${baseURL}&${params.toString()}`;
+    });
 
     return {
       currentQuestion,
       currentQuestionId,
-      author,
-      source,
       chapterId,
       chapter,
-      llmExplanation,
+      reportLink,
       questionStore,
     };
   },
