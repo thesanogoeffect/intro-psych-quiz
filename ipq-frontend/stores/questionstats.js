@@ -73,13 +73,11 @@ export const useQuestionStatsStore = defineStore("questionstats", {
       if (question_id in this.question_cache) {
         this.current_question_stats = this.getQuestionStatsById(question_id);
         console.log("Fetched from cache");
-        console.log(this.current_question_stats);
         return;
       }
       this.current_question_stats = await getQuestionById(question_id);
-      console.log(this.current_question_stats);
       // save to cache
-      this.question_cache[question_id] = this.current_question_stats;
+      this.question_cache[question_id] = { ...this.current_question_stats };
 
       //generate upvote, downvote and flag cache
       this.upvote_cache[question_id] = false;
@@ -102,9 +100,7 @@ export const useQuestionStatsStore = defineStore("questionstats", {
       const fields = this.getCurrentIncrementFieldsbyId(question_id);
       // look to see if the fields were already sent to Firestore
       const cached_fields = this.getCachedIncrementFieldsbyId(question_id);
-      console.log("Incrementing fields for question_id: " + question_id);
-      console.log("fields", fields);
-      console.log("cached_fields", cached_fields);
+      // console.log("Incrementing fields for question_id: " + question_id);
       // get only the key: value pairs that differ from the cached fields
       const fields_to_increment = [];
       const fields_to_decrement = [];
@@ -117,8 +113,7 @@ export const useQuestionStatsStore = defineStore("questionstats", {
           }
         }
       }
-      console.log("fields_to_increment", fields_to_increment);
-      console.log("fields_to_decrement", fields_to_decrement);
+
       // for the false values, decrement the fields
       // for the true values, increment the fields
       // process the increment fields in Firestore
@@ -126,7 +121,6 @@ export const useQuestionStatsStore = defineStore("questionstats", {
       await incrementQuestionFields(question_id, fields_to_decrement, true);
       // update the cache
       this.cached_questions_increment_fields[question_id] = { ...fields };
-      console.log("Incremented fields for question_id: " + question_id);
     },
     upvoteSpecificQuestion(question_id) {
       // Upvote the selected question in retrospect

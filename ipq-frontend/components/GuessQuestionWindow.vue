@@ -78,7 +78,6 @@ export default defineComponent({
     });
 
     const handleAnswer = async (index) => {
-      console.log("Selected answer index:", index);
       await questionStore.answerCurrentQuestion(index);
     };
 

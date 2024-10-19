@@ -1,5 +1,5 @@
 <template>
-  <v-container v-if="isStoreInitialized" class="py-3">
+  <v-container class="py-3">
     <v-row>
       <v-col>
         <v-container class="stats-container pa-3 rounded-xl">
@@ -9,36 +9,38 @@
             <v-col cols="2" xs="3">
               <v-icon color="secondary">mdi-eye-outline</v-icon>
             </v-col>
-            <v-col cols="7" xs="6"> Total Shown: </v-col>
+            <v-col cols="7" xs="6">Total Shown:</v-col>
             <v-col cols="3" xs="3">
-              {{ userStore.getTotalShownQuestions }}
+              {{ questionStore.getTotalShownQuestions }}
             </v-col>
           </v-row>
           <v-row>
             <v-col cols="2" xs="3">
-              <v-icon color="primary">mdi-checkbox-marked-circle-outline</v-icon>
+              <v-icon color="primary"
+                >mdi-checkbox-marked-circle-outline</v-icon
+              >
             </v-col>
-            <v-col cols="7" xs="6"> Answered: </v-col>
+            <v-col cols="7" xs="6">Answered:</v-col>
             <v-col cols="3" xs="3">
-              {{ userStore.getTotalAnsweredQuestions }}
+              {{ questionStore.getTotalAnsweredQuestions }}
             </v-col>
           </v-row>
           <v-row>
             <v-col cols="2" xs="3">
               <v-icon color="success">mdi-check-circle-outline</v-icon>
             </v-col>
-            <v-col cols="7" xs="6"> Correct: </v-col>
+            <v-col cols="7" xs="6">Correct:</v-col>
             <v-col cols="3" xs="3">
-              {{ userStore.getTotalCorrectAnswers }}
+              {{ questionStore.getTotalCorrectAnswers }}
             </v-col>
           </v-row>
           <v-row>
             <v-col cols="2" xs="3">
               <v-icon color="warning">mdi-skip-next-circle-outline</v-icon>
             </v-col>
-            <v-col cols="7" xs="6"> Skipped: </v-col>
+            <v-col cols="7" xs="6">Skipped:</v-col>
             <v-col cols="3" xs="3">
-              {{ userStore.getSkippedQuestions }}
+              {{ questionStore.getSkippedQuestions }}
             </v-col>
           </v-row>
           <v-row>
@@ -46,10 +48,10 @@
               <v-icon color="info">mdi-help-circle-outline</v-icon>
             </v-col>
             <v-col cols="7" xs="6">Skips Left:</v-col>
-            <v-col cols="3" xs="3"> {{ userStore.getSkipsRemaining }}</v-col>
+            <v-col cols="3" xs="3">{{ questionStore.getSkipsRemaining }}</v-col>
           </v-row>
           <v-row
-            v-show="userStore.getTotalAnsweredQuestions > 0"
+            v-show="questionStore.getTotalAnsweredQuestions > 0"
             justify="center"
           >
             <v-col cols="12" class="text-center">
@@ -78,53 +80,44 @@
           <!-- Global Stats Section -->
           <div v-if="showGlobalStats">
             <h2 class="mb-2 mt-4 text-center">Community Stats for Question</h2>
-            <h3 class="mb-3">
-              {{ chapter ? chapter.name : "Unknown Chapter" }}
-            </h3>
             <v-row>
               <v-col cols="2" xs="3">
                 <v-icon color="secondary">mdi-eye-outline</v-icon>
               </v-col>
-              <v-col cols="7" xs="6"> Times Asked: </v-col>
-              <v-col cols="3" xs="3">
-                {{ questionStats.times_asked }}
-              </v-col>
+              <v-col cols="7" xs="6">Times Asked:</v-col>
+              <v-col cols="3" xs="3">{{ questionStats.times_asked }}</v-col>
             </v-row>
             <v-row>
               <v-col cols="2" xs="3">
                 <v-icon color="success">mdi-check-circle-outline</v-icon>
               </v-col>
-              <v-col cols="7" xs="6"> Answered Correctly: </v-col>
-              <v-col cols="3" xs="3">
-                {{ questionStats.times_answered_correct }}
-              </v-col>
+              <v-col cols="7" xs="6">Answered Correctly:</v-col>
+              <v-col cols="3" xs="3">{{
+                questionStats.times_answered_correct
+              }}</v-col>
             </v-row>
             <v-row>
               <v-col cols="2" xs="3">
-                <v-icon color="primary">mdi-checkbox-marked-circle-outline</v-icon>
+                <v-icon color="primary"
+                  >mdi-checkbox-marked-circle-outline</v-icon
+                >
               </v-col>
-              <v-col cols="7" xs="6"> Times Answered: </v-col>
-              <v-col cols="3" xs="3">
-                {{ questionStats.times_answered }}
-              </v-col>
+              <v-col cols="7" xs="6">Times Answered:</v-col>
+              <v-col cols="3" xs="3">{{ questionStats.times_answered }}</v-col>
             </v-row>
             <v-row>
               <v-col cols="2" xs="3">
                 <v-icon color="warning">mdi-skip-next-circle-outline</v-icon>
               </v-col>
-              <v-col cols="7" xs="6"> Times Skipped: </v-col>
-              <v-col cols="3" xs="3">
-                {{ questionStats.times_skipped }}
-              </v-col>
+              <v-col cols="7" xs="6">Times Skipped:</v-col>
+              <v-col cols="3" xs="3">{{ questionStats.times_skipped }}</v-col>
             </v-row>
             <v-row>
               <v-col cols="2" xs="3">
                 <v-icon color="error">mdi-flag-outline</v-icon>
               </v-col>
-              <v-col cols="7" xs="6"> Times Flagged: </v-col>
-              <v-col cols="3" xs="3">
-                {{ questionStats.times_flagged }}
-              </v-col>
+              <v-col cols="7" xs="6">Times Flagged:</v-col>
+              <v-col cols="3" xs="3">{{ questionStats.times_flagged }}</v-col>
             </v-row>
             <v-row v-show="questionStats.times_answered > 0" justify="center">
               <v-col cols="12" class="text-center">
@@ -148,122 +141,91 @@
   </v-container>
 </template>
 
-<script>
-import { useQuestionStore } from "#imports";
-import { useQuestionStatsStore } from "#imports";
+<script setup>
+import { computed, ref, onMounted } from "vue";
+import { useQuestionStore, useQuestionStatsStore } from "#imports";
 
-export default {
-  data() {
-    return {
-      isStoreInitialized: false,
-      userStore: null,
-      questionStatsStore: null,
-      showGlobalStats: false,
-    };
-  },
-  created() {
-    try {
-      this.userStore = useQuestionStore();
-      this.questionStatsStore = useQuestionStatsStore();
-      this.isStoreInitialized = true;
-    } catch (error) {
-      console.error("Pinia store is not initialized:", error);
+const showGlobalStats = ref(false);
+
+const questionStore = useQuestionStore();
+const questionStatsStore = useQuestionStatsStore();
+
+const userPercentage = computed(
+  () => questionStore.getAnsweredCorrectlyPercentage
+);
+const formattedPercentage = computed(() => userPercentage.value.toFixed(1));
+const circularColor = computed(() => {
+  if (userPercentage.value >= 70) {
+    return "success";
+  } else if (userPercentage.value >= 40) {
+    return "warning";
+  } else {
+    return "error";
+  }
+});
+const percentageClass = computed(() => {
+  if (userPercentage.value >= 70) {
+    return "text-success";
+  } else if (userPercentage.value >= 40) {
+    return "text-warning";
+  } else {
+    return "text-error";
+  }
+});
+
+const currentQuestion = computed(() =>
+  questionStore.getReviewMode
+    ? questionStore.getCurrentlyReviewedQuestion
+    : questionStore.getCurrentQuestion
+);
+console.log(currentQuestion.value);
+const currentQuestionId = computed(() =>
+  currentQuestion.value ? currentQuestion.value.id : null
+);
+const questionStats = computed(
+  () =>
+    questionStatsStore.getQuestionStatsById(currentQuestionId.value) || {
+      times_asked: 0,
+      times_answered_correct: 0,
+      times_skipped: 0,
+      times_flagged: 0,
+      times_answered: 0,
+      times_upvoted: 0,
+      times_downvoted: 0,
     }
-  },
-  computed: {
-    // User Stats Computed Properties
-    userPercentage() {
-      return this.userStore.getAnsweredCorrectlyPercentage;
-    },
-    formattedPercentage() {
-      return this.userPercentage.toFixed(1);
-    },
-    circularColor() {
-      const percentage = this.userPercentage;
-      if (percentage >= 70) {
-        return "success"; // High percentage - green
-      } else if (percentage >= 40) {
-        return "warning"; // Medium percentage - yellow
-      } else {
-        return "error"; // Low percentage - red
-      }
-    },
-    percentageClass() {
-      const percentage = this.userPercentage;
-      if (percentage >= 70) {
-        return "text-success"; // Green text for high percentage
-      } else if (percentage >= 40) {
-        return "text-warning"; // Yellow text for medium percentage
-      } else {
-        return "text-error"; // Red text for low percentage
-      }
-    },
-    // Global Stats Computed Properties
-    currentQuestion() {
-      return this.userStore.getReviewMode
-        ? this.userStore.getCurrentlyReviewedQuestion
-        : this.userStore.getCurrentQuestion;
-    },
-    currentQuestionId() {
-      return this.currentQuestion ? this.currentQuestion.id : null;
-    },
-    questionStats() {
-      return (
-        this.questionStatsStore.getQuestionStatsById(
-          this.currentQuestionId
-        ) || {
-          times_asked: 0,
-          times_answered_correct: 0,
-          times_skipped: 0,
-          times_flagged: 0,
-          times_answered: 0,
-          times_upvoted: 0,
-          times_downvoted: 0,
-        }
-      );
-    },
-    author() {
-      return this.currentQuestion ? this.currentQuestion.author : null;
-    },
-    source() {
-      return this.currentQuestion ? this.currentQuestion.source : null;
-    },
-    chapterId() {
-      return this.currentQuestion ? this.currentQuestion.chapter_id : null;
-    },
-    chapter() {
-      return this.userStore.getChapterById(this.chapterId);
-    },
-    correctPercentage() {
-      const stats = this.questionStats;
-      if (stats.times_answered > 0) {
-        return (stats.times_answered_correct / stats.times_answered) * 100;
-      } else {
-        return 0;
-      }
-    },
-    globalCircularColor() {
-      const percentage = this.correctPercentage;
-      if (percentage >= 60) {
-        return "success"; // High percentage - green
-      } else if (percentage >= 30) {
-        return "warning"; // Medium percentage - yellow
-      } else {
-        return "error"; // Low percentage - red
-      }
-    },
-    globalPercentageClass() {
-      const percentage = this.correctPercentage;
-      if (percentage >= 70) {
-        return "text-success"; // Green text for high percentage
-      } else if (percentage >= 40) {
-        return "text-warning"; // Yellow text for medium percentage
-      } else {
-        return "text-error"; // Red text for low percentage
-      }
-    },
-  },
-};
+);
+
+const correctPercentage = computed(() => {
+  if (questionStats.value.times_answered > 0) {
+    return (
+      (questionStats.value.times_answered_correct /
+        questionStats.value.times_answered) *
+      100
+    );
+  } else {
+    return 0;
+  }
+});
+
+const globalCircularColor = computed(() => {
+  if (correctPercentage.value >= 60) {
+    return "success";
+  } else if (correctPercentage.value >= 30) {
+    return "warning";
+  } else {
+    return "error";
+  }
+});
+
+const globalPercentageClass = computed(() => {
+  if (correctPercentage.value >= 70) {
+    return "text-success";
+  } else if (correctPercentage.value >= 40) {
+    return "text-warning";
+  } else {
+    return "text-error";
+  }
+});
 </script>
 
 <style scoped>

@@ -267,7 +267,7 @@ export const useQuestionStore = defineStore("question", {
       const questionStatsStore = useQuestionStatsStore();
 
       // Check if all_questions is loaded
-      console.log("All Questions:", this.all_questions);
+      // console.log("All Questions:", this.all_questions);
 
       await this.fill_filters_from_questions();
 
@@ -291,6 +291,9 @@ export const useQuestionStore = defineStore("question", {
           ? this.currentlyReviewedQuestion.id
           : this.currentQuestion.id
       );
+      console.log("Re-setting up after filters change");
+      console.log("Selected Chapters:", this.selected_chapters);
+      console.log("Selected Sources:", this.selected_sources);
       // Generate the initial queue
       await this.generateQueue(this.selected_chapters, this.selected_sources);
       // here, call .getFromQueue with blockAnalytics set to true
@@ -409,17 +412,6 @@ export const useQuestionStore = defineStore("question", {
         this.currentQuestion.id
       ]["times_answered"] = true;
 
-      console.log("User's answer index:", guessed_index);
-      console.log(
-        "Correct answer index:",
-        this.currentQuestion.correct_answer_index
-      );
-      console.log(
-        "User's answer:",
-        this.currentQuestion.answers[guessed_index]
-      );
-      console.log("Was the user's answer correct?", isCorrect);
-
       // Add the current question to answerHistory
       this.answerHistory.push(this.currentQuestion);
 
@@ -439,7 +431,7 @@ export const useQuestionStore = defineStore("question", {
         }
       }
 
-      console.log("answerHistory:", this.answerHistory);
+      // console.log("answerHistory:", this.answerHistory);
       await this.toggleReviewMode();
 
       // Pop the next question and set it as the current question

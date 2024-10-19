@@ -10,7 +10,7 @@ export async function getQuestionById(id) {
       throw new Error('Invalid ID. ID must be a non-empty string.');
     }
   
-    console.log("ID:", id);  // Debug log
+    // console.log("ID:", id);  // Debug log
   
     const questionDocRef = doc($questionsRef, id);
   
@@ -32,7 +32,6 @@ export async function getQuestionById(id) {
 export async function incrementQuestionFields(id, updates, negative = false) {
   setTimeout(async () => {
     const { $questionsRef } = useNuxtApp(); // Access the injected questionsRef
-    console.log("ID firestore trigger:", id);  // Debug log
     const questionDocRef = doc($questionsRef, String(id));
 
     const updateData = {};

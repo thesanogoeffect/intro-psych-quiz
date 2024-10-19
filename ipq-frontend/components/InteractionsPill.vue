@@ -107,8 +107,6 @@ const handleDownvote = () => {
 
 // Toggle flagged state
 const toggleFlagged = () => {
-    console.log("toggleFlagged");
-    console.log(flagged.value);
   if (flagged.value) {
     questionStatsStore.cancelFlagSpecificQuestion(currentQuestionId.value);
   } else {

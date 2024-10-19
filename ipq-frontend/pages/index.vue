@@ -203,13 +203,14 @@ function toggleRightDrawer() {
   rightDrawer.value = !rightDrawer.value;
 }
 
-const applyFilters = () => {
+async function applyFilters() {
   questionStore.selected_chapters = selectedChapters.value;
   questionStore.selected_sources = selectedSources.value;
   // save to local storage
   questionStore.saveSelectedFiltersToLocalStorage();
+  await questionStore.reSetUpAfterFiltersChange();
   filterDialog.value = false;
-};
+}
 
 const selectAllChapters = () => {
   selectedChapters.value = [...availableChapters.value];

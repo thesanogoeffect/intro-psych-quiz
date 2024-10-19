@@ -1,9 +1,7 @@
-# About
+# Intro to Psychology Quiz
 
-### Links:
-- [![Buy Me A Coffee](https://cdn.buymeacoffee.com/buttons/v2/default-yellow.png)](https://www.buymeacoffee.com/thesanogoeffect)
-- [![GitHub](https://github.githubassets.com/images/modules/logos_page/GitHub-Mark.png) View GitHub Repo](https://github.com/thesanogoeffect/intro-psych-quiz)
-- [![LinkedIn](https://cdn-icons-png.flaticon.com/512/174/174857.png) Connect on LinkedIn](https://www.linkedin.com/in/jakubwerner)
+This project is a student-made quiz app for the Intro to Psychology course at TU/e in Eindhoven.
+The app is available on GitHub Pages at [Intro to Psychology Quiz](https://thesanogoeffect.github.io/intro-psych-quiz/)
 
 ### About
 Developed for TU/e with ❤️ by Jakub Werner.  

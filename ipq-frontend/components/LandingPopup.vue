@@ -2,6 +2,7 @@
   <v-dialog
     v-model="generalStore.landingPopup"
     max-width="800px"
+    persistent
     v-if="!mobile.value"
   >
     <v-card class="rounded-xl">
