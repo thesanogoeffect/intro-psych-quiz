@@ -68,12 +68,12 @@
         </p>
         <p>
           Unfortunately, the app doesn't yet work on mobile, sorry. 😞 Please
-          visit from a larger screen device. See you there!
+          visit from a larger screen device. 
         </p>
         <p></p>
 
         <p>
-          Thanks for understanding! <br />
+          See you there! <br />
           Jakub
         </p>
       </v-card-text>
