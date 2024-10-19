@@ -19,19 +19,18 @@
         <h3><strong>Disclaimer:</strong></h3>
         <p>
           Some of the questions <b>might be incorrect</b>, please flag them if
-          you think so.
+          you think so. You can also report wrong chapters on the top right!
         </p>
         <p>
-          As the app is still in early stage, there might be some issues. If you
-          find any, please let me know.
+          If you
+          find any issues, please let me know.
         </p>
         <h3><strong>News:</strong></h3>
         <ul>
-          <li>We are getting closer to a full release on 21-10-2024!</li>
+            <li>The app officially released on 21-10-2024! 🎉</li>
           <li>
-            New feature - ChatGPT <b>explanations</b> after answering a
-            question, on the right hand side...just don't take them too
-            seriously 😅
+            New feature - You can now see a <b>ChatGPT explanation</b> after answering a
+            question. Try it out in the right sidebar!
           </li>
           <li>
             Halfway student-made questions from 21-22 have been added in, there

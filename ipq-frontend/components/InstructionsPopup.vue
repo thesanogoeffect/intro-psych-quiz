@@ -19,7 +19,7 @@
           </li>
           <li>
             You can upvote/downvote questions to improve question quality for
-            everyone.
+            everyone. If you think there is a wrong chapter, there is a report wrong chapter button next to the chapter name.
           </li>
         </ol>
 
