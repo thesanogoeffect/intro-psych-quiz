@@ -231,8 +231,6 @@ const selectPostMidtermChapters = () => {
   );
 };
 
-
-
 const selectAllSources = () => {
   selectedSources.value = [...availableSources.value];
 };
@@ -249,7 +247,17 @@ const openPopup = () => {
   generalStore.toggleInstructionsPopup();
 };
 
+
+
 onMounted(() => {
+  const selectedChaptersLocal = localStorage.getItem("selected_chapters");
+  const selectedSourcesLocal = localStorage.getItem("selected_sources");
+  if (selectedChaptersLocal) {
+    selectedChapters.value = JSON.parse(selectedChaptersLocal);
+  }
+  if (selectedSourcesLocal) {
+    selectedSources.value = JSON.parse(selectedSourcesLocal);
+  }
   const currentHour = new Date().getHours();
   theme.global.name.value =
     currentHour >= 18 || currentHour < 6 ? "dark" : "light";

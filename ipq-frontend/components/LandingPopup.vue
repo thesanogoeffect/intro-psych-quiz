@@ -8,8 +8,8 @@
       <v-card-title class="headline text-center">Welcome!</v-card-title>
       <v-card-text class="mx-4">
         <p>
-          Hi, welcome to the Intro to Psychology Quiz. I
-          hope you find it useful!
+          Hi, welcome to the Intro to Psychology Quiz. I hope you find it
+          useful!
         </p>
         <p>
           Please upvote, downvote and flag as much as possible. It means we all
@@ -29,13 +29,16 @@
         <ul>
           <li>We are getting closer to a full release on 21-10-2024!</li>
           <li>
-            New feature - ChatGPT <b>explanations</b> after answering a question, on the right hand side...just don't take them too seriously 😅
+            New feature - ChatGPT <b>explanations</b> after answering a
+            question, on the right hand side...just don't take them too
+            seriously 😅
           </li>
           <li>
-            Halfway student-made questions from 21-22 have been added in, there are more to come 😊
+            Halfway student-made questions from 21-22 have been added in, there
+            are more to come 😊
           </li>
         </ul>
-        <v-container v-if="!mdAndUp.value" class="text-center">
+        <v-container class="text-center">
           <v-btn color="primary" @click="closeDialog">Sounds good</v-btn>
           <br />
         </v-container>
@@ -63,14 +66,11 @@
     <v-card class="rounded-xl">
       <v-card-title class="headline text-center">Welcome!</v-card-title>
       <v-card-text class="mx-4">
-        <p>
-          Hi, welcome to the Intro to Psychology Quiz.
-        </p>
+        <p>Hi, welcome to the Intro to Psychology Quiz.</p>
         <p>
           Unfortunately, the app doesn't yet work on mobile, sorry. 😞 Please
-          visit from a larger screen device. 
+          visit from a larger screen device.
         </p>
-        <p></p>
 
         <p>
           See you there! <br />
@@ -97,32 +97,9 @@ export default {
       generalStore.toggleLandingPopup();
     };
 
-    const setLandingPopupInLocalStorage = () => {
-      const now = new Date();
-      const expirationTime = now.getTime() + 24 * 60 * 60 * 1000; // 1 day in milliseconds
-      localStorage.setItem("landingPopupSeen", expirationTime);
-    };
-
-    const checkLandingPopupInLocalStorage = () => {
-      const landingPopupSeen = localStorage.getItem("landingPopupSeen");
-      if (landingPopupSeen && new Date().getTime() < parseInt(landingPopupSeen, 10)) {
-        generalStore.landingPopup = false; // Don't show the popup
-      }
-    };
-
     onMounted(() => {
-      checkLandingPopupInLocalStorage();
+      generalStore.checkLandingPopup();
     });
-
-    watch(
-      () => generalStore.landingPopup,
-      (newVal) => {
-        if (!newVal) {
-          setLandingPopupInLocalStorage();
-        }
-      }
-    );
-
 
     return {
       closeDialog,
