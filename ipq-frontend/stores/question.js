@@ -12,7 +12,7 @@ export const useQuestionStore = defineStore("question", {
 
     alreadySeenQuestions: {}, // store the question ids that have already been seen by the user
 
-    skipsRemaining: 3, // number of skips remaining for the user
+    skipsRemaining: 999, // number of skips remaining for the user
 
     selected_chapters: [],
     all_chapters: [],
@@ -144,6 +144,9 @@ export const useQuestionStore = defineStore("question", {
   },
 
   actions: {
+    resetAlreadySeenQuestions() {
+      this.alreadySeenQuestions = {};
+    },
     incrementTotalShownQuestions() {
       this.total_shown_questions++;
     },
@@ -191,6 +194,7 @@ export const useQuestionStore = defineStore("question", {
           ? this.currentlyReviewedQuestion.id
           : this.currentQuestion.id
       );
+      questionStatsStore.saveInteractionsCacheToLocalStorage();
       this.reviewMode = !this.reviewMode;
       if (!this.reviewMode) {
         // if we just exited review mode, the user has seen the question
@@ -225,6 +229,7 @@ export const useQuestionStore = defineStore("question", {
         await questionStatsStore.incrementSpecificQuestionFields(
           this.currentlyReviewedQuestion.id
         );
+        questionStatsStore.saveInteractionsCacheToLocalStorage();
         this.currentlyReviewedQuestion =
           this.answerHistory[this.currentReviewPosition];
       }
@@ -238,6 +243,7 @@ export const useQuestionStore = defineStore("question", {
         await questionStatsStore.incrementSpecificQuestionFields(
           this.currentlyReviewedQuestion.id
         );
+        questionStatsStore.saveInteractionsCacheToLocalStorage();
         this.currentlyReviewedQuestion =
           this.answerHistory[this.currentReviewPosition];
         // also increment to Firestore
@@ -291,6 +297,7 @@ export const useQuestionStore = defineStore("question", {
           ? this.currentlyReviewedQuestion.id
           : this.currentQuestion.id
       );
+      questionStatsStore.saveInteractionsCacheToLocalStorage();
       console.log("Re-setting up after filters change");
       console.log("Selected Chapters:", this.selected_chapters);
       console.log("Selected Sources:", this.selected_sources);
@@ -346,6 +353,7 @@ export const useQuestionStore = defineStore("question", {
 
       if (this.questionQueue.length === 0) {
         console.info("The question queue is empty! Refilling the queue...");
+        this.resetAlreadySeenQuestions();
 
         // Await generateQueue to ensure it completes before proceeding
         await this.generateQueue(this.selected_chapters, this.selected_sources);

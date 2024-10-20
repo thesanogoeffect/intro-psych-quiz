@@ -34,6 +34,8 @@ export async function incrementQuestionFields(id, updates, negative = false) {
     const { $questionsRef } = useNuxtApp(); // Access the injected questionsRef
     const questionDocRef = doc($questionsRef, String(id));
 
+    console.log("Triggered incrementQuestionFields", id, updates, negative);  // Debug log
+
     const updateData = {};
     updates.forEach((key) => {
       updateData[key] = increment(negative ? -1 : 1);

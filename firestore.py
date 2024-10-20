@@ -81,4 +81,4 @@ def reset_all_firestore_stats():
         })
 
 if __name__ == "__main__":
-    delete_all_questions()
+    reset_all_firestore_stats()

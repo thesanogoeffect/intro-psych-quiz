@@ -7,7 +7,7 @@
       v-ripple
       class="mx-2 upvote-button"
       @click="handleUpvote"
-      :color="upvoted? 'success' : ''"
+      :color="upvoted ? 'success' : ''"
       :class="{ voted: upvoted }"
     ></v-btn>
 
@@ -19,7 +19,7 @@
       <!-- Conditionally set the color of the karma number -->
       <span
         :style="{
-          color: karma> 0 ? '#4CAF50' : karma < 0 ? '#F44336' : '',
+          color: karma > 0 ? '#4CAF50' : karma < 0 ? '#F44336' : '',
         }"
         >{{ karma }}</span
       >
@@ -27,15 +27,13 @@
 
     <!-- Downvote Button -->
     <v-btn
-      :icon="
-        downvoted? 'mdi-arrow-down-bold' : 'mdi-arrow-down-bold-outline'
-      "
+      :icon="downvoted ? 'mdi-arrow-down-bold' : 'mdi-arrow-down-bold-outline'"
       variant="plain"
       v-ripple
       class="mx-2"
       @click="handleDownvote"
       :color="downvoted ? 'error' : ''"
-      :class="{ voted: downvoted}"
+      :class="{ voted: downvoted }"
     ></v-btn>
 
     <!-- Flag Button -->
@@ -61,9 +59,9 @@ const questionStatsStore = useQuestionStatsStore();
 const questionStore = useQuestionStore();
 const display = useDisplay();
 
+
 // Computed properties
 const mdAndUp = computed(() => display.mdAndUp.value);
-
 
 const currentQuestion = computed(() => {
   return questionStore.getReviewMode
@@ -71,6 +69,7 @@ const currentQuestion = computed(() => {
     : questionStore.getCurrentQuestion;
 });
 const currentQuestionId = computed(() => currentQuestion.value.id);
+
 const statsCache = computed(() =>
   questionStatsStore.getQuestionStatsById(currentQuestionId.value)
 );
@@ -83,17 +82,21 @@ const downvoted = computed(() =>
 const flagged = computed(() =>
   questionStatsStore.getFlagCacheById(currentQuestionId.value)
 );
-const karma = computed(
-  () => statsCache.value.times_upvoted - statsCache.value.times_downvoted
-);
+
+const karma = computed(() => {
+  let karmaValue =
+    statsCache.value.times_upvoted - statsCache.value.times_downvoted;
+
+  return karmaValue;
+});
 
 // Handle upvote logic
 const handleUpvote = () => {
-    if (upvoted.value) {
-        questionStatsStore.cancelUpvoteSpecificQuestion(currentQuestionId.value);
-    } else {
-        questionStatsStore.upvoteSpecificQuestion(currentQuestionId.value);
-    }
+  if (upvoted.value) {
+    questionStatsStore.cancelUpvoteSpecificQuestion(currentQuestionId.value);
+  } else {
+    questionStatsStore.upvoteSpecificQuestion(currentQuestionId.value);
+  }
 };
 
 // Handle downvote logic
