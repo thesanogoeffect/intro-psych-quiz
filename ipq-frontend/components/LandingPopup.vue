@@ -20,7 +20,7 @@
         <h3><strong>Disclaimer:</strong></h3>
         <p>
           Some of the questions <b>might be incorrect</b>, please flag them if
-          you think so. For wrong chapters, please rather use the report button in the chapter info. 
+          you think so. For wrong chapters, please rather use the report button in the chapter info (top right). 
         </p>
         <h3><strong>News:</strong></h3>
         <ul>
@@ -30,8 +30,8 @@
             question. Try it out in the right sidebar!
           </li>
           <li>
-            Halfway student-made questions from 21-22 have been added in, there
-            are more to come 😊
+            Halfway student-made questions from 21-22 and <b>most of our (23-24) questions</b> have now been added in! There
+            are still more to come 😊
           </li>
         </ul>
         <v-container class="text-center">
@@ -47,7 +47,7 @@
         <br />
 
         <p>
-          Enjoy! <br />
+          Happy quizzing! <br />
           Jakub
         </p>
       </v-card-text>
