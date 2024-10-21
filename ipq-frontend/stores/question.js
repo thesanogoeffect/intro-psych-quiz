@@ -12,7 +12,7 @@ export const useQuestionStore = defineStore("question", {
 
     alreadySeenQuestions: {}, // store the question ids that have already been seen by the user
 
-    skipsRemaining: 999, // number of skips remaining for the user
+    skipsRemaining: 3, // number of skips remaining for the user
 
     selected_chapters: [],
     all_chapters: [],

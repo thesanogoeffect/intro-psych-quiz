@@ -174,10 +174,12 @@ def canvas_student_q_raw_to_dict(text: str):
             {{
                 "question_title": "A ____ uses X-rays to create a cross-section of your body.",
                 "student_id": "17535923",
-                "correct_answer": "D",
-                "distractor_1": "EEG",
-                "distractor_2": "MRI",
-                "distractor_3": "PET scan"}}
+                "marked_correct_answer": "D",
+                "answer_a": "EEG",
+                "answer_b": "MRI",
+                "answer_c": "PET scan",
+                "answer_d": "CT scan"
+            }}
             
             Example Input 2:
             1739026. What is the correct defintion of a cone?
@@ -191,10 +193,12 @@ def canvas_student_q_raw_to_dict(text: str):
             {{
                 "question_title": "What is the correct defintion of a cone?",
                 "student_id": "1739026",
-                "correct_answer": "B",
-                "distractor_1": "Specialized photoreceptor that works well in low light conditions",
-                "distractor_2": "",
-                "distractor_3": ""}}
+                "marked_correct_answer": "B",
+                "answer_a": "Specialized photoreceptor that works well in low light conditions",
+                "answer_b": "Specialized photoreceptor that works best in bright light conditions and detects color",
+                "answer_c": "",
+                "answer_d": ""
+            }}
             
         """
     prompt_template = ChatPromptTemplate.from_messages(
@@ -208,7 +212,15 @@ def canvas_student_q_raw_to_dict(text: str):
 
     question_str = chain.invoke(input_dict)
 
-    return question_str
+    # Attempt to parse the string output to a dictionary
+
+    try:
+        question_dict = json.loads(question_str)
+    except json.JSONDecodeError:
+        # Handle JSON parsing error
+        question_dict = {}
+
+    return question_dict
 
 
 def canvas_student_q_organized_to_raw_dict(text: str) -> dict:

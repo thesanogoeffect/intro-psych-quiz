@@ -1,0 +1,78 @@
+"""the canvas questions from 23/24 are in a bit different format"""
+"""they are in separate text files, which should actually be easier to work with?"""
+"""we can however still use llm extractor and copy most of the code in process_canvas_questions"""
+
+import os
+import re
+import llm_extractor as llm
+import pandas as pd
+FOLDER_NAME = "practice questions 2024 final exam first_batch"
+SOURCE_NAME = "23/24_Student_Final"
+Q_INDEX_TO_CHAPTER = {
+    0: 7,
+    1: 8,
+    2: 9,
+    3: 10,
+    4: 12,
+    5: 14,
+}
+
+
+def process_question_content_from_txt(question_content : str, file_name: str):
+    # this processes the question submission content made by one user
+    chunks = re.split(r"(\d{7,9}\.)", question_content)
+    questions = []
+    question_dicts = []
+    declared_student_ids = []
+    declared_student_ids_differ = False
+    for i in range(1, len(chunks), 2):
+        question = chunks[i] + chunks[i+1]
+        declared_student_ids.append(chunks[i].rstrip("."))
+        questions.append(question)
+
+    # now validate that we got all we need and process the questions
+    if len(questions) < 6:
+        print("ERROR: not enough parts, check out the question content manually!!!")
+        print(file_name)
+        raise ValueError("Not enough parts in the question content")
+
+    declared_student_ids_differ = len(set(declared_student_ids)) > 1
+    
+    # process the question with the help of a llm extractor
+    for i in range(len(questions)):
+        current_question_dict = {}
+        current_question_dict = llm.canvas_student_q_raw_to_dict(questions[i])
+        current_question_dict["chapter_id"] = Q_INDEX_TO_CHAPTER[i]
+        if declared_student_ids_differ:
+            current_question_dict["student_id"] = declared_student_ids[i] if i < 3 else declared_student_ids[i][:-2] # this will not work
+        else:
+            current_question_dict["student_id"] = declared_student_ids[i]
+        # for the default that many unfortunately kept, 08123453.. but we can live with that
+        # for now just print out the dict
+        question_dicts.append(current_question_dict)
+    
+    return question_dicts
+
+    
+
+
+
+        
+
+def process_canvas_questions_23_24(txt_files_folder: str, source: str):
+    question_dicts = []
+    for filename in os.listdir(FOLDER_NAME):
+        if filename.endswith(".txt"):
+            with open(f"{FOLDER_NAME}/{filename}", "r", encoding="iso-8859-1") as f:
+                question_text = f.read()
+                author_question_dicts = process_question_content_from_txt(question_text, filename)
+                # dump the questions to the list
+                question_dicts.extend(author_question_dicts)
+                
+    return question_dicts
+
+
+
+if __name__ == "__main__":
+    question_dicts = process_canvas_questions_23_24(FOLDER_NAME, SOURCE_NAME)
+    print(question_dicts)
