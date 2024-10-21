@@ -6,6 +6,9 @@ from google.oauth2.service_account import Credentials
 L1_SPREADSHEET_ID = '1hegfJtLpNKnjOd9vClo90YSqZ9mnKoCh-Pa_-1q2SP0'
 L1_SHEET_NAME = 'Sheet1'
 
+CHAPTER_ERRORS_SPREADSHEET_ID = '1I0fStJ-1prmbOz0R7PQgIQG-UKRzgRR0Ht--guQ7EZU'
+CHAPTER_ERRORS_SHEET_NAME = 'Form Responses 1'
+
 os.environ["GOOGLE_APPLICATION_CREDENTIALS"] = "credentials.json"
 
 # Load credentials from JSON file with the required scopes
@@ -38,5 +41,13 @@ def upload_l1_df_to_gsheet(df):
     # Append each row of the DataFrame to the sheet
     for row in data_to_append:
         sheet.append_row(row)
+
+
+def get_chapter_errors_table_as_df():
+    client = gspread.authorize(credentials)
+    sheet = client.open_by_key(CHAPTER_ERRORS_SPREADSHEET_ID).worksheet(CHAPTER_ERRORS_SHEET_NAME)
+    data = sheet.get_all_records()
+    df = pd.DataFrame(data)
+    return df
 
 # Usage example

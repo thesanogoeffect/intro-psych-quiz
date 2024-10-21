@@ -2,6 +2,7 @@ import db_operations as db
 import pandas as pd
 import llm_extractor as llm
 import os
+import gsheets as gsh
 """provides methods that will be used in pipelines to regularly update the l2 metadata"""
 
 
@@ -77,9 +78,31 @@ def fix_chapter_id(question_id: int, chapter_id: int):
     # save the updated data
     db.replace_df_in_db(df)
 
+
+def get_correct_id_to_chapter_id_pairs():
+    # will generate tuples with the modus for the correct answer and the chapter id from the df
+    df = gsh.get_chapter_errors_table_as_df()
+    # the colu Timestamp	Question ID	Current chapter number	Correct chapter number
+    # get the correct chapter number and the modus for the correct chapter number
+    # get the errored IDs
+    errored_ids = df["Question ID"].tolist()
+    id_chapter_pairs = []
+
+    for id in errored_ids:
+        filtered_df_by_id = df[df["Question ID"] == id]
+        # now get the mode of the correct chapter number
+        correct_chapter_number = filtered_df_by_id["Correct chapter number"].mode().values[0]
+        id_chapter_pairs.append((id, correct_chapter_number))
+    return id_chapter_pairs
+        
+
+
+
+
 if __name__ == "__main__":
     # make_db_backup()
     # update_missing_chapter_ids()
     # update_is_correct()
     # update_missing_descriptions()
-    fix_chapter_id(282, 1)
+    for id, chapter in get_correct_id_to_chapter_id_pairs():
+        fix_chapter_id(id, chapter)
