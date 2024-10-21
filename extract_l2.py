@@ -40,4 +40,4 @@ def copy_l3_to_public():
 
 if __name__ == "__main__":
     create_l3()
-    copy_l3_to_public()
+    # copy_l3_to_public()

@@ -171,5 +171,6 @@ if __name__ == "__main__":
     # delete_id_column()
     # print(select_row_id(69))
     # drop_table_and_rename_new_to_old()
-    delete_question_by_id(689)
+    # delete_question_by_id(689)
+    pass
 
