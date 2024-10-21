@@ -11,10 +11,11 @@ import { useQuestionStore } from "./stores/question";
 import { useQuestionStatsStore } from '#imports';
 const questionStore = useQuestionStore();
 const questionStatsStore = useQuestionStatsStore();
-await questionStore.setUp();
 
 
-onMounted(() => {
+
+onMounted(async () => {
+  await questionStore.setUp();
   questionStatsStore.loadDownvoteCacheFromLocalStorage();
   questionStatsStore.loadUpvoteCacheFromLocalStorage();
   questionStatsStore.loadFlagCacheFromLocalStorage();

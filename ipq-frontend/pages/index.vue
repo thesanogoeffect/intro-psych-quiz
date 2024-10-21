@@ -3,7 +3,7 @@
     <LandingPopup />
     <InstructionsPopup />
 
-    <v-card>
+    <v-sheet>
       <v-layout column fill-height>
         <!-- App Bar -->
         <v-app-bar color="primary" prominent>
@@ -47,11 +47,9 @@
           <RightSidebar />
         </v-navigation-drawer>
 
-        <v-container fluid fill-height>
-          <v-main>
-            <MainQuestionWindow />
-          </v-main>
-        </v-container>
+        <v-main>
+          <MainQuestionWindow />
+        </v-main>
       </v-layout>
 
       <v-dialog v-model="filterDialog" max-width="600px">
@@ -77,14 +75,24 @@
 
               <v-divider class=""></v-divider>
 
-              <v-btn outlined class="my-2 rounded-xl" @click="selectPreMidtermChapters"
+              <v-btn
+                outlined
+                class="my-2 rounded-xl"
+                @click="selectPreMidtermChapters"
                 >'24 Pre-Midterm Chapters</v-btn
               >
-              <v-btn outlined class="my-2 rounded-xl" @click="selectPostMidtermChapters"
+              <v-btn
+                outlined
+                class="my-2 rounded-xl"
+                @click="selectPostMidtermChapters"
                 >'24 Post-Midterm Chapters</v-btn
               >
-              <v-btn outlined class="my-2 rounded-xl" @click="selectAllTUEChapters"
-                >'24 All Exam Chapters</v-btn>
+              <v-btn
+                outlined
+                class="my-2 rounded-xl"
+                @click="selectAllTUEChapters"
+                >'24 All Exam Chapters</v-btn
+              >
             </div>
 
             <!-- Source Selection -->
@@ -116,7 +124,7 @@
           </v-card-actions>
         </v-card>
       </v-dialog>
-    </v-card>
+    </v-sheet>
   </v-app>
 </template>
 
@@ -169,7 +177,8 @@ const selectAllTUEChapters = () => {
   // premidterm + postmidterm
   selectedChapters.value = availableChapters.value.filter(
     (chapter) => chapter !== 13 && chapter !== 11
-  )};
+  );
+};
 
 watch(
   [availableChapters, availableSources],
@@ -228,7 +237,8 @@ const selectPreMidtermChapters = () => {
 
 const selectPostMidtermChapters = () => {
   selectedChapters.value = availableChapters.value.filter(
-    (chapter) => chapter >= 7 && chapter <= 14 && chapter !== 13 && chapter !== 11
+    (chapter) =>
+      chapter >= 7 && chapter <= 14 && chapter !== 13 && chapter !== 11
   );
 };
 
@@ -247,8 +257,6 @@ const canApplyFilters = computed(() => {
 const openPopup = () => {
   generalStore.toggleInstructionsPopup();
 };
-
-
 
 onMounted(() => {
   const selectedChaptersLocal = localStorage.getItem("selected_chapters");

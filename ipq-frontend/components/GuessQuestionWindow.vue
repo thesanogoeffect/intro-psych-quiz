@@ -6,7 +6,7 @@
       <v-card class="mb-4 text-h3 rounded-lg" elevation="0">
         <v-card-text>
           <p class="question-text">
-            {{ questionStore.getCurrentQuestion.question_title }}
+            {{ questionStore.getCurrentQuestion ? questionStore.getCurrentQuestion.question_title : '' }}
           </p>
         </v-card-text>
       </v-card>

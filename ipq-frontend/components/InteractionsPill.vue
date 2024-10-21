@@ -68,22 +68,31 @@ const currentQuestion = computed(() => {
     ? questionStore.getCurrentlyReviewedQuestion
     : questionStore.getCurrentQuestion;
 });
-const currentQuestionId = computed(() => currentQuestion.value.id);
+const currentQuestionId = computed(() => {
+  return currentQuestion.value ? currentQuestion.value.id : null;
+});
 
-const statsCache = computed(() =>
-  questionStatsStore.getQuestionStatsById(currentQuestionId.value)
-);
-const upvoted = computed(() =>
-  questionStatsStore.getUpvoteCacheById(currentQuestionId.value)
-);
-const downvoted = computed(() =>
-  questionStatsStore.getDownvoteCacheById(currentQuestionId.value)
-);
-const flagged = computed(() =>
-  questionStatsStore.getFlagCacheById(currentQuestionId.value)
-);
+const statsCache = computed(() => {
+  return currentQuestionId.value ? questionStatsStore.getQuestionStatsById(currentQuestionId.value) : null;
+});
+
+const upvoted = computed(() => {
+  return currentQuestionId.value ? questionStatsStore.getUpvoteCacheById(currentQuestionId.value) : null;
+});
+
+const downvoted = computed(() => {
+  return currentQuestionId.value ? questionStatsStore.getDownvoteCacheById(currentQuestionId.value) : null;
+});
+
+const flagged = computed(() => {
+  return currentQuestionId.value ? questionStatsStore.getFlagCacheById(currentQuestionId.value) : null;
+});
 
 const karma = computed(() => {
+  if (!statsCache.value) {
+    return 0;
+  }
+
   let karmaValue =
     statsCache.value.times_upvoted - statsCache.value.times_downvoted;
 
